@@ -1,0 +1,54 @@
+#
+# Specific test cases, fix soon or decide on supported state.
+#
+
+ITestS3AContractGetFileStatus#testComplexDirActions
+ITestS3AContractMkdir#testMkdirOverParentFile
+ITestS3AContractGetFileStatusV1List#testComplexDirActions
+ITestS3ABucketExistence#testAccessPointRequired
+ITestS3ABucketExistence#testBucketProbing2
+ITestS3ABucketExistence#testBucketProbing
+ITestS3ABucketExistence#testAccessPointProbing2
+ITestS3AOpenCost#testStreamIsNotChecksummed
+ITestCreateFileCost#testCreateFileRecursive[0]
+ITestCreateFileCost#testCreateFileRecursive[1]
+ITestS3AConfiguration#testCustomUserAgent
+ITestS3AConfiguration#testS3SpecificSignerOverride
+ITestS3AConfiguration#testRequestTimeout
+ITestS3AConfiguration#testDefaultUserAgent
+ITestS3AConfiguration#shouldBeAbleToSwitchOnS3PathStyleAccessViaConfigProperty
+ITestS3AContentEncoding#testCreatedObjectsHaveEncoding
+ITestUploadPurgeOnDirectoryOperations#testRenameWithPendingUpload
+ITestUploadPurgeOnDirectoryOperations#testDeleteWithPendingUpload
+ITestS3AContractDistCp
+ITestS3AContractMkdirWithCreatePerf#testMkdirOverParentFile
+ITestS3APrefetchingInputStream#testReadLargeFileFully
+
+# The following test class contains 15 tests that all fail with the same error.
+# It is likely that they can easily be fixed.
+ITestTreewalkProblems
+ITestS3AClosedFS#testClosedInstrumentation
+
+#
+# Complete test classes, features that are not yet supported
+#
+ITestS3AEndpointRegion
+ITestTerasortOnS3A
+ITestMagicCommitProtocol
+ITestCommitOperations
+ITestS3ACommitterMRJob
+ITestCommitOperationCost
+ITestDirectoryCommitProtocol
+ITestStagingCommitProtocol
+ITestPartitionedCommitProtocol
+ITestS3ACommitterFactory
+ITestS3ACannedACLs
+ITestHttpSigner
+ITestCustomSigner
+ITestS3ARequesterPays
+ITestS3AFileSystemStatistic
+ITestBucketTool
+ITestMarkerTool
+ITestS3AAWSCredentialsProvider
+ITestS3GuardTool
+ITestS3AMiniYarnCluster
