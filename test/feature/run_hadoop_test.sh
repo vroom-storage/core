@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e
 
+scriptdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cluster_url="${1:-http://localhost:8080}"
 test_bucket="hadoop-s3a-test"
-image_name="ghcr.io/stjank/hadoop-s3a-tests:v1"
+image_name="ghcr.io/stjank/hadoop-s3a-tests:v2"
 
 export UH_ROOT_USER="main"
 export UH_ROOT_ACCESS_KEY="0555b35654ad1656d804"
@@ -20,6 +21,9 @@ docker_args=(--rm --network host
     -e "S3_SECRET_KEY=$UH_ROOT_SECRET_KEY"
     -e "S3_BUCKET=$test_bucket"
 )
+skip_file="$scriptdir/hadoop_s3a_skip.txt"
+[ -f "$skip_file" ] && docker_args+=(-v "$skip_file:/hadoop_s3a_skip.txt:ro")
+
 [ -n "${IT_TEST:-}" ] && docker_args+=(-e "IT_TEST=$IT_TEST")
 
 exec docker run "${docker_args[@]}" "$image_name"
