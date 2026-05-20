@@ -14,10 +14,12 @@ export AWS_SECRET_ACCESS_KEY="$UH_ROOT_SECRET_KEY"
 export AWS_DEFAULT_REGION="us-east-1"
 aws --endpoint-url "$cluster_url" --no-verify-ssl s3 mb "s3://$test_bucket"
 
-docker run --rm --network host \
-    -e S3_ENDPOINT="$cluster_url" \
-    -e S3_ACCESS_KEY="$UH_ROOT_ACCESS_KEY" \
-    -e S3_SECRET_KEY="$UH_ROOT_SECRET_KEY" \
-    -e S3_BUCKET="$test_bucket" \
-    ${IT_TEST:+-e IT_TEST="$IT_TEST"} \
-    "$image_name"
+docker_args=(--rm --network host
+    -e "S3_ENDPOINT=$cluster_url"
+    -e "S3_ACCESS_KEY=$UH_ROOT_ACCESS_KEY"
+    -e "S3_SECRET_KEY=$UH_ROOT_SECRET_KEY"
+    -e "S3_BUCKET=$test_bucket"
+)
+[ -n "${IT_TEST:-}" ] && docker_args+=(-e "IT_TEST=$IT_TEST")
+
+exec docker run "${docker_args[@]}" "$image_name"
