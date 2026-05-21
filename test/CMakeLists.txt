@@ -17,7 +17,7 @@ target_include_directories(httplib INTERFACE ${CMAKE_BINARY_DIR}/test ${CMAKE_CU
 
 add_subdirectory(lib)
 
-# add_subdirectory(performance)
+# add_subdirectory(benchmark)
 
 configure_file(test_config.h.in ${CMAKE_CURRENT_BINARY_DIR}/test_config.h @ONLY)
 add_library(uh_test_config INTERFACE)
