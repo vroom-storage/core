@@ -105,6 +105,9 @@ private:
             a...)
             ;
 
+        auto span = co_await boost::asio::this_coro::span;
+        span->set_attribute("query", query);
+
         co_await cancel();
         if (!PQsendQueryParams(m_ptr.get(), query.c_str(), sizeof...(a),
                                nullptr, values.data(), lengths.data(),

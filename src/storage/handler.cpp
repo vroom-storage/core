@@ -14,7 +14,6 @@
 
 #include "handler.h"
 
-#include "config.h"
 #include <common/telemetry/log.h>
 #include <common/telemetry/metrics.h>
 #include <common/utils/common.h>

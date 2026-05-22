@@ -156,6 +156,10 @@ bool get_object::can_handle(const request& req) {
 coro<response> get_object::handle(request& req) {
     metric<entrypoint_get_object_req>::increase(1);
 
+    auto span = co_await boost::asio::this_coro::span;
+    span->set_attribute("bucket", req.bucket());
+    span->set_attribute("object-key", req.object_key());
+
     response res;
 
     auto version = req.query("versionId");
