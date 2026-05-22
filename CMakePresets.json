@@ -21,6 +21,22 @@
                 "ENABLE_UBSAN": "ON",
                 "CMAKE_POLICY_VERSION_MINIMUM": "3.5"
             }
+        },
+        {
+            "name": "perf",
+            "displayName": "Performance measurement config",
+            "description": "Configuration for doing performance optimizations",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "BUILD_TESTS": "OFF",
+                "BUILD_TOOLS": "OFF",
+                "ENABLE_CCACHE": "OFF",
+                "ENABLE_ASAN": "OFF",
+                "ENABLE_UBSAN": "OFF",
+                "CMAKE_POLICY_VERSION_MINIMUM": "3.5"
+            }
         }
     ]
 }
