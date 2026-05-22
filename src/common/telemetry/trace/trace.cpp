@@ -25,9 +25,12 @@
 
 #include <opentelemetry/context/propagation/global_propagator.h>
 #include <opentelemetry/context/propagation/text_map_propagator.h>
+#include <common/project/project.h>
+
 #include <opentelemetry/exporters/ostream/span_exporter_factory.h>
 #include <opentelemetry/exporters/otlp/otlp_grpc_exporter_factory.h>
 #include <opentelemetry/exporters/otlp/otlp_grpc_exporter_options.h>
+#include <opentelemetry/sdk/resource/resource.h>
 #include <opentelemetry/sdk/trace/batch_span_processor_factory.h>
 #include <opentelemetry/sdk/trace/batch_span_processor_options.h>
 #include <opentelemetry/sdk/trace/processor.h>
@@ -91,13 +94,18 @@ void initialize_trace(const std::string& tracer_name,
                       const std::string& endpoint) {
     boost::asio::traced_asio_initialize(tracer_name, tracer_version);
 
+    const auto& info = uh::project_info::get();
+    auto resource = opentelemetry::sdk::resource::Resource::Create(
+        {{"service.name", info.project_name},
+         {"service.version", info.project_version}});
+
     if (endpoint == TRACE_STDOUT_ENDPOINT) {
         auto exporter = opentelemetry::exporter::trace::
             OStreamSpanExporterFactory::Create();
         auto processor =
             trace_sdk::SimpleSpanProcessorFactory::Create(std::move(exporter));
         std::shared_ptr<opentelemetry::trace::TracerProvider> provider =
-            trace_sdk::TracerProviderFactory::Create(std::move(processor));
+            trace_sdk::TracerProviderFactory::Create(std::move(processor), resource);
         trace_api::Provider::SetTracerProvider(provider);
     } else {
         trace_sdk::BatchSpanProcessorOptions bspOpts{};
@@ -108,7 +116,7 @@ void initialize_trace(const std::string& tracer_name,
             std::move(exporter), bspOpts);
 
         std::shared_ptr<opentelemetry::trace::TracerProvider> provider =
-            trace_sdk::TracerProviderFactory::Create(std::move(processor));
+            trace_sdk::TracerProviderFactory::Create(std::move(processor), resource);
         trace_api::Provider::SetTracerProvider(provider);
     }
 
