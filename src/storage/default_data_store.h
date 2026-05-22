@@ -22,7 +22,6 @@
 #include <storage/interfaces/data_store.h>
 
 #include <filesystem>
-#include <list>
 #include <mutex>
 
 namespace uh::cluster {

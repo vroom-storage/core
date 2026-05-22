@@ -18,10 +18,7 @@
 
 #include "common/service_interfaces/storage_interface.h"
 #include "common/telemetry/log.h"
-#include "common/utils/pointer_traits.h"
-#include "common/utils/time_utils.h"
 #include "storage/default_data_store.h"
-#include <list>
 #include <span>
 
 namespace uh::cluster {
@@ -52,6 +49,11 @@ struct local_storage : public storage_interface {
     coro<void> read_address(const storage_address& addr, std::span<char> buffer,
                             const std::vector<size_t>& offsets) override {
         LOG_DEBUG() << "read addr start";
+
+        auto span = co_await boost::asio::this_coro::span;
+        span->set_attribute("address-size", addr.size());
+        span->set_attribute("total-size", buffer.size());
+        span->set_attribute("offsets-size", offsets.size());
 
         for (size_t i = 0; i < addr.size(); i++) {
             const auto frag = addr.get(i);
