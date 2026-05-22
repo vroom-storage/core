@@ -95,8 +95,10 @@ void initialize_trace(const std::string& tracer_name,
     boost::asio::traced_asio_initialize(tracer_name, tracer_version);
 
     const auto& info = uh::project_info::get();
+    const char* env_name = std::getenv("UH_SERVICE_NAME");
+    std::string service_name = env_name ? env_name : info.project_name;
     auto resource = opentelemetry::sdk::resource::Resource::Create(
-        {{"service.name", info.project_name},
+        {{"service.name", service_name},
          {"service.version", info.project_version}});
 
     if (endpoint == TRACE_STDOUT_ENDPOINT) {

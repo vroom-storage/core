@@ -222,7 +222,8 @@ _start_native() {
     declare -A pids
 
     mkdir -p "$cluster_abs/data/coordinator"
-    "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" coordinator \
+    UH_SERVICE_NAME="coordinator" \
+        "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" coordinator \
         >> "$cluster_abs/logs/coordinator.log" 2>&1 &
     pids[coordinator]=$!
 
@@ -234,7 +235,7 @@ _start_native() {
             local sname="storage-${gid}-${i}"
             local port=$((9311 + gid * 100 + i))
             mkdir -p "$cluster_abs/data/$sname"
-            UH_STORAGE_GROUP_ID="$gid" UH_STORAGE_INSTANCE_ID="$i" \
+            UH_STORAGE_GROUP_ID="$gid" UH_STORAGE_INSTANCE_ID="$i" UH_SERVICE_NAME="$sname" \
                 "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" \
                     --workdir "$cluster_abs/data/$sname" storage --port "$port" \
                     >> "$cluster_abs/logs/${sname}.log" 2>&1 &
@@ -242,7 +243,8 @@ _start_native() {
         done
     done < <(jq -c '.[]' <<< "$storage_groups")
 
-    "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" entrypoint --no-dedupe \
+    UH_SERVICE_NAME="entrypoint" \
+        "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" entrypoint --no-dedupe \
         >> "$cluster_abs/logs/entrypoint.log" 2>&1 &
     pids[entrypoint]=$!
 
@@ -316,7 +318,8 @@ _start_docker() {
     }
 
     _run_service "coordinator" \
-        "/usr/local/bin/uh-cluster --registry $registry coordinator"
+        "/usr/local/bin/uh-cluster --registry $registry coordinator" \
+        -e "UH_SERVICE_NAME=coordinator"
 
     while IFS= read -r group; do
         local gid num_s
@@ -327,7 +330,8 @@ _start_docker() {
             _run_service "$sname" \
                 "/usr/local/bin/uh-cluster --registry $registry storage" \
                 -e "UH_STORAGE_GROUP_ID=$gid" \
-                -e "UH_STORAGE_INSTANCE_ID=$i"
+                -e "UH_STORAGE_INSTANCE_ID=$i" \
+                -e "UH_SERVICE_NAME=$sname"
         done
     done < <(jq -c '.[]' <<< "$storage_groups")
 
@@ -338,6 +342,7 @@ _start_docker() {
         --name "${project}-entrypoint" \
         --user root \
         --env-file "$env_file" \
+        -e "UH_SERVICE_NAME=entrypoint" \
         -v "$cluster_abs/data/entrypoint:/var/lib/uh" \
         -v "$cluster_abs/logs:/cluster-logs" \
         -v "$cluster_abs/policies.json:/etc/uh/policies.json:ro" \
