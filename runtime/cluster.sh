@@ -17,6 +17,8 @@ DEFAULT_ROOT_SECRET_KEY="h7GhxuBLTrlhVUyxSPUKUV8r/2EI4ngqJxD7iBdBYLhwluN30JaT3Q=
 DEFAULT_STORAGE_GROUPS='[{"id":0,"type":"ROUND_ROBIN","storages":1}]'
 DB_PORT=5432
 ETCD_PORT=2379
+JAEGER_UI_PORT=16686
+JAEGER_OTLP_PORT=4317
 
 usage() {
     cat >&2 <<'EOF'
@@ -32,6 +34,7 @@ Start options:
   --docker              Run UH services in Docker containers
   --bin-dir PATH        Binary directory with uh-cluster, uh-access (required)
   --storage-groups JSON Storage groups JSON (default: ROUND_ROBIN, 1 storage)
+  --enable-traces       Start Jaeger and enable OTel trace export
 
 Root user (env vars, defaults match s3tests.conf):
   UH_ROOT_USER, UH_ROOT_ACCESS_KEY, UH_ROOT_SECRET_KEY
@@ -63,6 +66,8 @@ wait_for_http() {
 }
 
 generate_deps_compose() {
+    local enable_traces="${1:-false}"
+
     cat > "$COMPOSE_FILE" <<YAML
 services:
   db:
@@ -102,10 +107,23 @@ services:
     ports:
       - "${ETCD_PORT}:2379"
 YAML
+
+    if [[ "$enable_traces" == "true" ]]; then
+        cat >> "$COMPOSE_FILE" <<YAML
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "${JAEGER_UI_PORT}:16686"
+      - "${JAEGER_OTLP_PORT}:4317"
+YAML
+    fi
 }
 
 do_start() {
-    local mode="native" bin_dir="" storage_groups="$DEFAULT_STORAGE_GROUPS"
+    local mode="native" bin_dir="" storage_groups="$DEFAULT_STORAGE_GROUPS" enable_traces="false"
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -113,6 +131,7 @@ do_start() {
             --docker)         mode="docker"; shift ;;
             --bin-dir)        bin_dir="$2"; shift 2 ;;
             --storage-groups) storage_groups="$2"; shift 2 ;;
+            --enable-traces)  enable_traces="true"; shift ;;
             *)                die "unknown option: $1" ;;
         esac
     done
@@ -147,7 +166,7 @@ do_start() {
           storage_groups: $storage_groups}' > "$CONFIG_FILE"
 
     cp "$REPO_ROOT/docker/policies.json" "$CLUSTER_DIR/policies.json"
-    generate_deps_compose
+    generate_deps_compose "$enable_traces"
 
     echo "Starting dependencies (postgres, etcd)..."
     docker compose -f "$COMPOSE_FILE" -p "$project" up -d
@@ -158,10 +177,10 @@ do_start() {
     echo "Starting UH services..."
     if [[ "$mode" == "native" ]]; then
         _start_native "$bin_dir" "$storage_groups" "$uh_license" "$project" \
-            "$root_user" "$root_access_key" "$root_secret_key"
+            "$root_user" "$root_access_key" "$root_secret_key" "$enable_traces"
     else
         _start_docker "$bin_dir" "$storage_groups" "$uh_license" "$project" \
-            "$root_user" "$root_access_key" "$root_secret_key"
+            "$root_user" "$root_access_key" "$root_secret_key" "$enable_traces"
     fi
 
     echo "Waiting for cluster to become available..."
@@ -172,20 +191,17 @@ do_start() {
     fi
 
     echo "Cluster is ready at http://localhost:8080"
+    if [[ "$enable_traces" == "true" ]]; then
+        echo "Jaeger UI:       http://localhost:${JAEGER_UI_PORT}"
+    fi
 }
 
 _start_native() {
     local bin_dir="$1" storage_groups="$2" uh_license="$3" project="$4"
-    local root_user="$5" root_access_key="$6" root_secret_key="$7"
+    local root_user="$5" root_access_key="$6" root_secret_key="$7" enable_traces="${8:-false}"
     local registry="http://localhost:$ETCD_PORT"
     local cluster_abs
     cluster_abs="$(cd "$CLUSTER_DIR" && pwd)"
-
-    echo "Initializing root user..."
-    UH_DB_HOSTPORT="localhost:$DB_PORT" UH_DB_USER=postgres UH_DB_PASS=uh \
-        "$bin_dir/uh-access" user-add --superuser --if-not-exists "$root_user" 'root:::'
-    UH_DB_HOSTPORT="localhost:$DB_PORT" UH_DB_USER=postgres UH_DB_PASS=uh \
-        "$bin_dir/uh-access" key-add "$root_user" "$root_access_key" "$root_secret_key" 2000000000
 
     export UH_LOG_LEVEL=DEBUG
     export UH_LICENSE="$uh_license"
@@ -194,10 +210,19 @@ _start_native() {
     export UH_DB_PASS=uh
     export UH_STORAGE_GROUPS="$storage_groups"
 
+    local trace_args=()
+    if [[ "$enable_traces" == "true" ]]; then
+        trace_args=(--enable-traces --telemetry-endpoint "localhost:${JAEGER_OTLP_PORT}")
+    fi
+
+    echo "Initializing root user..."
+    "$bin_dir/uh-access" user-add --superuser --if-not-exists "$root_user" 'root:::'
+    "$bin_dir/uh-access" key-add "$root_user" "$root_access_key" "$root_secret_key" 2000000000
+
     declare -A pids
 
     mkdir -p "$cluster_abs/data/coordinator"
-    "$bin_dir/uh-cluster" --registry "$registry" coordinator \
+    "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" coordinator \
         >> "$cluster_abs/logs/coordinator.log" 2>&1 &
     pids[coordinator]=$!
 
@@ -210,20 +235,14 @@ _start_native() {
             local port=$((9311 + gid * 100 + i))
             mkdir -p "$cluster_abs/data/$sname"
             UH_STORAGE_GROUP_ID="$gid" UH_STORAGE_INSTANCE_ID="$i" \
-                "$bin_dir/uh-cluster" --registry "$registry" \
+                "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" \
                     --workdir "$cluster_abs/data/$sname" storage --port "$port" \
                     >> "$cluster_abs/logs/${sname}.log" 2>&1 &
             pids[$sname]=$!
         done
     done < <(jq -c '.[]' <<< "$storage_groups")
 
-    mkdir -p "$cluster_abs/data/deduplicator-0"
-    "$bin_dir/uh-cluster" --registry "$registry" \
-        --workdir "$cluster_abs/data/deduplicator-0" deduplicator --port 9200 \
-        >> "$cluster_abs/logs/deduplicator-0.log" 2>&1 &
-    pids[deduplicator-0]=$!
-
-    "$bin_dir/uh-cluster" --registry "$registry" entrypoint \
+    "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" entrypoint --no-dedupe \
         >> "$cluster_abs/logs/entrypoint.log" 2>&1 &
     pids[entrypoint]=$!
 
@@ -243,7 +262,7 @@ _start_native() {
 
 _start_docker() {
     local bin_dir="$1" storage_groups="$2" uh_license="$3" project="$4"
-    local root_user="$5" root_access_key="$6" root_secret_key="$7"
+    local root_user="$5" root_access_key="$6" root_secret_key="$7" enable_traces="${8:-false}"
     local registry="http://localhost:$ETCD_PORT"
     local cluster_abs
     cluster_abs="$(cd "$CLUSTER_DIR" && pwd)"
@@ -256,26 +275,27 @@ _start_docker() {
         -f "$REPO_ROOT/docker/Dockerfile.cluster" \
         "$REPO_ROOT"
 
-    echo "Initializing root user..."
-    docker run --rm \
-        --network host \
-        -e "UH_DB_HOSTPORT=localhost:$DB_PORT" \
-        -e UH_DB_USER=postgres \
-        -e UH_DB_PASS=uh \
-        "$image_tag" \
-        /usr/local/bin/uh-access user-add --superuser --if-not-exists "$root_user" 'root:::'
-    docker run --rm \
-        --network host \
-        -e "UH_DB_HOSTPORT=localhost:$DB_PORT" \
-        -e UH_DB_USER=postgres \
-        -e UH_DB_PASS=uh \
-        "$image_tag" \
-        /usr/local/bin/uh-access key-add "$root_user" "$root_access_key" "$root_secret_key" 2000000000
-
     # Write env file to avoid shell quoting issues with JSON values
     local env_file="$cluster_abs/cluster.env"
     printf 'UH_LOG_LEVEL=DEBUG\nUH_LICENSE=%s\nUH_DB_HOSTPORT=localhost:%s\nUH_DB_USER=postgres\nUH_DB_PASS=uh\nUH_STORAGE_GROUPS=%s\n' \
         "$uh_license" "$DB_PORT" "$storage_groups" > "$env_file"
+
+    if [[ "$enable_traces" == "true" ]]; then
+        printf 'UH_TRACES_ENABLED=true\nUH_OTEL_ENDPOINT=localhost:%s\n' \
+            "$JAEGER_OTLP_PORT" >> "$env_file"
+    fi
+
+    echo "Initializing root user..."
+    docker run --rm \
+        --network host \
+        --env-file "$env_file" \
+        "$image_tag" \
+        /usr/local/bin/uh-access user-add --superuser --if-not-exists "$root_user" 'root:::'
+    docker run --rm \
+        --network host \
+        --env-file "$env_file" \
+        "$image_tag" \
+        /usr/local/bin/uh-access key-add "$root_user" "$root_access_key" "$root_secret_key" 2000000000
 
     local containers=()
 
@@ -311,9 +331,6 @@ _start_docker() {
         done
     done < <(jq -c '.[]' <<< "$storage_groups")
 
-    _run_service "deduplicator-0" \
-        "/usr/local/bin/uh-cluster --registry $registry deduplicator"
-
     # Entrypoint gets an additional policy file mount
     mkdir -p "$cluster_abs/data/entrypoint"
     docker run -d \
@@ -325,7 +342,7 @@ _start_docker() {
         -v "$cluster_abs/logs:/cluster-logs" \
         -v "$cluster_abs/policies.json:/etc/uh/policies.json:ro" \
         "$image_tag" \
-        sh -c "/usr/local/bin/uh-cluster --registry $registry entrypoint >> /cluster-logs/entrypoint.log 2>&1"
+        sh -c "/usr/local/bin/uh-cluster --registry $registry entrypoint --no-dedupe >> /cluster-logs/entrypoint.log 2>&1"
     containers+=("${project}-entrypoint")
 
     local containers_json
