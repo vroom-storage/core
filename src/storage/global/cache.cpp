@@ -39,7 +39,7 @@ shared_buffer<> cache::read_fragment(const uint128_t& pointer, size_t size) {
     metric<metric_type::gdv_l2_cache_miss_counter>::increase(1);
     auto context = THREAD_LOCAL_CONTEXT;
 
-    if (boost::asio::trace_span::enable &&
+    if (boost::asio::trace_span::is_enabled() &&
         !boost::asio::trace_span::check_context(context)) {
         LOG_ERROR() << "[read_fragment] The context to be "
                        "encoded is invalid";

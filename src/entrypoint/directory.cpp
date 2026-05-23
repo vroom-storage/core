@@ -16,6 +16,8 @@
 #include "common/utils/strings.h"
 #include "http/command_exception.h"
 
+#include <regex>
+
 using namespace uh::cluster::ep::http;
 
 namespace uh::cluster {

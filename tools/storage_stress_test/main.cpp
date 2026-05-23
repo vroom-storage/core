@@ -22,6 +22,7 @@
 #include <fstream>
 #include <future>
 #include <random>
+#include <deque>
 
 using namespace uh::cluster;
 

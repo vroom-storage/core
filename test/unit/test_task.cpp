@@ -19,6 +19,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/test/unit_test.hpp>
+#include <thread>
 
 #include <iostream>
 
