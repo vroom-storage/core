@@ -90,3 +90,36 @@ jobs:
             - name: Stop cluster
               if: always()
               run: runtime/cluster.sh stop
+
+    hadoop-s3a-tests:
+        needs: build-and-test
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/download-artifact@v4
+              with:
+                  name: binaries
+                  path: build/bin
+
+            - name: Make binaries executable
+              run: chmod +x build/bin/*
+
+            - name: Start cluster
+              run: runtime/cluster.sh start --docker --bin-dir build/bin
+
+            - name: Run Hadoop S3A tests
+              run: test/feature/run_hadoop_test.sh
+
+            - name: Upload cluster logs
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: hadoop-cluster-logs
+                  path: .cluster/logs
+                  if-no-files-found: ignore
+
+            - name: Stop cluster
+              if: always()
+              run: runtime/cluster.sh stop
