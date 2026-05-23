@@ -119,8 +119,7 @@ public:
     coro<header> recv_header(std::optional<std::chrono::steady_clock::duration>
                                  timeout = std::nullopt);
 
-    coro<std::tuple<header, opentelemetry::context::Context>>
-    recv_header_with_context();
+    coro<std::tuple<header, boost::asio::trace_context>> recv_header_with_context();
 
     coro<void> recv_buffers(const header& h);
 

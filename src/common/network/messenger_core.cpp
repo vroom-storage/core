@@ -94,7 +94,7 @@ coro<messenger_core::header> messenger_core::recv_header(
     }
 }
 
-coro<std::tuple<messenger_core::header, opentelemetry::context::Context>>
+coro<std::tuple<messenger_core::header, boost::asio::trace_context>>
 messenger_core::recv_header_with_context() {
     try {
         header h;

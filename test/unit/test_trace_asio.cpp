@@ -20,6 +20,8 @@
 #include <common/telemetry/trace/trace_asio.h>
 #include <common/types/common_types.h>
 
+#include <thread>
+
 using namespace uh::cluster;
 
 struct fixture {
@@ -42,7 +44,7 @@ BOOST_FIXTURE_TEST_SUITE(a_traced_coro, fixture)
 
 BOOST_AUTO_TEST_CASE(set_and_get_value) {
 
-    auto context = opentelemetry::context::Context();
+    auto context = boost::asio::trace_context();
     int64_t val = 42;
 
     boost::asio::context::set_value(context, "key", val);
@@ -53,7 +55,7 @@ BOOST_AUTO_TEST_CASE(set_and_get_value) {
 
 BOOST_AUTO_TEST_CASE(set_and_get_pointer) {
 
-    auto context = opentelemetry::context::Context();
+    auto context = boost::asio::trace_context();
     int val = 42;
 
     boost::asio::context::set_pointer(context, "key", &val);
@@ -63,7 +65,7 @@ BOOST_AUTO_TEST_CASE(set_and_get_pointer) {
 }
 
 BOOST_AUTO_TEST_CASE(set_and_get_baggage) {
-    auto context = opentelemetry::context::Context();
+    auto context = boost::asio::trace_context();
     auto val = "42";
 
     boost::asio::context::set_baggage(context, "key", val);
@@ -100,7 +102,7 @@ BOOST_AUTO_TEST_CASE(propagates_context_through_coro) {
 
 BOOST_AUTO_TEST_CASE(propagates_context_through_continue) {
 
-    auto context = opentelemetry::context::Context();
+    auto context = boost::asio::trace_context();
     boost::asio::context::set_value(context, "peer_port", 11UL);
 
     boost::asio::co_spawn(

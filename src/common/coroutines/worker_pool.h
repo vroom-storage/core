@@ -16,11 +16,10 @@
 
 #pragma once
 
-#include <common/telemetry/log.h>
 #include <common/coroutines/coro.h>
 #include <common/coroutines/promise.h>
+#include <common/telemetry/log.h>
 #include <exception>
-
 
 namespace uh::cluster {
 
@@ -40,7 +39,7 @@ public:
         auto f = [context](auto& f, auto&& promise) mutable {
             THREAD_LOCAL_CONTEXT = context;
 
-            if (boost::asio::trace_span::enable &&
+            if (boost::asio::trace_span::is_enabled() &&
                 !boost::asio::trace_span::check_context(context)) {
                 LOG_ERROR() << "[post_in_workers] The context to be "
                                "encoded is invalid";
@@ -71,7 +70,7 @@ public:
             try {
                 THREAD_LOCAL_CONTEXT = context;
 
-                if (boost::asio::trace_span::enable &&
+                if (boost::asio::trace_span::is_enabled() &&
                     !boost::asio::trace_span::check_context(context)) {
                     LOG_ERROR() << "[post_in_workers] The context to be "
                                    "encoded is invalid";

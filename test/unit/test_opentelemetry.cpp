@@ -19,6 +19,10 @@
 #include <common/telemetry/trace/trace.h>
 #include <common/telemetry/trace/trace_asio.h>
 
+#include <opentelemetry/context/context.h>
+#include <opentelemetry/trace/context.h>
+#include <opentelemetry/trace/provider.h>
+
 namespace uh::cluster::storage {
 
 BOOST_AUTO_TEST_SUITE(a_context)

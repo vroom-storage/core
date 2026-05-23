@@ -16,25 +16,21 @@
 
 #pragma once
 
+#include "trace_context.h"
+
 #include <boost/asio.hpp>
+
 #include <functional>
+#include <initializer_list>
+#include <memory>
+#include <string>
+#include <string_view>
+#include <type_traits>
+#include <utility>
+#include <variant>
+#include <vector>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
-#ifdef __clang__
-#pragma GCC diagnostic ignored "-Wdeprecated-builtins"
-#endif
-
-#include <opentelemetry/baggage/baggage.h>
-#include <opentelemetry/context/context.h>
-#include <opentelemetry/trace/context.h>
-#include <opentelemetry/trace/provider.h>
-
-#pragma GCC diagnostic pop
-
-namespace boost {
-namespace asio {
+namespace boost::asio {
 
 template <typename, typename> class traced_awaitable;
 
@@ -53,137 +49,79 @@ inline constexpr context_t context;
 
 } // namespace this_coro
 
-namespace context {
-
-template <typename T>
-concept value_type_t = std::is_same_v<T, bool> || std::is_same_v<T, int64_t> ||
-                       std::is_same_v<T, uint64_t> || std::is_same_v<T, double>;
-template <value_type_t T>
-void set_value(opentelemetry::context::Context& ctx, const std::string& key,
-               T val) {
-    ctx = ctx.SetValue(key, val);
-}
-
-template <value_type_t T>
-T get_value(const opentelemetry::context::Context& ctx,
-            const std::string& key) {
-    auto val = ctx.GetValue(key);
-    if (!std::holds_alternative<T>(val)) {
-        throw std::runtime_error(
-            "Value type mismatch for key: " + key +
-            ". Expected type: " + std::string(typeid(T).name()));
-    }
-    return std::get<T>(val);
-}
-
-/*
- * NOTE: You can set and get pointers only in a single process.
- */
-template <typename T>
-void set_pointer(opentelemetry::context::Context& ctx, const std::string& key,
-                 T* ptr) {
-    ctx = ctx.SetValue(key, reinterpret_cast<uint64_t>(ptr));
-}
-
-template <typename T>
-T* get_pointer(const opentelemetry::context::Context& ctx,
-               const std::string& key) {
-    auto val = ctx.GetValue(key);
-    if (std::holds_alternative<uint64_t>(val)) {
-        return reinterpret_cast<T*>(std::get<uint64_t>(val));
-    }
-    return nullptr;
-}
-
-inline void set_baggage(opentelemetry::context::Context& ctx,
-                        const std::string& key, const std::string& value) {
-    auto baggage_val = ctx.GetValue("baggage");
-    opentelemetry::nostd::shared_ptr<opentelemetry::baggage::Baggage> baggage;
-
-    if (std::holds_alternative<
-            opentelemetry::nostd::shared_ptr<opentelemetry::baggage::Baggage>>(
-            baggage_val)) {
-        baggage = std::get<
-            opentelemetry::nostd::shared_ptr<opentelemetry::baggage::Baggage>>(
-            baggage_val);
-    } else {
-        baggage = opentelemetry::baggage::Baggage::GetDefault();
-    }
-
-    auto new_baggage = baggage->Set(key, value);
-    ctx = ctx.SetValue("baggage", new_baggage);
-}
-
-inline std::string get_baggage(const opentelemetry::context::Context& ctx,
-                               const std::string& key) {
-    auto baggage_val = ctx.GetValue("baggage");
-    if (std::holds_alternative<
-            opentelemetry::nostd::shared_ptr<opentelemetry::baggage::Baggage>>(
-            baggage_val)) {
-        auto baggage = std::get<
-            opentelemetry::nostd::shared_ptr<opentelemetry::baggage::Baggage>>(
-            baggage_val);
-        std::string value;
-        if (baggage && baggage->GetValue(key, value)) {
-            return value;
-        }
-    }
-    return {};
-}
-
-} // namespace context
-
 namespace detail {
 template <typename, typename> class traced_awaitable_frame;
+} // namespace detail
+
+using trace_attribute_value =
+    std::variant<bool, int64_t, uint64_t, double, std::string>;
+using trace_attributes =
+    std::vector<std::pair<std::string, trace_attribute_value>>;
+
+namespace detail {
+
+template <typename> inline constexpr bool dependent_false_v = false;
+
+template <typename Value>
+trace_attribute_value make_trace_attribute_value(Value&& value) {
+    using D = std::decay_t<Value>;
+
+    if constexpr (std::is_same_v<D, trace_attribute_value>) {
+        return std::forward<Value>(value);
+    } else if constexpr (std::is_same_v<D, bool>) {
+        return value;
+    } else if constexpr (std::is_integral_v<D> && std::is_signed_v<D>) {
+        return static_cast<int64_t>(value);
+    } else if constexpr (std::is_integral_v<D> && std::is_unsigned_v<D>) {
+        return static_cast<uint64_t>(value);
+    } else if constexpr (std::is_floating_point_v<D>) {
+        return static_cast<double>(value);
+    } else if constexpr (std::is_convertible_v<D, std::string_view>) {
+        return std::string(std::string_view{std::forward<Value>(value)});
+    } else {
+        static_assert(dependent_false_v<D>,
+                      "Unsupported trace attribute value type");
+    }
 }
+
+} // namespace detail
 
 class trace_span {
 public:
-    inline static bool enable = false;
-    inline static std::string tracer_name = "default-tracer";
-    inline static std::string tracer_version = "0.1.0";
+    inline static bool enable = true;
+    trace_span();
+    ~trace_span();
 
-    trace_span(){};
+    trace_span(const trace_span&) = delete;
+    trace_span& operator=(const trace_span&) = delete;
+    trace_span(trace_span&&) noexcept;
+    trace_span& operator=(trace_span&&) noexcept;
 
-    ~trace_span() {
-        if (is_started())
-            m_data->End();
-    }
-
-    void set_location(const source_location& location) noexcept {
-        m_location = location;
-    }
-
-    void set_name(std::string_view name) noexcept {
-        if (enable) {
-            if (is_started()) {
-                m_data->UpdateName(opentelemetry::nostd::string_view(
-                    name.begin(), name.size()));
-            }
-        }
-    }
+    void set_location(const source_location& location) noexcept;
+    void set_name(std::string_view name) noexcept;
 
     template <typename Value>
-    void set_attribute(std::string_view key, Value value) noexcept {
-        if (enable) {
-            if (is_started()) {
-                m_data->SetAttribute(
-                    opentelemetry::nostd::string_view(key.begin(), key.size()),
-                    value);
-            }
+    void set_attribute(std::string_view key, Value&& value) noexcept {
+        try {
+            set_attribute_impl(key, detail::make_trace_attribute_value(
+                                        std::forward<Value>(value)));
+        } catch (...) {
         }
     }
 
-    template <class U,
-              std::enable_if_t<opentelemetry::common::detail::
-                                   is_key_value_iterable<U>::value>* = nullptr>
+    void add_event(std::string_view name, trace_attributes attributes) noexcept;
+
+    template <class U>
     void add_event(std::string_view name, const U& attributes) noexcept {
-        if (enable) {
-            if (is_started()) {
-                m_data->AddEvent(opentelemetry::nostd::string_view(name.begin(),
-                                                                   name.size()),
-                                 attributes);
+        try {
+            trace_attributes attrs;
+            for (const auto& attribute : attributes) {
+                attrs.emplace_back(
+                    std::string(attribute.first),
+                    detail::make_trace_attribute_value(attribute.second));
             }
+            add_event(name, std::move(attrs));
+        } catch (...) {
         }
     }
 
@@ -191,54 +129,30 @@ public:
     add_event(std::string_view name,
               const std::initializer_list<std::pair<std::string, std::string>>&
                   attributes) noexcept {
-        std::vector<std::pair<std::string, std::string>> attrs(attributes);
-        add_event(name, attrs);
-    }
-
-    void add_event(std::string_view name) noexcept {
-        if (enable) {
-            if (is_started()) {
-                m_data->AddEvent(opentelemetry::nostd::string_view(
-                    name.begin(), name.size()));
-            }
+        trace_attributes attrs;
+        attrs.reserve(attributes.size());
+        for (const auto& attribute : attributes) {
+            attrs.emplace_back(attribute.first, attribute.second);
         }
+        add_event(name, std::move(attrs));
     }
 
-    auto context() noexcept {
-        if (m_context == nullptr)
-            return opentelemetry::context::Context{};
-        else
-            return *m_context;
-    }
+    void add_event(std::string_view name) noexcept;
 
-    bool is_started() noexcept { return m_data != nullptr; }
-    bool has_context() noexcept { return m_context != nullptr; }
+    trace_context context() const noexcept;
+
+    static bool is_enabled() noexcept;
+    bool is_started() const noexcept;
+    bool has_context() const noexcept;
 
     // For Debugging
-    void iterate_call_stack(std::function<void(source_location)> process) {
-        auto parent = m_parent;
-        while (parent) {
-            process(parent->m_location);
-            parent = parent->m_parent;
-        }
-    }
+    void iterate_call_stack(std::function<void(source_location)> process);
 
     // For Debugging
-    static std::string
-    trace_id(const trace_api::SpanContext& context) noexcept {
-        std::array<char, 2 * trace_api::TraceId::kSize> print_buffer{};
-        context.trace_id().ToLowerBase16(print_buffer);
-        return std::string(print_buffer.data(), print_buffer.size());
-    }
+    static std::string trace_id(const trace_context& context) noexcept;
 
     // For Debugging
-    static bool check_context(const opentelemetry::context::Context& context) {
-        auto span = opentelemetry::trace::GetSpan(context);
-        auto span_context = span->GetContext();
-        bool is_valid = span_context.IsValid();
-
-        return is_valid;
-    }
+    static bool check_context(const trace_context& context);
 
 private:
     template <typename, typename> friend class boost::asio::traced_awaitable;
@@ -247,42 +161,14 @@ private:
     friend boost::asio::this_coro::span_t;
     friend boost::asio::this_coro::context_t;
 
-    // For Debugging
-    trace_span* m_parent{nullptr};
+    struct impl;
+    std::unique_ptr<impl> m_impl;
 
-    source_location m_location;
-
-    opentelemetry::nostd::shared_ptr<trace_api::Span> m_data{nullptr};
-    std::unique_ptr<opentelemetry::context::Context> m_context{nullptr};
-
-    static auto root_context() noexcept {
-        opentelemetry::context::Context context;
-        return context.SetValue(trace_api::kIsRootSpanKey, true);
-    }
-
-    // For Debugging
-    void set_parent(trace_span* parent) { m_parent = parent; }
-
-    void start_span(opentelemetry::context::Context context) noexcept {
-        if (enable) {
-            auto tracer = trace_api::Provider::GetTracerProvider()->GetTracer(
-                tracer_name, tracer_version);
-            m_data = tracer->StartSpan(m_location.function_name(),
-                                       {.parent = context});
-            decorate_span();
-            m_context = std::make_unique<opentelemetry::context::Context>(
-                opentelemetry::trace::SetSpan(context, m_data));
-        } else {
-            m_context =
-                std::make_unique<opentelemetry::context::Context>(context);
-        }
-    }
-
-    void decorate_span() noexcept {
-        m_data->SetAttribute("function name", m_location.function_name());
-        m_data->SetAttribute("file", m_location.file_name());
-        m_data->SetAttribute("line", std::to_string(m_location.line()));
-    }
+    void set_parent(trace_span* parent) noexcept;
+    void start_span(trace_context context) noexcept;
+    static trace_context root_context() noexcept;
+    void set_attribute_impl(std::string_view key,
+                            trace_attribute_value value) noexcept;
 };
 
 template <typename T, typename Executor = any_io_executor>
@@ -319,7 +205,7 @@ public:
         return m_frame;
     }
 
-    auto& continue_trace(opentelemetry::context::Context parent_context) & {
+    auto& continue_trace(trace_context parent_context) & {
         if (m_frame != nullptr) {
             auto current_span = m_frame->span();
             if (!current_span->has_context()) {
@@ -329,7 +215,7 @@ public:
         return *this;
     }
 
-    auto&& continue_trace(opentelemetry::context::Context parent_context) && {
+    auto&& continue_trace(trace_context parent_context) && {
         return std::move(this->continue_trace(std::move(parent_context)));
     }
 
@@ -349,21 +235,19 @@ public:
     }
 
     template <typename Value>
-    auto& set_attribute(std::string_view key, Value value) & noexcept {
+    auto& set_attribute(std::string_view key, Value&& value) & noexcept {
         if (m_frame != nullptr) {
-            m_frame->span()->set_attribute(key, value);
+            m_frame->span()->set_attribute(key, std::forward<Value>(value));
         }
         return *this;
     }
 
     template <typename Value>
-    auto&& set_attribute(std::string_view key, Value value) && noexcept {
-        return std::move(this->set_attribute(key, value));
+    auto&& set_attribute(std::string_view key, Value&& value) && noexcept {
+        return std::move(this->set_attribute(key, std::forward<Value>(value)));
     }
 
-    template <class U,
-              std::enable_if_t<opentelemetry::common::detail::
-                                   is_key_value_iterable<U>::value>* = nullptr>
+    template <class U>
     auto& add_event(std::string_view name, const U& attributes) & noexcept {
         if (m_frame != nullptr) {
             m_frame->span()->add_event(name, attributes);
@@ -371,9 +255,7 @@ public:
         return *this;
     }
 
-    template <class U,
-              std::enable_if_t<opentelemetry::common::detail::
-                                   is_key_value_iterable<U>::value>* = nullptr>
+    template <class U>
     auto&& add_event(std::string_view name, const U& attributes) && noexcept {
         return std::move(this->add_event(name, attributes));
     }
@@ -602,15 +484,10 @@ inline BOOST_ASIO_INITFN_AUTO_RESULT_TYPE(
                       std::forward<CompletionToken>(token));
 }
 
-inline void traced_asio_initialize(const std::string& tracer_name,
-                                   const std::string& tracer_version) {
-    boost::asio::trace_span::enable = true;
-    boost::asio::trace_span::tracer_name = tracer_name;
-    boost::asio::trace_span::tracer_version = tracer_version;
-}
+void traced_asio_initialize(const std::string& tracer_name,
+                            const std::string& tracer_version);
 
-} // namespace asio
-} // namespace boost
+} // namespace boost::asio
 
 namespace std {
 template <typename T, typename Executor, typename... Args>

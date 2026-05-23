@@ -37,7 +37,7 @@ coro<void> handler::handle(boost::asio::ip::tcp::socket s) {
     while (state.cancelled() == boost::asio::cancellation_type::none) {
         try {
             messenger_core::header hdr;
-            opentelemetry::context::Context context;
+            boost::asio::trace_context context;
 
             std::optional<error> err;
 

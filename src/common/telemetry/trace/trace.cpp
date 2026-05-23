@@ -14,7 +14,17 @@
 
 #include "trace.h"
 #include "trace_asio.h"
+#include "impl/bridge.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
+#ifdef __clang__
+#pragma GCC diagnostic ignored "-Wdeprecated-builtins"
+#endif
+
+#include <opentelemetry/context/propagation/global_propagator.h>
+#include <opentelemetry/context/propagation/text_map_propagator.h>
 #include <opentelemetry/exporters/ostream/span_exporter_factory.h>
 #include <opentelemetry/exporters/otlp/otlp_grpc_exporter_factory.h>
 #include <opentelemetry/exporters/otlp/otlp_grpc_exporter_options.h>
@@ -23,13 +33,43 @@
 #include <opentelemetry/sdk/trace/processor.h>
 #include <opentelemetry/sdk/trace/simple_processor_factory.h>
 #include <opentelemetry/sdk/trace/tracer_provider_factory.h>
+#include <opentelemetry/trace/propagation/http_trace_context.h>
 #include <opentelemetry/trace/provider.h>
+
+#pragma GCC diagnostic pop
 
 namespace trace_api = opentelemetry::trace;
 namespace trace_sdk = opentelemetry::sdk::trace;
 namespace otlp = opentelemetry::exporter::otlp;
 
 namespace {
+
+class HeaderMapCarrier
+    : public opentelemetry::context::propagation::TextMapCarrier {
+  public:
+    explicit HeaderMapCarrier(uh::cluster::trace_headers& headers)
+        : m_headers(headers) {}
+
+    opentelemetry::nostd::string_view
+    Get(opentelemetry::nostd::string_view key) const noexcept override {
+        const auto key_to_compare = std::string(key.data(), key.size());
+        auto it = m_headers.find(key_to_compare);
+        if (it == m_headers.end()) {
+            return {};
+        }
+        return {it->second.data(), it->second.size()};
+    }
+
+    void Set(opentelemetry::nostd::string_view key,
+             opentelemetry::nostd::string_view value) noexcept override {
+        m_headers[std::string(key.data(), key.size())] =
+            std::string(value.data(), value.size());
+    }
+
+  private:
+    uh::cluster::trace_headers& m_headers;
+};
+
 void init_propagation() {
     opentelemetry::context::propagation::GlobalTextMapPropagator::
         SetGlobalPropagator(
@@ -75,25 +115,52 @@ void initialize_trace(const std::string& tracer_name,
     init_propagation();
 }
 
-std::string encode_context(const opentelemetry::context::Context& context) {
-    std::map<std::string, std::string> map;
-    encode_context(map, context);
-    auto traceparent = map["traceparent"];
+trace_headers encode_context_headers(const trace_context& context) {
+    trace_headers headers;
+    HeaderMapCarrier carrier(headers);
+
+    auto propagator = opentelemetry::context::propagation::
+        GlobalTextMapPropagator::GetGlobalPropagator();
+    propagator->Inject(
+        carrier,
+        boost::asio::detail::trace_context_bridge::native_context(context));
+
+    return headers;
+}
+
+trace_context decode_context_headers(const trace_headers& headers) {
+    auto headers_copy = headers;
+    HeaderMapCarrier carrier(headers_copy);
+
+    auto propagator = opentelemetry::context::propagation::
+        GlobalTextMapPropagator::GetGlobalPropagator();
+
+    opentelemetry::context::Context empty_context;
+    auto context = propagator->Extract(carrier, empty_context);
+    return boost::asio::detail::trace_context_bridge::make_trace_context(
+        std::move(context));
+}
+
+std::string encode_context(const trace_context& context) {
+    auto headers = encode_context_headers(context);
+    auto it = headers.find("traceparent");
     auto desired_length = get_encoded_context_len();
-    if (traceparent.size() != desired_length) {
+    if (it == headers.end() || it->second.size() != desired_length) {
         auto ret = std::string{};
         ret.resize(desired_length);
         return ret;
     }
-    return traceparent;
+    return it->second;
 }
-opentelemetry::context::Context decode_context(std::string traceparent) {
+
+trace_context decode_context(std::string traceparent) {
     if (traceparent.empty()) {
         return {};
     }
-    std::map<std::string, std::string> map;
-    map["traceparent"] = traceparent;
-    return decode_context(map);
+
+    trace_headers headers;
+    headers["traceparent"] = std::move(traceparent);
+    return decode_context_headers(headers);
 }
 
 } // namespace uh::cluster

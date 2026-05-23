@@ -18,6 +18,7 @@
 
 #include <common/types/dedupe_response.h>
 #include "messenger_core.h"
+#include <map>
 
 namespace uh::cluster {
 

@@ -16,60 +16,101 @@
 
 #pragma once
 
-#include <opentelemetry/context/propagation/global_propagator.h>
+#include "trace_context.h"
 
-#include "impl/carriers.h"
+#include <concepts>
+#include <map>
+#include <string>
+#include <string_view>
+#include <utility>
 
 namespace uh::cluster {
 
 inline constexpr std::string TRACE_STDOUT_ENDPOINT = "stdout";
 
+using trace_context = boost::asio::trace_context;
+using trace_headers = std::map<std::string, std::string>;
+
+template <typename T>
+concept HttpRequestLike =
+    requires(T message, const std::string& key, std::string_view value) {
+        { message.set(key, value) };
+        { message[key] } -> std::convertible_to<std::string_view>;
+    };
+
+template <typename T>
+concept MapLike = requires(T message, typename T::key_type key,
+                           typename T::mapped_type value) {
+    typename T::key_type;
+    typename T::mapped_type;
+    {
+        message.insert(
+            std::pair<typename T::key_type, typename T::mapped_type>(key,
+                                                                    value))
+    };
+    { message.find(key) } -> std::same_as<decltype(message.end())>;
+    { message.end() };
+};
+
 void initialize_trace(const std::string& tracer_name,
                       const std::string& tracer_version,
                       const std::string& endpoint = "localhost:4317");
 
+trace_headers encode_context_headers(const trace_context& context);
+trace_context decode_context_headers(const trace_headers& headers);
+
 template <HttpRequestLike Req>
-void encode_context(Req& req, const opentelemetry::context::Context& context) {
-    HttpRequestCarrier carrier(req);
-
-    auto propagator = opentelemetry::context::propagation::
-        GlobalTextMapPropagator::GetGlobalPropagator();
-
-    propagator->Inject(carrier, context);
+void encode_context(Req& req, const trace_context& context) {
+    auto headers = encode_context_headers(context);
+    for (const auto& [key, value] : headers) {
+        req.set(key, value);
+    }
 }
 
 template <HttpRequestLike Req>
-opentelemetry::context::Context decode_context(Req& req) {
+trace_context decode_context(Req& req) {
+    trace_headers headers;
 
-    HttpRequestCarrier carrier(req);
+    auto add_header = [&](std::string key) {
+        auto value = std::string_view(req[key]);
+        if (!value.empty()) {
+            headers.emplace(std::move(key), std::string(value));
+        }
+    };
 
-    auto propagator = opentelemetry::context::propagation::
-        GlobalTextMapPropagator::GetGlobalPropagator();
+    add_header("traceparent");
+    add_header("tracestate");
 
-    opentelemetry::context::Context empty_context;
-    return propagator->Extract(carrier, empty_context);
+    return decode_context_headers(headers);
 }
 
 template <MapLike Map>
-void encode_context(Map& map, const opentelemetry::context::Context& context) {
-    HttpTextMapCarrier carrier(map);
-
-    auto propagator = opentelemetry::context::propagation::
-        GlobalTextMapPropagator::GetGlobalPropagator();
-
-    propagator->Inject(carrier, context);
+void encode_context(Map& map, const trace_context& context) {
+    auto headers = encode_context_headers(context);
+    for (const auto& [key, value] : headers) {
+        map.insert(std::pair<typename Map::key_type, typename Map::mapped_type>(
+            key, value));
+    }
 }
 
 template <MapLike Map>
-opentelemetry::context::Context decode_context(Map& map) {
+trace_context decode_context(Map& map) {
+    trace_headers headers;
 
-    HttpTextMapCarrier carrier(map);
+    auto add_header = [&](const std::string& key) {
+        auto it = map.find(key);
+        if (it != map.end()) {
+            auto value = std::string_view(it->second);
+            if (!value.empty()) {
+                headers.emplace(key, std::string(value));
+            }
+        }
+    };
 
-    auto propagator = opentelemetry::context::propagation::
-        GlobalTextMapPropagator::GetGlobalPropagator();
+    add_header("traceparent");
+    add_header("tracestate");
 
-    opentelemetry::context::Context empty_context;
-    return propagator->Extract(carrier, empty_context);
+    return decode_context_headers(headers);
 }
 
 template <std::size_t N>
@@ -83,7 +124,7 @@ constexpr auto get_encoded_context_len() {
     return length;
 }
 
-std::string encode_context(const opentelemetry::context::Context& context);
-opentelemetry::context::Context decode_context(std::string traceparent);
+std::string encode_context(const trace_context& context);
+trace_context decode_context(std::string traceparent);
 
 } // namespace uh::cluster
