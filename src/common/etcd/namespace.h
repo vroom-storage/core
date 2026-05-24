@@ -216,7 +216,6 @@ struct service_t : public key_t {
 
 struct uh_t : public key_t {
     storage_groups_t storage_groups{"storage_groups", this};
-    service_t deduplicator{"deduplicator", this};
     service_t entrypoint{"entrypoint", this};
     service_t coordinator{"coordinator", this};
 
