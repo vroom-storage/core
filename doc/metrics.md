@@ -21,10 +21,6 @@ Each service measures the number of requests it receives and handles using monot
 - `storage_allocate_req`: number of requests received for allocating storage
 - `storage_get_refcounts_req`: number of requests received to get reference counts
 
-### Deduplicator service requests (internal, custom protocol):
-
-- `deduplicator_req`: number of requests received to deduplicate uploaded data
-
 ### Entrypoint service requests (external, S3 protocol):
 
 - `entrypoint_abort_multipart_req`: number of [`AbortMultipartUpload`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html) requests received
@@ -58,8 +54,6 @@ Each service measures the number of requests it receives and handles using monot
 - `gdv_l1_cache_miss_counter`: Miss count of the L1 cache in the `global_data_view`
 - `gdv_l2_cache_hit_counter`: Hit count of the L2 cache in the `global_data_view`
 - `gdv_l2_cache_miss_counter`: Miss count of the L2 cache in the `global_data_view`
-- `deduplicator_set_fragment_counter`: The number of fragments pointed in the deduplicator set maintained by the `deduplicator service`
-- `deduplicator_set_fragment_size_counter`: The aggregated size of fragments pointed in the deduplicator set maintained by the `deduplicator service`
 - `entrypoint_ingested_data_counter`: The total data volume ingested by a `entrypoint service`
 - `entrypoint_egressed_data_counter`: The total data volume egressed by a `entrypoint service`
 - `active_connections`: Number of currently handled connections
