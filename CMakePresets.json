@@ -30,7 +30,7 @@
             "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "BUILD_TESTS": "OFF",
+                "BUILD_TESTS": "ON",
                 "BUILD_TOOLS": "OFF",
                 "ENABLE_CCACHE": "OFF",
                 "ENABLE_ASAN": "OFF",

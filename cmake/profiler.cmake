@@ -22,7 +22,7 @@ CPMAddPackage(
     VERSION
     1.9.4
     OPTIONS
-    "BENCHMARK_ENABLE_TESTING Off"
+    "BENCHMARK_ENABLE_TESTING OFF;BENCHMARK_ENABLE_WERROR OFF"
     CPM_ARGS
     "TIMEOUT 300")
 
@@ -41,8 +41,6 @@ function(uh_add_profiler name)
         ${target_name}
         PRIVATE benchmark::benchmark_main ${ARGS_PRIVATE}
         PUBLIC ${ARGS_PUBLIC})
-
-    target_precompile_headers(${target_name} REUSE_FROM uh_precompile_headers)
 endfunction()
 
 
