@@ -25,5 +25,4 @@ target_link_libraries(conf
                       CLI11::CLI11
                       coordinator
                       entrypoint
-                      deduplicator
                       storage)

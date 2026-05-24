@@ -87,7 +87,7 @@ void set_default_headers(response& res, const object& obj) {
     res.set("X-Amz-Version-Id", obj.version);
 }
 
-coro<dedupe_response> deduplicate(deduplicator_interface& dd,
+coro<dedupe_response> store(storage::global::global_data_view& gdv,
                                   ep::http::body& body, md5& hash) {
     auto bs = body.buffer_size();
 
@@ -105,8 +105,10 @@ coro<dedupe_response> deduplicate(deduplicator_interface& dd,
         if (data.empty()) {
             break;
         }
-        rv.append(co_await dd.deduplicate(
-            std::string_view{data.data(), data.size()}));
+
+        auto addr = co_await gdv.write(data, {0});
+        rv.append(dedupe_response{.effective_size = data.size(),
+                              .addr = std::move(addr)});
         hash.consume(data);
     }
 

@@ -74,16 +74,6 @@ services:
             <<: *uh-cluster-env
             UH_STORAGE_GROUP_ID: 0
 
-    deduplicator:
-        <<: *uh-cluster-service
-        command: ["/usr/local/bin/uh-cluster", "--registry", "http://etcd:2379", "deduplicator"]
-        depends_on:
-            - etcd
-            - coordinator
-            - storage
-        environment:
-            <<: *uh-cluster-env
-
     coordinator:
         <<: *uh-cluster-service
         command: ["/usr/local/bin/uh-cluster", "--registry", "http://etcd:2379", "coordinator"]
@@ -110,8 +100,6 @@ services:
             coordinator:
                 condition: service_started
             storage:
-                condition: service_started
-            deduplicator:
                 condition: service_started
         environment:
             <<: *uh-cluster-env

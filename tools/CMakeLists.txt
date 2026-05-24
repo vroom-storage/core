@@ -14,7 +14,6 @@
 
 add_subdirectory(access)
 add_subdirectory(basic)
-add_subdirectory(dd_stress_test)
 add_subdirectory(file_upload)
 add_subdirectory(license-checker)
 add_subdirectory(storage)

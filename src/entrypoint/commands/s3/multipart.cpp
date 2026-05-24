@@ -23,11 +23,9 @@ using namespace uh::cluster::ep::http;
 
 namespace uh::cluster {
 
-multipart::multipart(deduplicator_interface& dedupe,
-                     storage::global::global_data_view& gdv,
+multipart::multipart(storage::global::global_data_view& gdv,
                      multipart_state& uploads)
-    : m_dedupe(dedupe),
-      m_gdv(gdv),
+    : m_gdv(gdv),
       m_uploads(uploads) {}
 
 bool multipart::can_handle(const request& req) {
@@ -51,7 +49,7 @@ coro<response> multipart::handle(request& req) {
     metric<entrypoint_multipart_req>::increase(1);
 
     cluster::md5 hash;
-    auto resp = co_await deduplicate(m_dedupe, req.body(), hash);
+    auto resp = co_await store(m_gdv, req.body(), hash);
 
     auto md5 = to_hex(hash.finalize());
 

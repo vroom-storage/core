@@ -17,8 +17,6 @@
 #pragma once
 
 #include "commands/command.h"
-#include "common/service_interfaces/deduplicator_interface.h"
-#include "config.h"
 #include "directory.h"
 #include "limits.h"
 #include "multipart_state.h"
@@ -29,12 +27,10 @@
 namespace uh::cluster {
 
 struct command_factory {
-    command_factory(deduplicator_interface& dedupe, directory& dir,
-                    multipart_state& uploads,
+    command_factory(directory& dir, multipart_state& uploads,
                     storage::global::global_data_view& gdv, limits& uhlimits,
                     ep::user::db& users, license_watcher& watcher)
-        : m_dedupe(dedupe),
-          m_directory(dir),
+        : m_directory(dir),
           m_uploads(uploads),
           m_gdv(gdv),
           m_limits(uhlimits),
@@ -51,7 +47,6 @@ private:
 
     static constexpr std::size_t MAX_POST_QUERY_LENGTH = 64 * KIBI_BYTE;
 
-    deduplicator_interface& m_dedupe;
     directory& m_directory;
     multipart_state& m_uploads;
     storage::global::global_data_view& m_gdv;

@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include <common/utils/protocol_handler.h>
+#include <common/telemetry/metrics.h>
 #include "command_factory.h"
 #include "cors/module.h"
 #include "http/request_factory.h"

@@ -244,7 +244,7 @@ _start_native() {
     done < <(jq -c '.[]' <<< "$storage_groups")
 
     UH_SERVICE_NAME="entrypoint" \
-        "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" entrypoint --no-dedupe \
+    "$bin_dir/uh-cluster" --registry "$registry" entrypoint \
         >> "$cluster_abs/logs/entrypoint.log" 2>&1 &
     pids[entrypoint]=$!
 

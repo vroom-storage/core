@@ -16,8 +16,6 @@
 #include "handler.h"
 
 #include <common/telemetry/metrics.h>
-#include <deduplicator/interfaces/dedupe_array.h>
-#include <deduplicator/interfaces/noop_deduplicator.h>
 #include <format>
 #include <magic_enum/magic_enum.hpp>
 
@@ -42,28 +40,6 @@ coro<void> update_limits(uh::cluster::directory& directory, limits& l) {
     }
 }
 
-std::unique_ptr<deduplicator_interface>
-make_deduplicator(const entrypoint_config& config,
-                  storage::global::global_data_view& storage,
-                  storage::global::cache& cache, boost::asio::io_context& ioc,
-                  etcd_manager& etcd) {
-
-    if (config.m_attached_deduplicator) {
-        LOG_INFO() << "using attached deduplicator";
-        return std::make_unique<local_deduplicator>(
-            *config.m_attached_deduplicator, storage, cache);
-    }
-
-    if (config.noop_deduplicator) {
-        LOG_INFO() << "using noop deduplicator";
-        return std::make_unique<noop_deduplicator>(storage);
-    }
-
-    LOG_INFO() << "using remote deduplicator array";
-    return std::make_unique<dedupe_array>(ioc, etcd,
-                                          config.dedupe_node_connection_count);
-}
-
 } // namespace
 
 service::service(boost::asio::io_context& ioc, const service_config& sc,
@@ -75,8 +51,6 @@ service::service(boost::asio::io_context& ioc, const service_config& sc,
       m_gdv{ioc, m_etcd, config.global_data_view},
       m_cache(ioc, m_gdv, config.global_data_view.read_cache_capacity_l2),
 
-      m_dedupe(make_deduplicator(m_config, m_gdv, m_cache, ioc, m_etcd)),
-
       m_directory(ioc, m_config.database),
       m_uploads(ioc, m_config.database),
       m_users(ioc, m_config.database),
@@ -84,7 +58,7 @@ service::service(boost::asio::io_context& ioc, const service_config& sc,
       m_limits(m_license_watcher),
       m_server(m_config.server,
                std::make_unique<handler>(
-                   command_factory(*m_dedupe, m_directory, m_uploads, m_gdv,
+                   command_factory(m_directory, m_uploads, m_gdv,
                                    m_limits, m_users, m_license_watcher),
                    http::request_factory(m_users),
                    std::make_unique<policy::module>(m_directory),

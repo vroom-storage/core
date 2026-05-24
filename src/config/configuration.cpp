@@ -174,42 +174,7 @@ CLI::App* sub_entrypoint(CLI::App& app, entrypoint_config& cfg) {
                    "buffer size before sending data to deduplicators")
         ->default_val(cfg.buffer_size);
 
-    rv->add_flag("--no-dedupe", cfg.noop_deduplicator,
-                 "disable deduplication and write directly to storage")
-        ->default_val(cfg.noop_deduplicator)
-        ->envname(ENV_CFG_NO_DEDUPE);
-
     configure(*rv, cfg.database);
-
-    return rv;
-}
-
-CLI::App* sub_deduplicator(CLI::App& app, deduplicator_config& cfg) {
-    auto* rv =
-        app.add_subcommand("deduplicator", "Run as deduplicator service");
-
-    rv->add_option("--server-threads", cfg.num_threads,
-                   "threads handling incoming connections")
-        ->default_val(cfg.num_threads);
-
-    register_server(*rv, cfg.server);
-    register_global_data_view(*rv, cfg.global_data_view);
-
-    rv->add_option("--worker-count", cfg.worker_thread_count,
-                   "number of worker threads")
-        ->default_val(cfg.worker_thread_count);
-
-    rv->add_option("--min-fragment-size", cfg.min_fragment_size,
-                   "minimum fragment size")
-        ->default_val(cfg.min_fragment_size);
-
-    rv->add_option("--max-fragment-size", cfg.max_fragment_size,
-                   "maximum fragment size")
-        ->default_val(cfg.max_fragment_size);
-
-    rv->add_option("--set-capacity", cfg.set_capacity,
-                   "maximum number of fragments in the dedupe set")
-        ->default_val(cfg.set_capacity);
 
     return rv;
 }
@@ -294,14 +259,8 @@ std::optional<config> read_config(int argc, char** argv) {
 
     auto sub_str = sub_storage(app, rv.storage);
     auto sub_ep = sub_entrypoint(app, rv.entrypoint);
-    auto sub_dd = sub_deduplicator(app, rv.deduplicator);
     auto sub_rk = sub_coordinator(app, rv.coordinator);
     auto sub_px = sub_proxy(app, rv.proxy);
-
-    auto sub_dd_str =
-        sub_storage(*sub_dd, rv.deduplicator.m_attached_storage.emplace());
-    auto sub_en_dd = sub_deduplicator(
-        *sub_ep, rv.entrypoint.m_attached_deduplicator.emplace());
 
     register_service(app, rv.service);
 
@@ -328,10 +287,6 @@ std::optional<config> read_config(int argc, char** argv) {
         rv.role = STORAGE_SERVICE;
         rv.storage.working_directory =
             std::filesystem::path(rv.service.working_dir) / "storage";
-    } else if (sub_dd->parsed()) {
-        rv.role = DEDUPLICATOR_SERVICE;
-        rv.deduplicator.working_dir =
-            std::filesystem::path(rv.service.working_dir) / "deduplicator";
     } else if (sub_ep->parsed()) {
         rv.role = ENTRYPOINT_SERVICE;
     } else if (sub_rk->parsed()) {
@@ -351,14 +306,6 @@ std::optional<config> read_config(int argc, char** argv) {
     }
 
     rv.log = make_log_config(rv.service, log_level, rv.role);
-
-    if (!sub_dd_str->parsed()) {
-        rv.deduplicator.m_attached_storage.reset();
-    }
-    if (!sub_en_dd->parsed()) {
-        rv.entrypoint.m_attached_deduplicator.reset();
-    }
-
     return rv;
 }
 

@@ -25,12 +25,11 @@ using namespace uh::cluster::ep::http;
 namespace uh::cluster {
 
 put_object::put_object(limits& uhlimits,
-                       directory& dir, storage::global::global_data_view& gdv,
-                       deduplicator_interface& dedupe)
+                       directory& dir, storage::global::global_data_view& gdv)
     : m_dir(dir),
       m_gdv(gdv),
-      m_limits(uhlimits),
-      m_dedupe(dedupe) {}
+      m_limits(uhlimits)
+    {}
 
 bool put_object::can_handle(const request& req) {
     return req.method() == verb::put && req.bucket() != RESERVED_BUCKET_NAME &&
@@ -51,7 +50,7 @@ coro<response> put_object::handle(request& req) {
     m_limits.check_storage_size(content_length);
 
     md5 hash;
-    auto resp = co_await deduplicate(m_dedupe, req.body(), hash);
+    auto resp = co_await store(m_gdv, req.body(), hash);
 
     auto tag = to_hex(hash.finalize());
 

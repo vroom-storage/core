@@ -21,11 +21,11 @@
 
 #include <common/coroutines/coro_util.h>
 #include <common/db/db.h>
+#include <common/etcd/service.h>
 #include <common/etcd/registry/service_id.h>
 #include <common/etcd/registry/service_registry.h>
 #include <common/etcd/service_discovery/service_maintainer.h>
 #include <common/license/license_watcher.h>
-#include <deduplicator/service.h>
 #include <entrypoint/directory.h>
 #include <entrypoint/garbage_collector.h>
 #include <entrypoint/http/request_factory.h>
@@ -48,7 +48,6 @@ private:
     storage::global::global_data_view m_gdv;
     storage::global::cache m_cache;
 
-    std::unique_ptr<deduplicator_interface> m_dedupe;
     directory m_directory;
 
     multipart_state m_uploads;

@@ -21,7 +21,6 @@
 #include <common/telemetry/log.h>
 #include <common/utils/common.h>
 #include <coordinator/config.h>
-#include <deduplicator/config.h>
 #include <entrypoint/config.h>
 #include <storage/config.h>
 #include <proxy/config.h>
@@ -38,7 +37,6 @@ struct config {
 
     entrypoint_config entrypoint;
     storage_config storage;
-    deduplicator_config deduplicator;
     coordinator_config coordinator;
     proxy::config proxy;
 };

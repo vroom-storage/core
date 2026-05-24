@@ -16,14 +16,13 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <util/dedupe_fixture.h>
-
 #include <proxy/cache/disk/disk_io.h>
 #include <proxy/http.h>
 #include <proxy/socket_io.h>
 #include <proxy/tee_io.h>
 
 #include <common/utils/random.h>
+#include <util/storage_fixture.h>
 
 #include <boost/beast/http/parser.hpp>
 #include <boost/beast/http/string_body.hpp>
@@ -32,7 +31,7 @@ using namespace boost::beast::http;
 
 namespace uh::cluster::proxy::cache::disk {
 
-BOOST_FIXTURE_TEST_SUITE(a_disk_cache_body, dedupe_fixture)
+BOOST_FIXTURE_TEST_SUITE(a_disk_cache_body, storage_fixture)
 
 BOOST_AUTO_TEST_CASE(supports_write) {
     std::string data = random_string(64);
