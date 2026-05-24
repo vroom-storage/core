@@ -55,7 +55,6 @@ static constexpr std::size_t PEBI_BYTE = 1024 * TEBI_BYTE;
 
 enum role : uint8_t {
     STORAGE_SERVICE,
-    DEDUPLICATOR_SERVICE,
     ENTRYPOINT_SERVICE,
     COORDINATOR_SERVICE,
     PROXY_SERVICE
@@ -76,9 +75,6 @@ enum message_type : uint8_t {
     STORAGE_USED_REQ = 39,
     STORAGE_ALLOCATE_REQ = 40,
     STORAGE_GET_REFCOUNTS_REQ = 41,
-
-    DEDUPLICATOR_REQ = 64,
-
 };
 
 constexpr const char* ENV_CFG_ENDPOINT_HOST = "UH_POD_IP";

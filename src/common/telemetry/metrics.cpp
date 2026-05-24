@@ -63,9 +63,7 @@ void initialize_counters() {
             if ((metric_suffix == COUNTER_SUFFIX or
                  metric_suffix == REQ_SUFFIX) and
                 (metric_prefix == role_prefix or
-                 (metric_prefix == GDV_PREFIX and
-                  (role_prefix == get_role_prefix(DEDUPLICATOR_SERVICE) or
-                   role_prefix == get_role_prefix(ENTRYPOINT_SERVICE))))) {
+                 (metric_prefix == GDV_PREFIX and role_prefix == get_role_prefix(ENTRYPOINT_SERVICE)))) {
                 metric<type>::increase(0);
             }
         }
