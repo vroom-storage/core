@@ -15,12 +15,10 @@
 set_property(GLOBAL PROPERTY TEST_TYPE "integration")
 
 # uh_add_test(test_gdv_fixture PRIVATE storage coordinator)
-# uh_add_test(test_fragment_set PRIVATE deduplicator)
 # uh_add_test(test_global_data_view PRIVATE storage coordinator)
 
 # uh_add_test(test_gdv_fixture PRIVATE storage coordinator MODE with_ec)
 # uh_add_test(test_global_data_view PRIVATE storage coordinator MODE with_ec)
-# uh_add_test(test_fragment_set PRIVATE deduplicator MODE with_ec)
 
 uh_add_test(test_awaitable_promise PRIVATE network)
 # uh_add_test(test_coordinator PRIVATE etcd storage coordinator)
@@ -34,7 +32,6 @@ uh_add_test(test_ec PRIVATE ec)
 uh_add_test(test_lru_cache)
 uh_add_test(test_mock_data_store PRIVATE uh_mock_storage)
 uh_add_test(test_reference_counter PRIVATE storage)
-# uh_add_test(test_service PRIVATE entrypoint deduplicator storage)
 # uh_add_test(test_service_discovery PRIVATE etcd storage)
 # uh_add_test(test_storage_state_manager PRIVATE etcd storage)
 # uh_add_test(test_ec_maintainer PRIVATE storage)
