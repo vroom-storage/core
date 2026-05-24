@@ -16,14 +16,14 @@
 
 #include <common/utils/random.h>
 #include <proxy/cache/disk/manager.h>
-#include <util/dedupe_fixture.h>
+#include <util/storage_fixture.h>
 
 #include <boost/test/unit_test.hpp>
 
 
 namespace uh::cluster::proxy::cache::disk {
 
-BOOST_FIXTURE_TEST_SUITE(a_disk_cache_manager, dedupe_fixture)
+BOOST_FIXTURE_TEST_SUITE(a_disk_cache_manager, storage_fixture)
 
 BOOST_AUTO_TEST_CASE(put_and_get_with_metadata) {
     manager mgr{manager::create(m_ioc, data_view, 256)};

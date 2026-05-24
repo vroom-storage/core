@@ -217,12 +217,6 @@ _start_native() {
         done
     done < <(jq -c '.[]' <<< "$storage_groups")
 
-    mkdir -p "$cluster_abs/data/deduplicator-0"
-    "$bin_dir/uh-cluster" --registry "$registry" \
-        --workdir "$cluster_abs/data/deduplicator-0" deduplicator --port 9200 \
-        >> "$cluster_abs/logs/deduplicator-0.log" 2>&1 &
-    pids[deduplicator-0]=$!
-
     "$bin_dir/uh-cluster" --registry "$registry" entrypoint \
         >> "$cluster_abs/logs/entrypoint.log" 2>&1 &
     pids[entrypoint]=$!
@@ -310,9 +304,6 @@ _start_docker() {
                 -e "UH_STORAGE_INSTANCE_ID=$i"
         done
     done < <(jq -c '.[]' <<< "$storage_groups")
-
-    _run_service "deduplicator-0" \
-        "/usr/local/bin/uh-cluster --registry $registry deduplicator"
 
     # Entrypoint gets an additional policy file mount
     mkdir -p "$cluster_abs/data/entrypoint"

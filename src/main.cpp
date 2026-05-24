@@ -16,10 +16,10 @@
 #include <common/telemetry/trace/trace.h>
 #include <common/utils/service_runner.h>
 #include <common/utils/strings.h>
+#include <common/project/project.h>
 #include <config/configuration.h>
 
 #include <coordinator/service.h>
-#include <deduplicator/service.h>
 #include <entrypoint/service.h>
 #include <storage/service.h>
 #include <proxy/service.h>
@@ -32,9 +32,6 @@ static std::any make_service(boost::asio::io_context& ioc, const config& c) {
     case STORAGE_SERVICE:
         return std::make_shared<storage::service>( //
             ioc, c.service, c.storage);
-    case DEDUPLICATOR_SERVICE:
-        return std::make_shared<deduplicator::service>( //
-            ioc, c.service, c.deduplicator);
     case ENTRYPOINT_SERVICE:
         return std::make_shared<ep::service>( //
             ioc, c.service, c.entrypoint);
@@ -52,8 +49,6 @@ static std::size_t get_num_threads(const config& c) {
     switch (c.role) {
     case STORAGE_SERVICE:
         return c.storage.num_threads;
-    case DEDUPLICATOR_SERVICE:
-        return c.deduplicator.num_threads;
     case ENTRYPOINT_SERVICE:
         return c.entrypoint.num_threads;
     case COORDINATOR_SERVICE:

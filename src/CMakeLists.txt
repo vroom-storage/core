@@ -15,10 +15,9 @@
 add_subdirectory(common)
 add_subdirectory(config)
 add_subdirectory(storage)
-add_subdirectory(deduplicator)
 add_subdirectory(entrypoint)
 add_subdirectory(coordinator)
 add_subdirectory(proxy)
 
 add_executable(uh-cluster main.cpp)
-target_link_libraries(uh-cluster Threads::Threads types telemetry conf entrypoint deduplicator storage coordinator proxy project)
+target_link_libraries(uh-cluster Threads::Threads types telemetry conf entrypoint storage coordinator proxy project)
