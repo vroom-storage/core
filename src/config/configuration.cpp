@@ -86,6 +86,10 @@ void register_service(CLI::App& app, service_config& cfg) {
                  "enable generation of traces")
         ->default_val(cfg.enable_traces)
         ->envname(ENV_CFG_ENABLE_TRACES);
+
+    app.add_option("--trace-endpoint", cfg.trace_url,
+                   "URL to OpenTelemetry trace endpoint (overrides --telemetry-endpoint for traces)")
+        ->envname(ENV_CFG_TRACE_ENDPOINT);
 }
 
 void register_server(CLI::App& app, server_config& cfg) {

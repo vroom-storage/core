@@ -28,6 +28,7 @@ struct service_config {
     std::string telemetry_url;
     unsigned telemetry_interval = 1000;
     bool enable_traces = false;
+    std::string trace_url;
 };
 
 } // namespace uh::cluster

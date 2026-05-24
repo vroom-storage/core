@@ -84,11 +84,12 @@ int main(int argc, char** argv) {
 
         initialize_metrics_exporter(config->service.telemetry_url,
                                     config->service.telemetry_interval);
-        if (config->service.enable_traces &&
-            !config->service.telemetry_url.empty()) {
-            LOG_DEBUG() << "trace endpoint: " << config->service.telemetry_url;
-            initialize_trace(info.project_name, info.project_version,
-                             config->service.telemetry_url);
+        const auto& trace_url = config->service.trace_url.empty()
+                                    ? config->service.telemetry_url
+                                    : config->service.trace_url;
+        if (config->service.enable_traces && !trace_url.empty()) {
+            LOG_DEBUG() << "trace endpoint: " << trace_url;
+            initialize_trace(info.project_name, info.project_version, trace_url);
         }
         auto runner = service_runner(
             [&](boost::asio::io_context& ioc) {
