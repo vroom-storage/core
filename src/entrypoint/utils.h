@@ -17,7 +17,7 @@
 #pragma once
 
 #include <common/crypto/hash.h>
-#include <common/service_interfaces/deduplicator_interface.h>
+#include <common/types/dedupe_response.h>
 #include <storage/global/data_view.h>
 #include <entrypoint/http/response.h>
 #include <entrypoint/object.h>

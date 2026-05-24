@@ -19,11 +19,9 @@
  */
 #pragma once
 
-#include <common/service_interfaces/deduplicator_interface.h>
+#include <common/coroutines/coro.h>
 #include <common/types/common_types.h>
 #include <storage/interfaces/data_view.h>
-
-#include <memory>
 
 namespace uh::cluster::proxy::cache::disk::utils {
 
