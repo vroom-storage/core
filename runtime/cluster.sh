@@ -212,7 +212,7 @@ _start_native() {
 
     local trace_args=()
     if [[ "$enable_traces" == "true" ]]; then
-        trace_args=(--enable-traces --telemetry-endpoint "localhost:${JAEGER_OTLP_PORT}")
+        trace_args=(--enable-traces --trace-endpoint "localhost:${JAEGER_OTLP_PORT}")
     fi
 
     echo "Initializing root user..."
@@ -283,7 +283,7 @@ _start_docker() {
         "$uh_license" "$DB_PORT" "$storage_groups" > "$env_file"
 
     if [[ "$enable_traces" == "true" ]]; then
-        printf 'UH_TRACES_ENABLED=true\nUH_OTEL_ENDPOINT=localhost:%s\n' \
+        printf 'UH_TRACES_ENABLED=true\nUH_TRACE_ENDPOINT=localhost:%s\n' \
             "$JAEGER_OTLP_PORT" >> "$env_file"
     fi
 
