@@ -15,13 +15,14 @@
 #include <boost/test/tools/old/interface.hpp>
 #define BOOST_TEST_MODULE "service_registry tests"
 
-#include "common/etcd/namespace.h"
-#include "common/etcd/registry/service_registry.h"
-#include "common/etcd/utils.h"
-#include <boost/asio/ip/host_name.hpp>
-#include <boost/test/unit_test.hpp>
+#include <common/etcd/namespace.h>
+#include <common/etcd/registry/service_registry.h>
+#include <common/etcd/utils.h>
 #include <common/service_interfaces/hostport.h>
 #include <common/utils/strings.h>
+
+#include <boost/asio/ip/host_name.hpp>
+#include <boost/test/unit_test.hpp>
 
 // ------------- Tests Suites Follow --------------
 
@@ -33,7 +34,7 @@ BOOST_AUTO_TEST_CASE(basic_register_retrieve_deregister) {
     const auto port_address = 9200;
 
     auto etcd = etcd_manager();
-    auto key = ns::root.deduplicator.hostports[index];
+    auto key = ns::root.coordinator.hostports[index];
 
     {
         // check if the keys already exist or not
