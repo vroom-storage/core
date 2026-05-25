@@ -184,11 +184,6 @@ void default_data_store::write(
     m_refcounter.increment(refcounts, false);
 }
 
-std::vector<refcount_t>
-default_data_store::link(const std::vector<refcount_t>& refcounts) {
-    return m_refcounter.increment(refcounts);
-}
-
 std::size_t
 default_data_store::unlink(const std::vector<refcount_t>& refcounts) {
     return m_refcounter.decrement(refcounts);

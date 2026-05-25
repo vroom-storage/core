@@ -72,17 +72,6 @@ public:
     std::size_t read(storage_pointer local_pointer,
                      std::span<char> buffer) override;
 
-    /**
-     * @brief Creates a reference to one or multiple storage locations.
-     * Invalid/non-existing fragments will be reported as rejected fragments
-     * in a returned address.
-     * @param refcounts: vector of refcount_t containing the stripe ID and its
-     * count to link
-     * @return a vector containing rejected refcount_t.
-     */
-    std::vector<refcount_t>
-    link(const std::vector<refcount_t>& refcounts) override;
-
     /***
      * @brief Unlinks the specified reference counts from the data store.
      * If a stripe ID does not exist, it will be ignored.
