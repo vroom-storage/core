@@ -96,9 +96,6 @@ coro<void> handler::handle_iteration(const messenger::header& hdr,
     case STORAGE_READ_ADDRESS_REQ:
         co_await handle_read_address(m, hdr);
         break;
-    case STORAGE_LINK_REQ:
-        co_await handle_link(m, hdr);
-        break;
     case STORAGE_UNLINK_REQ:
         co_await handle_unlink(m, hdr);
         break;
@@ -147,14 +144,6 @@ coro<void> handler::handle_read_address(messenger& m,
 
     co_await m_storage.read_address(addr, buffer.span(), offsets);
     co_await m.send(SUCCESS, buffer.span());
-}
-
-coro<void> handler::handle_link(messenger& m, const messenger::header& h) {
-
-    const auto refcounts = co_await m.recv_refcounts(h);
-    auto rejected_stripes = co_await m_storage.link(refcounts);
-
-    co_await m.send_refcounts(SUCCESS, rejected_stripes);
 }
 
 coro<void> handler::handle_unlink(messenger& m, const messenger::header& h) {

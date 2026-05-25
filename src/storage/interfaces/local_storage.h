@@ -69,19 +69,6 @@ struct local_storage : public storage_interface {
         co_return;
     }
 
-    coro<std::vector<refcount_t>>
-    link(const std::vector<refcount_t>& refcounts) override {
-        auto p = std::make_shared<std::promise<std::vector<refcount_t>>>();
-        boost::asio::post(m_threads, [this, p, &refcounts]() {
-            try {
-                p->set_value(m_data_store->link(refcounts));
-            } catch (const std::exception&) {
-                p->set_exception(std::current_exception());
-            }
-        });
-        co_return p->get_future().get();
-    }
-
     coro<std::size_t>
     unlink(const std::vector<refcount_t>& refcounts) override {
         auto p = std::make_shared<std::promise<std::size_t>>();

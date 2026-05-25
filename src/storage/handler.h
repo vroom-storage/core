@@ -38,8 +38,6 @@ private:
 
     coro<void> handle_read_address(messenger& m, const messenger::header& h);
 
-    coro<void> handle_link(messenger& m, const messenger::header& h);
-
     coro<void> handle_unlink(messenger& m, const messenger::header& h);
 
     coro<void> handle_get_refcounts(messenger& m, const messenger::header& h);

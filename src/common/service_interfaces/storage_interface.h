@@ -38,9 +38,6 @@ struct storage_interface {
                                     std::span<char> buffer,
                                     const std::vector<size_t>& offsets) = 0;
 
-    virtual coro<std::vector<refcount_t>>
-    link(const std::vector<refcount_t>& refcounts) = 0;
-
     virtual coro<std::size_t>
     unlink(const std::vector<refcount_t>& refcounts) = 0;
 
