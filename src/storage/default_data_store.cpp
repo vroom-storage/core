@@ -138,8 +138,7 @@ std::size_t default_data_store::fetch_used_space() const {
 }
 
 void default_data_store::write(
-    allocation_t allocation, const std::vector<std::span<const char>>& buffers,
-    const std::vector<refcount_t>& refcounts) {
+    allocation_t allocation, const std::vector<std::span<const char>>& buffers) {
     std::size_t local_pointer = allocation.offset;
     allocate_files(local_pointer, allocation.size);
 
@@ -180,8 +179,6 @@ void default_data_store::write(
         desired = std::max(desired, expected);
     }
     sync(dirty_files);
-
-    m_refcounter.increment(refcounts, false);
 }
 
 std::size_t

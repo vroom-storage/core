@@ -61,8 +61,7 @@ coro<address> mock_data_view::write(std::span<const char> data,
                                     const std::vector<std::size_t>& offsets) {
     auto alloc = m_storage.allocate(data.size());
     auto addr = compute_address(offsets, data.size(), alloc);
-    auto refcounts = extract_refcounts(addr);
-    m_storage.write(alloc, std::vector<std::span<const char>>{data}, refcounts);
+    m_storage.write(alloc, std::vector<std::span<const char>>{data});
     co_return addr;
 }
 

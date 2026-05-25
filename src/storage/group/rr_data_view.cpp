@@ -41,8 +41,7 @@ coro<address> rr_data_view::write(std::span<const char> data,
     auto allocation = co_await client->allocate(data.size());
     address rv = compute_address(offsets, data.size_bytes(), storage_id,
                                  allocation.offset);
-    auto refcounts = extract_refcounts(rv);
-    co_await client->write(allocation, {data}, refcounts[storage_id]);
+    co_await client->write(allocation, {data});
 
     co_return rv;
 }

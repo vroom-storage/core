@@ -131,13 +131,11 @@ coro<address> ec_data_view::write(std::span<const char> data,
     address addr = compute_address(offsets, data.size_bytes(), allocation);
     // WARNING: this is a group address and won't work with multiple storage
     // groups
-    auto refcounts = extract_refcounts(addr);
 
     co_await run_for_all<void, std::shared_ptr<storage_interface>>(
         m_ioc,
         [&](size_t i, auto storage) -> coro<void> {
-            co_await storage->write(allocation, storage_buffers_view[i],
-                                    refcounts);
+            co_await storage->write(allocation, storage_buffers_view[i]);
         },
         storages);
 

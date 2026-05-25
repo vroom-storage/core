@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_CASE(write_updates_space) {
 
     auto data = random_buffer(1 * MEBI_BYTE);
     auto alloc = ds->allocate(data.size());
-    ds->write(alloc, {data.string_view()}, make_default_refcounts(alloc));
+    ds->write(alloc, {data.string_view()});
 
     BOOST_CHECK_EQUAL(ds->get_used_space(), 1 * MEBI_BYTE);
     BOOST_CHECK_EQUAL(ds->get_available_space(),
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE(test_used_and_available_space) {
 
     for (auto& data : test_data) {
         auto alloc = ds->allocate(data.size());
-        ds->write(alloc, {data.string_view()}, make_default_refcounts(alloc));
+        ds->write(alloc, {data.string_view()});
 
         auto used_size = get_expected_used(data.size());
         BOOST_TEST(ds->get_used_space() == used_size);
@@ -184,7 +184,7 @@ BOOST_AUTO_TEST_CASE(test_read) {
     long failures = 0;
     for (auto& data : test_data) {
         auto alloc = ds->allocate(data.size());
-        ds->write(alloc, {data.string_view()}, make_default_refcounts(alloc));
+        ds->write(alloc, {data.string_view()});
         address addr;
         addr.emplace_back(alloc.offset, data.size());
         size_t t_read = 0;
@@ -210,7 +210,7 @@ BOOST_AUTO_TEST_CASE(test_sync) {
     std::vector<address> addresses;
     for (auto& data : test_data) {
         auto alloc = ds->allocate(data.size());
-        ds->write(alloc, {data.string_view()}, make_default_refcounts(alloc));
+        ds->write(alloc, {data.string_view()});
         address addr;
         addr.emplace_back(alloc.offset, data.size());
         addresses.emplace_back(addr);
@@ -245,8 +245,7 @@ BOOST_AUTO_TEST_CASE(stress_test) {
         threads.emplace_back([&, thread_id = i]() {
             try {
                 auto alloc = ds->allocate(test_data[thread_id].size());
-                ds->write(alloc, {test_data[thread_id].string_view()},
-                          make_default_refcounts(alloc));
+                ds->write(alloc, {test_data[thread_id].string_view()});
                 address addr;
                 addr.emplace_back(alloc.offset, test_data[thread_id].size());
                 char read_buf[MAX_FILE_SIZE_BYTES];
@@ -313,7 +312,7 @@ BOOST_AUTO_TEST_CASE(test_async_write) {
     std::vector<address> addresses;
     for (auto& data : test_data) {
         auto alloc = ds->allocate(data.size());
-        ds->write(alloc, {data.string_view()}, make_default_refcounts(alloc));
+        ds->write(alloc, {data.string_view()});
         address addr;
         addr.emplace_back(alloc.offset, data.size());
         addresses.emplace_back(addr);
@@ -336,7 +335,7 @@ BOOST_AUTO_TEST_CASE(test_link_unlink_invariant) {
     auto buffer = random_buffer(2 * DEFAULT_PAGE_SIZE);
 
     auto alloc = ds->allocate(buffer.size());
-    ds->write(alloc, {buffer.string_view()}, make_default_refcounts(alloc));
+    ds->write(alloc, {buffer.string_view()});
     address addr;
     addr.emplace_back(alloc.offset, buffer.size());
 
@@ -344,7 +343,7 @@ BOOST_AUTO_TEST_CASE(test_link_unlink_invariant) {
     BOOST_CHECK_EQUAL(ds->unlink(refcounts), addr.data_size());
 
     auto alloc2 = ds->allocate(buffer.size());
-    ds->write(alloc2, {buffer.string_view()}, make_default_refcounts(alloc2));
+    ds->write(alloc2, {buffer.string_view()});
     addr = address{};
     addr.emplace_back(alloc2.offset, buffer.size());
 
@@ -368,9 +367,9 @@ BOOST_AUTO_TEST_CASE(test_unlink_page_aligned) {
     auto alloc1 = ds->allocate(buffer1.size());
     auto alloc2 = ds->allocate(buffer2.size());
     auto alloc3 = ds->allocate(buffer3.size());
-    ds->write(alloc1, {buffer1.string_view()}, make_default_refcounts(alloc1));
-    ds->write(alloc2, {buffer2.string_view()}, make_default_refcounts(alloc2));
-    ds->write(alloc3, {buffer3.string_view()}, make_default_refcounts(alloc3));
+    ds->write(alloc1, {buffer1.string_view()});
+    ds->write(alloc2, {buffer2.string_view()});
+    ds->write(alloc3, {buffer3.string_view()});
     address buffer1_address;
     buffer1_address.emplace_back(alloc1.offset, buffer1.size());
     address buffer2_address;
@@ -440,9 +439,9 @@ BOOST_AUTO_TEST_CASE(test_unlink_page_unaligned) {
     auto alloc1 = ds->allocate(buffer1.size(), 1);
     auto alloc2 = ds->allocate(buffer2.size(), 1);
     auto alloc3 = ds->allocate(buffer3.size(), 1);
-    ds->write(alloc1, {buffer1.string_view()}, make_default_refcounts(alloc1));
-    ds->write(alloc2, {buffer2.string_view()}, make_default_refcounts(alloc2));
-    ds->write(alloc3, {buffer3.string_view()}, make_default_refcounts(alloc3));
+    ds->write(alloc1, {buffer1.string_view()});
+    ds->write(alloc2, {buffer2.string_view()});
+    ds->write(alloc3, {buffer3.string_view()});
     address buffer1_address;
     buffer1_address.emplace_back(alloc1.offset, buffer1.size());
     address buffer2_address;
@@ -518,8 +517,8 @@ BOOST_AUTO_TEST_CASE(test_unlink_multi_file) {
     address full_address;
     auto alloc1 = ds->allocate(buffer1.size());
     auto alloc2 = ds->allocate(buffer2.size());
-    ds->write(alloc1, {buffer1.string_view()}, make_default_refcounts(alloc1));
-    ds->write(alloc2, {buffer2.string_view()}, make_default_refcounts(alloc2));
+    ds->write(alloc1, {buffer1.string_view()});
+    ds->write(alloc2, {buffer2.string_view()});
     address buffer1_address;
     buffer1_address.emplace_back(alloc1.offset, buffer1.size());
     address buffer2_address;
@@ -576,7 +575,7 @@ BOOST_AUTO_TEST_CASE(repeated_write_delete) {
 
     for (std::size_t i = 0; i < 100; i++) {
         auto alloc = ds->allocate(buffer.size());
-        ds->write(alloc, {buffer.string_view()}, make_default_refcounts(alloc));
+        ds->write(alloc, {buffer.string_view()});
         address buffer_address;
         buffer_address.emplace_back(alloc.offset, buffer.size());
         auto buffer_refcounts = extract_refcounts(buffer_address);
@@ -586,7 +585,7 @@ BOOST_AUTO_TEST_CASE(repeated_write_delete) {
     auto alloc = ds->allocate(buffer.size());
     address buffer_address;
     buffer_address.emplace_back(alloc.offset, buffer.size());
-    ds->write(alloc, {buffer.string_view()}, make_default_refcounts(alloc));
+    ds->write(alloc, {buffer.string_view()});
 
     shared_buffer<char> read_buffer(buffer_address.data_size());
     size_t t_read = 0;
@@ -609,7 +608,7 @@ BOOST_AUTO_TEST_CASE(deletion_space_reclaim) {
 
     auto data = random_buffer(MAX_DATA_STORE_SIZE_BYTES / 4);
     auto alloc = ds->allocate(data.size());
-    ds->write(alloc, {data.string_view()}, make_default_refcounts(alloc));
+    ds->write(alloc, {data.string_view()});
     BOOST_CHECK_EQUAL(ds->get_used_space(), MAX_DATA_STORE_SIZE_BYTES / 4);
     BOOST_CHECK_EQUAL(ds->get_available_space(),
                       3 * (MAX_DATA_STORE_SIZE_BYTES / 4));
