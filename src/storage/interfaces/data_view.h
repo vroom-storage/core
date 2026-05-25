@@ -33,8 +33,6 @@ public:
     virtual coro<std::size_t> read_address(const address& addr,
                                            std::span<char> buffer) = 0;
 
-    [[nodiscard]] virtual coro<address> link(const address& addr) = 0;
-
     virtual coro<std::size_t> unlink(const address& addr) = 0;
 
     virtual coro<std::size_t> get_used_space() = 0;

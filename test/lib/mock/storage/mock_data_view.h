@@ -31,7 +31,6 @@ public:
     coro<shared_buffer<>> read(const uint128_t& pointer, size_t size) override;
     coro<std::size_t> read_address(const address& addr,
                                    std::span<char> buffer) override;
-    [[nodiscard]] coro<address> link(const address& addr) override;
     coro<std::size_t> unlink(const address& addr) override;
     coro<std::size_t> get_used_space() override;
 

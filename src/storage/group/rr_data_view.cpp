@@ -171,24 +171,6 @@ address rr_data_view::compute_rejected_address(
     return rv;
 }
 
-[[nodiscard]] coro<address> rr_data_view::link(const address& addr) {
-    std::vector<std::vector<refcount_t>> refcounts_by_storage =
-        extract_refcounts(addr);
-
-    auto refcounts = co_await run_for_all<std::vector<refcount_t>,
-                                          std::shared_ptr<storage_interface>>(
-        m_ioc,
-        [&](size_t i, auto storage) -> coro<std::vector<refcount_t>> {
-            if (storage == nullptr)
-                throw std::runtime_error("Storage " + std::to_string(i) +
-                                         " is not available");
-            co_return co_await storage->link(refcounts_by_storage[i]);
-        },
-        m_storage_index.get());
-
-    co_return compute_rejected_address(refcounts, addr);
-}
-
 coro<std::size_t> rr_data_view::unlink(const address& addr) {
     std::vector<std::vector<refcount_t>> refcounts_by_storage =
         extract_refcounts(addr);

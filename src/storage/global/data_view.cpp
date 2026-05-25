@@ -86,10 +86,6 @@ coro<std::size_t> global_data_view::get_used_space() {
     co_return co_await m_group_view->get_used_space();
 }
 
-[[nodiscard]] coro<address> global_data_view::link(const address& addr) {
-    co_return co_await m_group_view->link(addr);
-}
-
 coro<std::size_t> global_data_view::unlink(const address& addr) {
     co_return co_await m_group_view->unlink(addr);
 }

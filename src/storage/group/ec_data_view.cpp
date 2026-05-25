@@ -471,20 +471,6 @@ address ec_data_view::compute_rejected_address(
     return rv;
 }
 
-[[nodiscard]] coro<address> ec_data_view::link(const address& addr) {
-    auto refcounts = extract_refcounts(addr);
-    auto storages = m_externals.get_storage_services();
-    auto link_rvs = co_await run_for_all<std::vector<refcount_t>,
-                                         std::shared_ptr<storage_interface>>(
-        m_ioc,
-        [&](size_t i, auto storage) -> coro<std::vector<refcount_t>> {
-            co_return co_await storage->link(refcounts);
-        },
-        storages);
-
-    co_return compute_rejected_address(link_rvs, addr);
-}
-
 coro<std::size_t> ec_data_view::unlink(const address& addr) {
     auto refcounts = extract_refcounts(addr);
     auto storages = m_externals.get_storage_services();

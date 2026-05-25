@@ -90,15 +90,6 @@ coro<std::size_t> mock_data_view::get_used_space() {
     co_return m_storage.get_used_space();
 }
 
-[[nodiscard]] coro<address> mock_data_view::link(const address& addr) {
-    auto refcounts = extract_refcounts(addr);
-    m_storage.link(refcounts);
-
-    address rv;
-    co_return rv; // This is a placeholder, actual implementation should return
-                  // a valid address
-}
-
 coro<std::size_t> mock_data_view::unlink(const address& addr) {
     auto refcounts = extract_refcounts(addr);
     co_return m_storage.unlink(refcounts);
