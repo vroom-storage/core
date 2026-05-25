@@ -67,14 +67,11 @@ coro<response> copy_object::handle(request& req) {
 
     m_limits.check_storage_size(obj->size);
 
-    auto rejects = co_await m_gdv.link(*obj->addr);
-    if (!rejects.empty()) {
-        LOG_ERROR() << req.peer()
-                    << ": database contains object without references";
-        throw command_exception(status::internal_server_error, "InternalError",
-                                "Found corrupted data.");
-    }
-
+    // TODO make this support really large objects
+    std::vector<char> buffer(obj->size);
+    co_await m_gdv.read_address(*obj->addr, buffer);
+    auto copy_addr = co_await m_gdv.write(buffer, {0});
+    obj->addr = copy_addr;
     obj->name = req.object_key();
     auto new_version = co_await safe_put_object(m_dir, m_gdv, req.bucket(), *obj);
 
