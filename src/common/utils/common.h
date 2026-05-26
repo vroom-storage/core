@@ -73,7 +73,6 @@ enum message_type : uint8_t {
     STORAGE_UNLINK_REQ = 38,
     STORAGE_USED_REQ = 39,
     STORAGE_ALLOCATE_REQ = 40,
-    STORAGE_GET_REFCOUNTS_REQ = 41,
 };
 
 constexpr const char* ENV_CFG_ENDPOINT_HOST = "UH_POD_IP";

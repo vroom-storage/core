@@ -53,7 +53,6 @@ enum metric_type {
     storage_unlink_req,
     storage_used_req,
     storage_allocate_req,
-    storage_get_refcounts_req,
     entrypoint_abort_multipart_req,
     entrypoint_complete_multipart_req,
     entrypoint_create_bucket_req,

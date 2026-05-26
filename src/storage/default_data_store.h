@@ -80,15 +80,6 @@ public:
      */
     std::size_t unlink(const std::vector<refcount_t>& refcounts) override;
 
-    /***
-     * @brief Returns the reference counts for the specified stripe IDs.
-     * If a stripe ID does not exist, it will be returned with a count of 0.
-     * @param stripe_ids: vector of stripe IDs to get reference counts for
-     * @return vector of refcount_t containing the stripe ID and its count
-     */
-    std::vector<refcount_t>
-    get_refcounts(const std::vector<std::size_t>& stripe_ids) override;
-
     /**
      * @brief Returns the current used space of the data store.
      * @return size_t: the used space in the data store

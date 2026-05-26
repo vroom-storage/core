@@ -40,9 +40,6 @@ struct data_store {
 
     virtual std::size_t unlink(const std::vector<refcount_t>& refcounts) = 0;
 
-    virtual std::vector<refcount_t>
-    get_refcounts(const std::vector<std::size_t>& stripe_ids) = 0;
-
     virtual std::size_t get_used_space() const noexcept = 0;
 
     virtual std::size_t get_available_space() const noexcept = 0;
