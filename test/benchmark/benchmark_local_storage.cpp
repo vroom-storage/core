@@ -46,7 +46,7 @@ BENCHMARK_F(storage_fixture, profile_storage_write_4k)
     const auto& data = s->random_4k;
     for (auto _ : state) {
         auto alloc = s->store.allocate(data.size());
-        s->store.write(alloc, { std::span<const char>{data.c_str(), data.size() } }, {});
+        s->store.write(alloc, { std::span<const char>{data.c_str(), data.size() } });
     }
 }
 
