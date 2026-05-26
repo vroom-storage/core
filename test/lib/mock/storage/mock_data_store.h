@@ -43,7 +43,6 @@ public:
     void clear(); // for testing
 
     size_t id() const noexcept;
-    std::size_t get_page_size() const noexcept;
 
     ~mock_data_store();
 
@@ -58,7 +57,6 @@ private:
     data_store_config m_conf;
 
     std::vector<char> m_data;
-    std::unordered_map<std::size_t, std::size_t> m_refcounter;
     std::mutex m_mutex;
 };
 

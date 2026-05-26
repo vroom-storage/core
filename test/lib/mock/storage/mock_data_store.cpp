@@ -19,7 +19,6 @@
 #include <common/types/address.h>
 #include <fstream>
 #include <iostream>
-#include <unordered_set>
 
 namespace uh::cluster {
 
@@ -48,6 +47,7 @@ mock_data_store::mock_data_store(data_store_config conf,
             ifs.read(m_data.data(), m_data.size());
 
             std::streamsize bytes_read = ifs.gcount();
+            LOG_WARN() << "read " << bytes_read << " bytes from data store";
             if (bytes_read < 0) {
                 throw std::runtime_error("Stream read error occurred.");
             }
@@ -82,8 +82,8 @@ std::size_t mock_data_store::read(const std::size_t pointer,
 std::size_t mock_data_store::unlink(storage_pointer pointer, std::size_t size) {
     std::lock_guard<std::mutex> lock(m_mutex);
 
-    std::fill(m_data.begin() + pointer, m_data.begin() + pointer + m_conf.page_size, 0);
-    return m_conf.page_size;
+    std::fill(m_data.begin() + pointer, m_data.begin() + pointer + size, 0);
+    return size;
 }
 
 uint64_t mock_data_store::get_used_space() const noexcept {
@@ -100,7 +100,6 @@ std::size_t mock_data_store::get_write_offset() const noexcept {
 
 void mock_data_store::clear() {
     m_data.clear();
-    m_refcounter.clear();
 }
 
 size_t mock_data_store::id() const noexcept { return m_data_store_id; }
@@ -124,12 +123,9 @@ allocation_t mock_data_store::allocate(std::size_t size,
     return {.offset = allocation_offset, .size = size};
 }
 
-std::size_t mock_data_store::get_page_size() const noexcept {
-    return m_conf.page_size;
-}
-
 mock_data_store::~mock_data_store() {
     {
+        LOG_WARN() << "writing mock_data_store: " << m_current_offset.load();
         std::ofstream ofs(m_root / m_datafile, std::ios::binary);
         ofs.write(reinterpret_cast<const char*>(m_data.data()),
                   m_current_offset.load());

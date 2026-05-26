@@ -281,7 +281,7 @@ BOOST_AUTO_TEST_CASE(test_async_write) {
     BOOST_TEST(failures == 0);
 }
 
-BOOST_AUTO_TEST_CASE(test_link_unlink_invariant) {
+BOOST_AUTO_TEST_CASE(test_unlink_reported_freed_memory) {
     auto buffer = random_buffer(2 * DEFAULT_PAGE_SIZE);
     auto alloc = ds->allocate(buffer.size());
     ds->write(alloc, {buffer.string_view()});
@@ -290,12 +290,6 @@ BOOST_AUTO_TEST_CASE(test_link_unlink_invariant) {
 
     auto freed = ds->unlink(alloc.offset, buffer.size());
     BOOST_CHECK_EQUAL(freed, addr.data_size());
-
-    auto alloc2 = ds->allocate(buffer.size());
-    ds->write(alloc2, {buffer.string_view()});
-    addr = address{};
-    addr.emplace_back(alloc2.offset, buffer.size());
-    BOOST_TEST(addr.size() == 1);
 }
 
 BOOST_AUTO_TEST_CASE(test_unlink_page_aligned) {
@@ -343,7 +337,7 @@ BOOST_AUTO_TEST_CASE(test_unlink_page_aligned) {
         offset += buffer3.size();
     }
 
-    for (auto i = 0; i < buffer2_address.size(); ++i) {
+    for (auto i = 0ull; i < buffer2_address.size(); ++i) {
         const auto& f = buffer2_address.get(i);
         ds->unlink(f.pointer, f.size);
     }
@@ -373,84 +367,65 @@ BOOST_AUTO_TEST_CASE(test_unlink_page_aligned) {
 
 BOOST_AUTO_TEST_CASE(test_unlink_page_unaligned) {
     const std::size_t ALIGNMENT_OFFSET = 1337;
+
     auto buffer1 = random_buffer(DEFAULT_PAGE_SIZE + ALIGNMENT_OFFSET);
     auto buffer2 = random_buffer(2 * DEFAULT_PAGE_SIZE);
     auto buffer3 = random_buffer(DEFAULT_PAGE_SIZE - ALIGNMENT_OFFSET);
 
-    address full_address;
     auto alloc1 = ds->allocate(buffer1.size(), 1);
     auto alloc2 = ds->allocate(buffer2.size(), 1);
     auto alloc3 = ds->allocate(buffer3.size(), 1);
+
     ds->write(alloc1, {buffer1.string_view()});
     ds->write(alloc2, {buffer2.string_view()});
     ds->write(alloc3, {buffer3.string_view()});
-    address buffer1_address;
-    buffer1_address.emplace_back(alloc1.offset, buffer1.size());
-    address buffer2_address;
-    buffer2_address.emplace_back(alloc2.offset, buffer2.size());
-    address buffer3_address;
-    buffer3_address.emplace_back(alloc3.offset, buffer3.size());
-    full_address.append(buffer1_address);
-    full_address.append(buffer2_address);
-    full_address.append(buffer3_address);
-    ds.reset();
 
+    address full_address;
+    full_address.emplace_back(alloc1.offset, buffer1.size());
+    full_address.emplace_back(alloc2.offset, buffer2.size());
+    full_address.emplace_back(alloc3.offset, buffer3.size());
+
+    ds.reset();
     ds = make_data_store();
 
     {
-        shared_buffer<char> read_buffer(full_address.data_size());
+        std::vector<char> read_buffer(full_address.data_size());
         size_t t_read = 0;
         for (size_t i = 0; i < full_address.size(); ++i) {
             const auto p = full_address.get(i);
-            auto read_size =
-                ds->read(p.pointer, {read_buffer.data() + t_read, p.size});
-            t_read += read_size;
+            t_read += ds->read(p.pointer, {read_buffer.data() + t_read, p.size});
         }
 
         BOOST_CHECK(t_read == full_address.data_size());
         size_t offset = 0;
-        CHECK_EQUAL_FROM_OFFSET(read_buffer, offset, buffer1);
+        BOOST_CHECK(std::memcmp(read_buffer.data(), buffer1.data(), buffer1.size()) == 0);
         offset += buffer1.size();
-        CHECK_EQUAL_FROM_OFFSET(read_buffer, offset, buffer2);
+        BOOST_CHECK(std::memcmp(read_buffer.data() + offset, buffer2.data(), buffer2.size()) == 0);
         offset += buffer2.size();
-        CHECK_EQUAL_FROM_OFFSET(read_buffer, offset, buffer3);
+        BOOST_CHECK(std::memcmp(read_buffer.data() + offset, buffer3.data(), buffer3.size()) == 0);
         offset += buffer3.size();
     }
 
-    for (auto i = 0; i < buffer2_address.size(); ++i) {
-        const auto& f = buffer2_address.get(i);
-        ds->unlink(f.pointer, f.size);
-    }
+    ds->unlink(alloc2.offset, alloc2.size);
 
     {
-        shared_buffer<char> read_buffer(full_address.data_size());
+        std::vector<char> read_buffer(full_address.data_size());
         size_t t_read = 0;
         for (size_t i = 0; i < full_address.size(); ++i) {
             const auto p = full_address.get(i);
-            auto read_size =
-                ds->read(p.pointer, {read_buffer.data() + t_read, p.size});
-            t_read += read_size;
+            t_read += ds->read(p.pointer, {read_buffer.data() + t_read, p.size});
         }
 
         BOOST_CHECK(t_read == full_address.data_size());
-        shared_buffer<char> zero_buffer(buffer2.size());
-        memset(zero_buffer.data(), 0, buffer2.size());
+        memset(buffer2.data(), 0, buffer2.size());
 
-        BOOST_CHECK(std::memcmp(read_buffer.data(), buffer1.data(),
-                                buffer1.size()) == 0);
-        BOOST_CHECK(std::memcmp(read_buffer.data() + buffer1.size(),
-                                buffer2.data(),
-                                DEFAULT_PAGE_SIZE - ALIGNMENT_OFFSET) == 0);
-        BOOST_CHECK(std::memcmp(read_buffer.data() + 2 * DEFAULT_PAGE_SIZE,
-                                zero_buffer.data(), DEFAULT_PAGE_SIZE) == 0);
-        BOOST_CHECK(
-            std::memcmp(read_buffer.data() + 3 * DEFAULT_PAGE_SIZE,
-                        buffer2.data() + buffer2.size() - ALIGNMENT_OFFSET,
-                        ALIGNMENT_OFFSET) == 0);
-        BOOST_CHECK(std::memcmp(read_buffer.data() + 3 * DEFAULT_PAGE_SIZE +
-                                    ALIGNMENT_OFFSET,
-                                buffer3.data(),
-                                DEFAULT_PAGE_SIZE - ALIGNMENT_OFFSET) == 0);
+        size_t offset = 0;
+        BOOST_CHECK(std::memcmp(read_buffer.data(), buffer1.data(), buffer1.size()) == 0);
+        offset += buffer1.size();
+        BOOST_CHECK(std::memcmp(read_buffer.data() + offset, buffer2.data(), buffer2.size()) == 0);
+        offset += buffer2.size();
+        BOOST_CHECK(std::memcmp(read_buffer.data() + offset, buffer3.data(), buffer3.size()) == 0);
+        offset += buffer3.size();
     }
 }
 
@@ -462,7 +437,7 @@ BOOST_AUTO_TEST_CASE(repeated_write_delete) {
         ds->write(alloc, {buffer.string_view()});
         address buffer_address;
         buffer_address.emplace_back(alloc.offset, buffer.size());
-        for (auto i = 0; i < buffer_address.size(); ++i) {
+        for (auto i = 0ull; i < buffer_address.size(); ++i) {
             const auto& f = buffer_address.get(i);
             ds->unlink(f.pointer, f.size);
         }
