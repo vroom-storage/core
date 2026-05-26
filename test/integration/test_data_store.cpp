@@ -426,23 +426,18 @@ BOOST_AUTO_TEST_CASE(test_unlink_page_unaligned) {
     auto buffer2 = random_buffer(2 * DEFAULT_PAGE_SIZE);
     auto buffer3 = random_buffer(DEFAULT_PAGE_SIZE - ALIGNMENT_OFFSET);
 
-    address full_address;
     auto alloc1 = ds->allocate(buffer1.size(), 1);
     auto alloc2 = ds->allocate(buffer2.size(), 1);
     auto alloc3 = ds->allocate(buffer3.size(), 1);
+
     ds->write(alloc1, {buffer1.string_view()});
     ds->write(alloc2, {buffer2.string_view()});
     ds->write(alloc3, {buffer3.string_view()});
-    address buffer1_address;
-    buffer1_address.emplace_back(alloc1.offset, buffer1.size());
-    address buffer2_address;
-    buffer2_address.emplace_back(alloc2.offset, buffer2.size());
-    address buffer3_address;
-    buffer3_address.emplace_back(alloc3.offset, buffer3.size());
-    full_address.append(buffer1_address);
-    full_address.append(buffer2_address);
-    full_address.append(buffer3_address);
-    ds.reset();
+
+    address full_address;
+    full_address.emplace_back(alloc1.offset, buffer1.size());
+    full_address.emplace_back(alloc2.offset, buffer2.size());
+    full_address.emplace_back(alloc3.offset, buffer3.size());
 
     ds = make_data_store();
 
@@ -466,10 +461,7 @@ BOOST_AUTO_TEST_CASE(test_unlink_page_unaligned) {
         offset += buffer3.size();
     }
 
-    for (auto i = 0; i < buffer2_address.size(); ++i) {
-        const auto& f = buffer2_address.get(i);
-        ds->unlink(f.pointer, f.size);
-    }
+    ds->unlink(alloc2.offset, alloc2.size);
 
     {
         shared_buffer<char> read_buffer(full_address.data_size());
@@ -482,24 +474,17 @@ BOOST_AUTO_TEST_CASE(test_unlink_page_unaligned) {
         }
 
         BOOST_CHECK(t_read == full_address.data_size());
+
         shared_buffer<char> zero_buffer(buffer2.size());
         memset(zero_buffer.data(), 0, buffer2.size());
 
-        BOOST_CHECK(std::memcmp(read_buffer.data(), buffer1.data(),
-                                buffer1.size()) == 0);
-        BOOST_CHECK(std::memcmp(read_buffer.data() + buffer1.size(),
-                                buffer2.data(),
-                                DEFAULT_PAGE_SIZE - ALIGNMENT_OFFSET) == 0);
-        BOOST_CHECK(std::memcmp(read_buffer.data() + 2 * DEFAULT_PAGE_SIZE,
-                                zero_buffer.data(), DEFAULT_PAGE_SIZE) == 0);
-        BOOST_CHECK(
-            std::memcmp(read_buffer.data() + 3 * DEFAULT_PAGE_SIZE,
-                        buffer2.data() + buffer2.size() - ALIGNMENT_OFFSET,
-                        ALIGNMENT_OFFSET) == 0);
-        BOOST_CHECK(std::memcmp(read_buffer.data() + 3 * DEFAULT_PAGE_SIZE +
-                                    ALIGNMENT_OFFSET,
-                                buffer3.data(),
-                                DEFAULT_PAGE_SIZE - ALIGNMENT_OFFSET) == 0);
+        size_t offset = 0;
+        CHECK_EQUAL_FROM_OFFSET(read_buffer, offset, buffer1);
+        offset += buffer1.size();
+        CHECK_EQUAL_FROM_OFFSET(read_buffer, offset, zero_buffer);
+        offset += zero_buffer.size();
+        CHECK_EQUAL_FROM_OFFSET(read_buffer, offset, buffer3);
+        offset += buffer3.size();
     }
 }
 
