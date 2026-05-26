@@ -42,14 +42,6 @@ coro<allocation_t> messenger::recv_allocation(const header& message_header) {
     co_return allocation;
 }
 
-coro<std::vector<refcount_t>>
-messenger::recv_refcounts(const header& message_header) {
-    std::vector<refcount_t> refcounts(message_header.size / sizeof(refcount_t));
-    register_read_buffer(refcounts);
-    co_await recv_buffers(message_header);
-    co_return refcounts;
-}
-
 coro<dedupe_response>
 messenger::recv_dedupe_response(const header& message_header) {
     dedupe_response dedupe_resp;
@@ -64,12 +56,8 @@ messenger::recv_dedupe_response(const header& message_header) {
 coro<void> messenger::send_write(const write_request_view& req) {
     register_write_buffer(req.allocation);
 
-    std::size_t num_refcounts = req.refcounts.size();
-    register_write_buffer(num_refcounts);
     std::size_t num_buffers = req.buffers.size();
     register_write_buffer(num_buffers);
-
-    register_write_buffer(req.refcounts);
 
     auto buffer_sizes_view =
         req.buffers |
@@ -88,24 +76,15 @@ coro<void> messenger::send_write(const write_request_view& req) {
 coro<write_request_store> messenger::recv_write(const header& message_header) {
     allocation_t allocation;
     register_read_buffer(allocation);
-    std::size_t num_refcounts;
-    register_read_buffer(num_refcounts);
     std::size_t num_buffers;
     register_read_buffer(num_buffers);
     unique_buffer<char> buffer(message_header.size - sizeof(allocation) -
-                               sizeof(num_buffers) - sizeof(num_refcounts));
+                               sizeof(num_buffers));
     register_read_buffer(buffer);
 
     co_await recv_buffers(message_header);
 
     auto p = buffer.begin();
-
-    std::vector<refcount_t> refcounts = std::vector<refcount_t>(
-        reinterpret_cast<refcount_t*>(p),
-        reinterpret_cast<refcount_t*>(p) + num_refcounts);
-
-    p += num_refcounts * sizeof(refcount_t);
-
     auto buffer_sizes =
         std::span<const std::size_t>((std::size_t*)p, num_buffers);
 
@@ -120,7 +99,6 @@ coro<write_request_store> messenger::recv_write(const header& message_header) {
 
     co_return write_request_store{.allocation = std::move(allocation),
                                   .buffers = std::move(buffers),
-                                  .refcounts = std::move(refcounts),
                                   .backing_buffer = std::move(buffer)};
 }
 
@@ -140,12 +118,6 @@ coro<void> messenger::send_allocation(const message_type type,
                                       const allocation_t& allocation) {
     register_write_buffer(allocation.offset);
     register_write_buffer(allocation.size);
-    co_await send_buffers(type);
-}
-
-coro<void> messenger::send_refcounts(const message_type type,
-                                     const std::vector<refcount_t>& refcounts) {
-    register_write_buffer(refcounts);
     co_await send_buffers(type);
 }
 

@@ -85,42 +85,6 @@ struct data_store_fixture {
         return m_expected_used;
     }
 
-    std::vector<refcount_t> extract_refcounts(const address& addr) {
-        std::map<std::size_t, std::size_t> refcount_by_stripe;
-
-        for (const auto& frag : addr.fragments) {
-            auto local_pointer =
-                pointer_traits::get_group_pointer(frag.pointer);
-            std::size_t first_stripe = local_pointer / DEFAULT_PAGE_SIZE;
-            std::size_t last_stripe =
-                (local_pointer + frag.size - 1) / DEFAULT_PAGE_SIZE;
-            for (size_t stripe_id = first_stripe; stripe_id <= last_stripe;
-                 stripe_id++) {
-                refcount_by_stripe[stripe_id]++;
-            }
-        }
-
-        std::vector<refcount_t> refcounts;
-        refcounts.reserve(refcount_by_stripe.size());
-        for (const auto& [stripe_id, count] : refcount_by_stripe) {
-            refcounts.emplace_back(stripe_id, count);
-        }
-        return refcounts;
-    }
-
-    std::vector<refcount_t>
-    make_default_refcounts(const allocation_t& allocation) {
-        std::vector<refcount_t> derived_refcounts;
-        std::size_t first_stripe = allocation.offset / DEFAULT_PAGE_SIZE;
-        std::size_t last_stripe =
-            (allocation.offset + allocation.size - 1) / DEFAULT_PAGE_SIZE;
-        for (size_t stripe_id = first_stripe; stripe_id <= last_stripe;
-             stripe_id++) {
-            derived_refcounts.emplace_back(stripe_id, 1);
-        }
-        return derived_refcounts;
-    }
-
     temp_directory m_dir;
     std::vector<shared_buffer<char>> test_data;
     shared_buffer<char> throwing_data;

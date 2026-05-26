@@ -35,28 +35,6 @@ address compute_address(const std::vector<std::size_t>& offsets,
     return rv;
 }
 
-std::vector<refcount_t> extract_refcounts(const address& addr) {
-    std::map<std::size_t, std::size_t> refcount_by_stripe;
-
-    for (const auto& frag : addr.fragments) {
-        auto group_pointer = pointer_traits::get_group_pointer(frag.pointer);
-        std::size_t first_stripe = group_pointer / DEFAULT_PAGE_SIZE;
-        std::size_t last_stripe =
-            (group_pointer + frag.size - 1) / DEFAULT_PAGE_SIZE;
-        for (size_t stripe_id = first_stripe; stripe_id <= last_stripe;
-             stripe_id++) {
-            refcount_by_stripe[stripe_id]++;
-        }
-    }
-
-    std::vector<refcount_t> refcounts;
-    refcounts.reserve(refcount_by_stripe.size());
-    for (const auto& [stripe_id, count] : refcount_by_stripe) {
-        refcounts.emplace_back(stripe_id, count);
-    }
-    return refcounts;
-}
-
 coro<address> mock_data_view::write(std::span<const char> data,
                                     const std::vector<std::size_t>& offsets) {
     auto alloc = m_storage.allocate(data.size());

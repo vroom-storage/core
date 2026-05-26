@@ -49,10 +49,8 @@ public:
      *
      * @param allocation: allocation to which data is written
      * @param buffers: buffers to be written
-     * @param refcounts: vector of refcount_t containing the stripe ID and its
-     * count to register as part of the write operation
      */
-    void write(const allocation_t allocation,
+    void write(allocation_t allocation,
                const std::vector<std::span<const char>>& buffers) override;
 
     /**

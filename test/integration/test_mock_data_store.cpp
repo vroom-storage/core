@@ -83,29 +83,6 @@ struct data_store_fixture {
         return m_expected_used;
     }
 
-    std::vector<refcount_t> extract_refcounts(const address& addr) {
-        std::map<std::size_t, std::size_t> refcount_by_stripe;
-
-        for (const auto& frag : addr.fragments) {
-            auto local_pointer =
-                pointer_traits::get_group_pointer(frag.pointer);
-            std::size_t first_stripe = local_pointer / DEFAULT_PAGE_SIZE;
-            std::size_t last_stripe =
-                (local_pointer + frag.size - 1) / DEFAULT_PAGE_SIZE;
-            for (size_t stripe_id = first_stripe; stripe_id <= last_stripe;
-                 stripe_id++) {
-                refcount_by_stripe[stripe_id]++;
-            }
-        }
-
-        std::vector<refcount_t> refcounts;
-        refcounts.reserve(refcount_by_stripe.size());
-        for (const auto& [stripe_id, count] : refcount_by_stripe) {
-            refcounts.emplace_back(stripe_id, count);
-        }
-        return refcounts;
-    }
-
     temp_directory m_dir;
     std::vector<shared_buffer<char>> test_data;
     shared_buffer<char> throwing_data;

@@ -54,23 +54,6 @@ mock_data_store::mock_data_store(data_store_config conf,
             m_current_offset = static_cast<std::size_t>(bytes_read);
         }
     }
-    {
-        std::ifstream ifs(m_root / m_refcountfile, std::ios::binary);
-        if (ifs) {
-            size_t map_size;
-            ifs.read(reinterpret_cast<char*>(&map_size), sizeof(map_size));
-
-            for (size_t i = 0; i < map_size; ++i) {
-                refcount_t refcount;
-
-                ifs.read(reinterpret_cast<char*>(&refcount.stripe_id),
-                         sizeof(refcount.stripe_id));
-                ifs.read(reinterpret_cast<char*>(&refcount.count),
-                         sizeof(refcount.count));
-                m_refcounter[refcount.stripe_id] = refcount.count;
-            }
-        }
-    }
 }
 
 void mock_data_store::write(const allocation_t allocation,
@@ -150,16 +133,6 @@ mock_data_store::~mock_data_store() {
         std::ofstream ofs(m_root / m_datafile, std::ios::binary);
         ofs.write(reinterpret_cast<const char*>(m_data.data()),
                   m_current_offset.load());
-    }
-    {
-        std::ofstream ofs(m_root / m_refcountfile, std::ios::binary);
-        size_t map_size = m_refcounter.size();
-        ofs.write(reinterpret_cast<const char*>(&map_size), sizeof(map_size));
-
-        for (const auto& [key, value] : m_refcounter) {
-            ofs.write(reinterpret_cast<const char*>(&key), sizeof(key));
-            ofs.write(reinterpret_cast<const char*>(&value), sizeof(value));
-        }
     }
 }
 

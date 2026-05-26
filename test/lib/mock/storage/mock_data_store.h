@@ -52,7 +52,6 @@ private:
     const uint32_t m_data_store_id;
     const std::filesystem::path m_root;
     const std::string m_datafile = "data.backup";
-    const std::string m_refcountfile = "refcount.backup";
 
     std::atomic<size_t> m_current_offset{0};
 

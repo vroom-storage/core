@@ -411,41 +411,6 @@ coro<std::size_t> ec_data_view::get_used_space() {
     co_return used_space;
 }
 
-address ec_data_view::compute_rejected_address(
-    const std::vector<std::vector<refcount_t>>& rejected_refcounts,
-    const address& original_addr) {
-    std::unordered_set<std::size_t> rejected_stripes;
-    for (const auto& refcount : rejected_refcounts) {
-        for (const auto& rc : refcount) {
-            rejected_stripes.insert(rc.stripe_id);
-        }
-    }
-
-    if (rejected_stripes.empty()) {
-        return {};
-    }
-
-    address rv;
-    for (const auto& frag : original_addr.fragments) {
-        auto group_pointer = pointer_traits::get_group_pointer(frag.pointer);
-        std::size_t first_stripe = group_pointer / m_stripe_size;
-        std::size_t last_stripe =
-            (group_pointer + frag.size - 1) / m_stripe_size;
-        bool has_overlap = false;
-        for (size_t stripe_id = first_stripe; stripe_id <= last_stripe;
-             stripe_id++) {
-            if (rejected_stripes.contains(stripe_id)) {
-                has_overlap = true;
-            }
-        }
-        if (has_overlap) {
-            rv.push(frag);
-        }
-    }
-
-    return rv;
-}
-
 coro<std::size_t> ec_data_view::unlink(const address& addr) {
 
     std::vector<storage_address> addr_by_storage(m_config.data_shards);
