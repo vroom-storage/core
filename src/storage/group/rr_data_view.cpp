@@ -102,37 +102,6 @@ coro<std::size_t> rr_data_view::get_used_space() {
     co_return used;
 }
 
-std::vector<std::vector<refcount_t>>
-rr_data_view::extract_refcounts(const address& addr) const {
-    std::map<uint16_t, std::map<std::size_t, std::size_t>>
-        refcount_by_stripe_and_storage;
-    size_t stripe_size = m_group_config.get_stripe_size();
-
-    for (const auto& frag : addr.fragments) {
-        auto [storage_id, local_pointer] =
-            pointer_traits::rr::get_storage_pointer(frag.pointer);
-        std::size_t first_stripe = local_pointer / stripe_size;
-        std::size_t last_stripe = (local_pointer + frag.size - 1) / stripe_size;
-        for (size_t stripe_id = first_stripe; stripe_id <= last_stripe;
-             stripe_id++) {
-            refcount_by_stripe_and_storage[storage_id][stripe_id]++;
-        }
-    }
-
-    std::vector<std::vector<refcount_t>> refcounts_by_storage;
-    refcounts_by_storage.resize(m_group_config.storages);
-    for (const auto& [storage_id, stripe_map] :
-         refcount_by_stripe_and_storage) {
-        std::vector<refcount_t> refcounts;
-        refcounts.reserve(stripe_map.size());
-        for (const auto& [stripe_id, count] : stripe_map) {
-            refcounts.emplace_back(stripe_id, count);
-        }
-        refcounts_by_storage[storage_id] = std::move(refcounts);
-    }
-    return refcounts_by_storage;
-}
-
 address rr_data_view::compute_rejected_address(
     const std::vector<std::vector<refcount_t>>& rejected_refcounts,
     const address& original_addr) {
@@ -171,17 +140,23 @@ address rr_data_view::compute_rejected_address(
 }
 
 coro<std::size_t> rr_data_view::unlink(const address& addr) {
-    std::vector<std::vector<refcount_t>> refcounts_by_storage =
-        extract_refcounts(addr);
+
+    std::vector<storage_address> addr_by_storage(m_group_config.storages);
+
+    for (const auto& frag : addr.fragments) {
+        auto [sid, addr] = pointer_traits::rr::get_storage_pointer(frag.pointer);
+        addr_by_storage[sid].push({ addr, frag.size });
+    }
 
     auto freed_partials =
         co_await run_for_all<std::size_t, std::shared_ptr<storage_interface>>(
             m_ioc,
             [&](size_t i, auto storage) -> coro<std::size_t> {
-                if (storage == nullptr)
+                if (storage == nullptr) {
                     throw std::runtime_error("Storage " + std::to_string(i) +
                                              " is not available");
-                co_return co_await storage->unlink(refcounts_by_storage[i]);
+                }
+                co_return co_await storage->unlink(addr_by_storage[i]);
             },
             m_storage_index.get());
 

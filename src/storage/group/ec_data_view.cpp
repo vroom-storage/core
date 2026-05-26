@@ -411,29 +411,6 @@ coro<std::size_t> ec_data_view::get_used_space() {
     co_return used_space;
 }
 
-std::vector<refcount_t>
-ec_data_view::extract_refcounts(const address& addr) const {
-    std::map<std::size_t, std::size_t> refcount_by_stripe;
-
-    for (const auto& frag : addr.fragments) {
-        auto group_pointer = pointer_traits::get_group_pointer(frag.pointer);
-        std::size_t first_stripe = group_pointer / m_stripe_size;
-        std::size_t last_stripe =
-            (group_pointer + frag.size - 1) / m_stripe_size;
-        for (size_t stripe_id = first_stripe; stripe_id <= last_stripe;
-             stripe_id++) {
-            refcount_by_stripe[stripe_id]++;
-        }
-    }
-
-    std::vector<refcount_t> refcounts;
-    refcounts.reserve(refcount_by_stripe.size());
-    for (const auto& [stripe_id, count] : refcount_by_stripe) {
-        refcounts.emplace_back(stripe_id, count);
-    }
-    return refcounts;
-}
-
 address ec_data_view::compute_rejected_address(
     const std::vector<std::vector<refcount_t>>& rejected_refcounts,
     const address& original_addr) {
@@ -470,24 +447,29 @@ address ec_data_view::compute_rejected_address(
 }
 
 coro<std::size_t> ec_data_view::unlink(const address& addr) {
-    auto refcounts = extract_refcounts(addr);
-    auto storages = m_externals.get_storage_services();
 
-    auto unlink_rvs =
+    std::vector<storage_address> addr_by_storage(m_config.data_shards);
+
+    for (const auto& frag : addr.fragments) {
+        auto [sid, addr] = pointer_traits::rr::get_storage_pointer(frag.pointer);
+        addr_by_storage[sid].push({ addr, frag.size });
+    }
+
+    auto freed_partials =
         co_await run_for_all<std::size_t, std::shared_ptr<storage_interface>>(
             m_ioc,
             [&](size_t i, auto storage) -> coro<std::size_t> {
-                std::size_t freed = co_await storage->unlink(refcounts);
-                if (i >= m_config.data_shards) {
-                    co_return 0;
+                if (storage == nullptr) {
+                    throw std::runtime_error("Storage " + std::to_string(i) +
+                                             " is not available");
                 }
-                co_return freed;
+                co_return co_await storage->unlink(addr_by_storage[i]);
             },
-            storages);
+            m_externals.get_storage_services());
 
-    auto freed_bytes =
-        std::accumulate(unlink_rvs.begin(), unlink_rvs.end(), 0ul);
-    co_return freed_bytes;
+    std::size_t freed =
+        std::accumulate(freed_partials.begin(), freed_partials.end(), 0ull);
+    co_return freed;
 }
 
 } // namespace uh::cluster::storage

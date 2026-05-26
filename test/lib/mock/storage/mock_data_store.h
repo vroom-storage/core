@@ -36,7 +36,7 @@ public:
     void write(const allocation_t allocation,
                const std::vector<std::span<const char>>& buffers);
     std::size_t read(const std::size_t pointer, std::span<char> buffer);
-    std::size_t unlink(const std::vector<refcount_t>& refcounts);
+    std::size_t unlink(storage_pointer local_pointer, std::size_t size);
     [[nodiscard]] size_t get_used_space() const noexcept;
     [[nodiscard]] size_t get_available_space() const noexcept;
     [[nodiscard]] std::size_t get_write_offset() const noexcept;

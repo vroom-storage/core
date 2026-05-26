@@ -38,7 +38,7 @@ struct data_store {
     virtual std::size_t read(const storage_pointer local_pointer,
                              std::span<char> buffer) = 0;
 
-    virtual std::size_t unlink(const std::vector<refcount_t>& refcounts) = 0;
+    virtual std::size_t unlink(std::size_t local_pointer, std::size_t size) = 0;
 
     virtual std::size_t get_used_space() const noexcept = 0;
 

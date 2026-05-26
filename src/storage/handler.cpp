@@ -145,7 +145,7 @@ coro<void> handler::handle_read_address(messenger& m,
 
 coro<void> handler::handle_unlink(messenger& m, const messenger::header& h) {
 
-    const auto addr = co_await m.recv_refcounts(h);
+    const auto addr = co_await m.recv_address(h);
     std::size_t freed_bytes = co_await m_storage.unlink(addr);
 
     co_await m.send_primitive<size_t>(SUCCESS, freed_bytes);

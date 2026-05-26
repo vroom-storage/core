@@ -72,13 +72,11 @@ public:
                      std::span<char> buffer) override;
 
     /***
-     * @brief Unlinks the specified reference counts from the data store.
-     * If a stripe ID does not exist, it will be ignored.
-     * @param refcounts: vector of refcount_t containing the stripe ID and its
-     * count to unlink
+     * @brief Free the storage referenced by address
+     * @param addr: address to free
      * @return std::size_t: number of bytes freed in the data store
      */
-    std::size_t unlink(const std::vector<refcount_t>& refcounts) override;
+    std::size_t unlink(storage_pointer local_pointer, std::size_t size) override;
 
     /**
      * @brief Returns the current used space of the data store.

@@ -171,8 +171,6 @@ private:
     address split_fragment(const uint128_t& pointer,
                            std::size_t read_size) const;
 
-    std::vector<refcount_t> extract_refcounts(const address& addr) const;
-
     address get_aligned_address(const address& addr) const;
     address compute_address(const std::vector<std::size_t>& offsets,
                             const std::size_t data_size,

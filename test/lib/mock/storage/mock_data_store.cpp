@@ -96,23 +96,11 @@ std::size_t mock_data_store::read(const std::size_t pointer,
     return buffer.size();
 }
 
-std::size_t mock_data_store::unlink(const std::vector<refcount_t>& refcounts) {
-    size_t size = 0;
-    for (auto& refcount : refcounts) {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        auto it = m_refcounter.find(refcount.stripe_id);
-        if (it == m_refcounter.end()) {
-            throw std::exception();
-        }
-        if (it->second <= refcount.count) {
-            auto pointer = it->first * m_conf.page_size;
-            std::fill(m_data.begin() + pointer,
-                      m_data.begin() + pointer + m_conf.page_size, 0);
-            m_refcounter.erase(it);
-            size += m_conf.page_size;
-        }
-    }
-    return size;
+std::size_t mock_data_store::unlink(storage_pointer pointer, std::size_t size) {
+    std::lock_guard<std::mutex> lock(m_mutex);
+
+    std::fill(m_data.begin() + pointer, m_data.begin() + pointer + m_conf.page_size, 0);
+    return m_conf.page_size;
 }
 
 uint64_t mock_data_store::get_used_space() const noexcept {

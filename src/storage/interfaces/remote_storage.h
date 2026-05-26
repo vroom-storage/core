@@ -70,9 +70,9 @@ struct remote_storage : public storage_interface {
     }
 
     coro<std::size_t>
-    unlink(const std::vector<refcount_t>& refcounts) override {
+    unlink(const storage_address& addr) override {
         auto m = co_await m_storage_service.acquire_messenger();
-        co_await m->send_refcounts(STORAGE_UNLINK_REQ, refcounts);
+        co_await m->send_address(STORAGE_UNLINK_REQ, addr);
         const auto h =
             co_await m->recv_header(time_settings::instance().storage_timeout);
         co_return co_await m->recv_primitive<size_t>(h);

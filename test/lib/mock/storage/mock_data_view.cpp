@@ -90,8 +90,13 @@ coro<std::size_t> mock_data_view::get_used_space() {
 }
 
 coro<std::size_t> mock_data_view::unlink(const address& addr) {
-    auto refcounts = extract_refcounts(addr);
-    co_return m_storage.unlink(refcounts);
+    std::size_t rv = 0;
+    for (unsigned i = 0; i < addr.size(); ++i) {
+        const auto& f = addr.get(i);
+        rv += m_storage.unlink(f.pointer, f.size);
+    }
+
+    co_return rv;
 }
 
 } // namespace uh::cluster

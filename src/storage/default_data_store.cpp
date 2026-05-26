@@ -182,8 +182,21 @@ void default_data_store::write(
 }
 
 std::size_t
-default_data_store::unlink(const std::vector<refcount_t>& refcounts) {
-    return m_refcounter.decrement(refcounts);
+default_data_store::unlink(storage_pointer local_pointer, std::size_t size) {
+    std::size_t rv = 0ull;
+
+    while (rv < size) {
+        auto loc = file_location(local_pointer);
+        auto count = loc.file.release(loc.offset, size);
+        if (count == 0) {
+            break;
+        }
+
+        local_pointer += count;
+        rv += count;
+    }
+
+    return rv;
 }
 
 default_data_store::~default_data_store() {

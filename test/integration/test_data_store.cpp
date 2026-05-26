@@ -339,23 +339,12 @@ BOOST_AUTO_TEST_CASE(test_link_unlink_invariant) {
     address addr;
     addr.emplace_back(alloc.offset, buffer.size());
 
-    auto refcounts = extract_refcounts(addr);
-    BOOST_CHECK_EQUAL(ds->unlink(refcounts), addr.data_size());
+    BOOST_CHECK_EQUAL(ds->unlink(alloc.offset, buffer.size()), addr.data_size());
 
     auto alloc2 = ds->allocate(buffer.size());
     ds->write(alloc2, {buffer.string_view()});
     addr = address{};
     addr.emplace_back(alloc2.offset, buffer.size());
-
-    address illegal_addr;
-    illegal_addr.push({0, addr.data_size() / 2});
-    illegal_addr.push(
-        {addr.data_size() / 2, (addr.data_size() - addr.data_size() / 2)});
-
-    BOOST_TEST(addr.data_size() == illegal_addr.data_size());
-    BOOST_TEST(addr.size() != illegal_addr.size());
-    auto illegal_refcounts = extract_refcounts(illegal_addr);
-    BOOST_CHECK_THROW(ds->unlink(illegal_refcounts), std::exception);
 }
 
 BOOST_AUTO_TEST_CASE(test_unlink_page_aligned) {
@@ -403,8 +392,10 @@ BOOST_AUTO_TEST_CASE(test_unlink_page_aligned) {
         offset += buffer3.size();
     }
 
-    auto buffer2_refcounts = extract_refcounts(buffer2_address);
-    ds->unlink(buffer2_refcounts);
+    for (auto i = 0; i < buffer2_address.size(); ++i) {
+        const auto& f = buffer2_address.get(i);
+        ds->unlink(f.pointer, f.size);
+    }
 
     {
         shared_buffer<char> read_buffer(full_address.data_size());
@@ -475,8 +466,11 @@ BOOST_AUTO_TEST_CASE(test_unlink_page_unaligned) {
         offset += buffer3.size();
     }
 
-    auto buffer2_refcounts = extract_refcounts(buffer2_address);
-    ds->unlink(buffer2_refcounts);
+    for (auto i = 0; i < buffer2_address.size(); ++i) {
+        const auto& f = buffer2_address.get(i);
+        ds->unlink(f.pointer, f.size);
+    }
+
 
     {
         shared_buffer<char> read_buffer(full_address.data_size());
@@ -546,8 +540,11 @@ BOOST_AUTO_TEST_CASE(test_unlink_multi_file) {
                                 buffer2.data(), buffer2.size()) == 0);
     }
 
-    auto buffer2_refcounts = extract_refcounts(buffer2_address);
-    ds->unlink(buffer2_refcounts);
+    for (auto i = 0; i < buffer2_address.size(); ++i) {
+        const auto& f = buffer2_address.get(i);
+        ds->unlink(f.pointer, f.size);
+    }
+
 
     {
         shared_buffer<char> read_buffer(full_address.data_size());
@@ -578,8 +575,11 @@ BOOST_AUTO_TEST_CASE(repeated_write_delete) {
         ds->write(alloc, {buffer.string_view()});
         address buffer_address;
         buffer_address.emplace_back(alloc.offset, buffer.size());
-        auto buffer_refcounts = extract_refcounts(buffer_address);
-        ds->unlink(buffer_refcounts);
+
+        for (auto i = 0; i < buffer_address.size(); ++i) {
+            const auto& f = buffer_address.get(i);
+            ds->unlink(f.pointer, f.size);
+        }
     }
 
     auto alloc = ds->allocate(buffer.size());
