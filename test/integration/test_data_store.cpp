@@ -471,7 +471,6 @@ BOOST_AUTO_TEST_CASE(test_unlink_page_unaligned) {
         ds->unlink(f.pointer, f.size);
     }
 
-
     {
         shared_buffer<char> read_buffer(full_address.data_size());
         size_t t_read = 0;

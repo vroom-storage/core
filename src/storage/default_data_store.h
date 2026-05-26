@@ -16,8 +16,6 @@
 
 #pragma once
 
-#include "reference_counter.h"
-
 #include <storage/data_file.h>
 #include <storage/interfaces/data_store.h>
 
@@ -121,8 +119,6 @@ private:
 
     std::size_t fetch_used_space() const;
 
-    size_t internal_delete(std::size_t offset, std::size_t size);
-
     int open_metadata(const std::filesystem::path& path);
     void read_metadata();
     void write_metadata();
@@ -140,8 +136,6 @@ private:
 
     std::atomic<std::size_t> m_used_space{};
     std::atomic<std::size_t> m_write_offset{};
-
-    reference_counter m_refcounter;
 };
 
 } // end namespace uh::cluster

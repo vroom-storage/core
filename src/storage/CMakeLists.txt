@@ -20,7 +20,6 @@ add_library(storage
             handler.cpp
             interfaces/remote_storage.cpp
             data_file.cpp
-            default_data_store.cpp
-            reference_counter.cpp)
+            default_data_store.cpp)
 
-target_link_libraries(storage group_data global_data utils types etcd lmdbxx license storage_interfaces)
+target_link_libraries(storage group_data global_data utils types etcd license storage_interfaces)

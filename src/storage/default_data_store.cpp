@@ -83,10 +83,7 @@ default_data_store::default_data_store(data_store_config conf,
       m_files(load_files(m_root, m_filesize)),
       m_file_count(m_files.size()),
       m_meta_fd(open_metadata(working_dir / std::string("ds.meta"))),
-      m_used_space(fetch_used_space()),
-      m_refcounter(
-          m_root, m_conf.page_size,
-          std::bind_front(&default_data_store::internal_delete, this)) {
+      m_used_space(fetch_used_space()) {
 
     (void)m_storage_id;
     if (m_filesize % m_conf.page_size != 0) {
@@ -295,39 +292,6 @@ allocation_t default_data_store::allocate(size_t size, std::size_t alignment) {
     } while (!m_write_offset.compare_exchange_weak(current_offset, new_offset));
 
     return {.offset = allocation_start, .size = size};
-}
-
-std::size_t default_data_store::internal_delete(std::size_t offset,
-                                                std::size_t size) {
-    std::size_t current_write_offset = m_write_offset.load();
-    if (offset >= current_write_offset) {
-        LOG_WARN() << "attempted to delete data at the out-of-bounds offset="
-                   << offset
-                   << ", with m_write_offset=" << current_write_offset;
-        throw std::out_of_range("pointer for delete operation is out of range");
-    }
-
-    std::size_t adjusted_size = std::min(size, current_write_offset - offset);
-
-    LOG_DEBUG() << "page " << offset / m_conf.page_size
-                << " dropped to 0, deleting page (offset=" << offset
-                << ", size=" << adjusted_size << ")";
-
-    std::size_t bytes_released = 0ull;
-    while (bytes_released < adjusted_size) {
-        // it seems pointer of of range is coming from here
-        auto loc = file_location(offset + bytes_released);
-        auto count =
-            loc.file.release(loc.offset, adjusted_size - bytes_released);
-        if (count == 0) {
-            break;
-        }
-        bytes_released += count;
-    }
-
-    m_used_space -= bytes_released;
-
-    return bytes_released;
 }
 
 int default_data_store::open_metadata(const std::filesystem::path& path) {
