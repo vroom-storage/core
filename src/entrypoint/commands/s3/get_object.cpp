@@ -32,9 +32,11 @@ class local_read_handle : public uh::cluster::ep::http::body {
 public:
     local_read_handle(storage::global::global_data_view& storage,
                       directory::object_lock&& obj,
+                      boost::asio::trace_context context,
                       std::size_t buffer_size = 64 * MEBI_BYTE)
         : m_storage(storage),
           m_obj(std::move(obj)),
+          m_context(std::move(context)),
           m_buffer(buffer_size),
           m_size(m_obj->addr->data_size()) {}
 
@@ -97,7 +99,8 @@ public:
             LOG_DEBUG() << "local_read_handle: fill, reading " << count
                         << " bytes from storage";
             co_await m_storage.read_address(partial_addr,
-                                            {&m_buffer[m_put_ptr], count});
+                                            {&m_buffer[m_put_ptr], count})
+                .continue_trace(m_context);
             m_put_ptr += count;
             m_total += count;
             m_size -= count;
@@ -128,6 +131,7 @@ private:
 
     storage::global::global_data_view& m_storage;
     directory::object_lock m_obj;
+    boost::asio::trace_context m_context;
 
     std::vector<char> m_buffer;
     std::size_t m_get_ptr = 0ull;
@@ -201,8 +205,9 @@ coro<response> get_object::handle(request& req) {
                 "bytes " + r.to_string() + "/" + std::to_string(obj->size));
     }
 
+    auto context = co_await boost::asio::this_coro::context;
     res.set_body(
-        std::make_unique<local_read_handle>(m_storage, std::move(obj)));
+        std::make_unique<local_read_handle>(m_storage, std::move(obj), std::move(context)));
 
     co_return res;
 }
