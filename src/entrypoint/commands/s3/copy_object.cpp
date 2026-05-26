@@ -68,9 +68,14 @@ coro<response> copy_object::handle(request& req) {
     m_limits.check_storage_size(obj->size);
 
     // TODO make this support really large objects
-    std::vector<char> buffer(obj->size);
-    co_await m_gdv.read_address(*obj->addr, buffer);
-    auto copy_addr = co_await m_gdv.write(buffer, {0});
+    address copy_addr;
+
+    if (obj->size > 0) {
+        std::vector<char> buffer(obj->size);
+        co_await m_gdv.read_address(*obj->addr, buffer);
+        copy_addr = co_await m_gdv.write(buffer, {0});
+    }
+
     obj->addr = copy_addr;
     obj->name = req.object_key();
     auto new_version = co_await safe_put_object(m_dir, m_gdv, req.bucket(), *obj);
