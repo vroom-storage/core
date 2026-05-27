@@ -55,12 +55,8 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
-
-            - name: Checkout s3-tests
-              uses: actions/checkout@v4
               with:
-                  repository: ceph/s3-tests
-                  path: test/feature/s3-tests
+                  submodules: true
 
             - uses: actions/download-artifact@v4
               with:
