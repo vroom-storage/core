@@ -347,7 +347,7 @@ _start_docker() {
         -v "$cluster_abs/logs:/cluster-logs" \
         -v "$cluster_abs/policies.json:/etc/uh/policies.json:ro" \
         "$image_tag" \
-        sh -c "/usr/local/bin/uh-cluster --registry $registry entrypoint --no-dedupe >> /cluster-logs/entrypoint.log 2>&1"
+        sh -c "/usr/local/bin/uh-cluster --registry $registry entrypoint >> /cluster-logs/entrypoint.log 2>&1"
     containers+=("${project}-entrypoint")
 
     local containers_json
