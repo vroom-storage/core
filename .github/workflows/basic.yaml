@@ -91,6 +91,48 @@ jobs:
               if: always()
               run: runtime/cluster.sh stop
 
+    integration-tests-ec:
+        needs: build-and-test
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Checkout s3-tests
+              uses: actions/checkout@v4
+              with:
+                  repository: ceph/s3-tests
+                  path: test/feature/s3-tests
+
+            - uses: actions/download-artifact@v4
+              with:
+                  name: binaries
+                  path: build/bin
+
+            - name: Make binaries executable
+              run: chmod +x build/bin/*
+
+            - name: Install s3-tests dependencies
+              run: python3 -m pip install -r test/feature/s3-tests/requirements.txt
+
+            - name: Start cluster
+              run: runtime/cluster.sh start --docker --bin-dir build/bin --storage-groups '[{"id":0,"type":"ERASURE_CODING","storages":3,"data_shards":2,"parity_shards":1,"stripe_size_kib":1024}]'
+
+            - name: Run integration tests
+              run: test/feature/run_test.sh
+
+            - name: Upload cluster logs
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: cluster-logs
+                  path: .cluster/logs
+                  if-no-files-found: ignore
+
+            - name: Stop cluster
+              if: always()
+              run: runtime/cluster.sh stop
+
     hadoop-s3a-tests:
         needs: build-and-test
         runs-on: ubuntu-latest
@@ -108,6 +150,39 @@ jobs:
 
             - name: Start cluster
               run: runtime/cluster.sh start --docker --bin-dir build/bin
+
+            - name: Run Hadoop S3A tests
+              run: test/feature/run_hadoop_test.sh
+
+            - name: Upload cluster logs
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: hadoop-cluster-logs
+                  path: .cluster/logs
+                  if-no-files-found: ignore
+
+            - name: Stop cluster
+              if: always()
+              run: runtime/cluster.sh stop
+
+    hadoop-s3a-tests-ec:
+        needs: build-and-test
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/download-artifact@v4
+              with:
+                  name: binaries
+                  path: build/bin
+
+            - name: Make binaries executable
+              run: chmod +x build/bin/*
+
+            - name: Start cluster
+              run: runtime/cluster.sh start --docker --bin-dir build/bin --storage-groups '[{"id":0,"type":"ERASURE_CODING","storages":3,"data_shards":2,"parity_shards":1,"stripe_size_kib":1024}]'
 
             - name: Run Hadoop S3A tests
               run: test/feature/run_hadoop_test.sh
