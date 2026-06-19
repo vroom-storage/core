@@ -17,11 +17,11 @@
 #include <entrypoint/http/chunked_body.h>
 #include <entrypoint/http/raw_body.h>
 
-namespace uh::cluster::proxy {
+namespace vrm::cluster::proxy {
 
 namespace {
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
 std::unique_ptr<body> make_body(stream& s, raw_request& req) {
     if (req.optional("Transfer-Encoding").value_or("") == "chunked") {
@@ -61,4 +61,4 @@ coro<std::unique_ptr<ep::http::request>> request_factory::create(ep::http::strea
             ep::user::user{.name = ep::user::user::ANONYMOUS});
 }
 
-} // namespace uh::cluster::proxy
+} // namespace vrm::cluster::proxy

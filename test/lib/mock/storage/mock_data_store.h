@@ -24,7 +24,7 @@
 #include <filesystem>
 #include <mutex>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class mock_data_store : public data_store {
 
@@ -68,4 +68,4 @@ private:
     std::mutex m_mutex;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

@@ -16,7 +16,7 @@
 
 #pragma once
 
-#define NAMESPACE "uh"
+#define NAMESPACE "vrm"
 
 #include <common/utils/common.h>
 
@@ -25,7 +25,7 @@
 #include <map>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 static constexpr const char* etcd_watchdog = "/" NAMESPACE "/watchdog/";
 
@@ -66,10 +66,10 @@ enum etcd_service_attributes {
 };
 
 constexpr std::array<
-    std::pair<uh::cluster::etcd_service_attributes, const char*>, 2>
+    std::pair<vrm::cluster::etcd_service_attributes, const char*>, 2>
     string_by_service_attribute = {{
-        {uh::cluster::ENDPOINT_HOST, "endpoint_host"},
-        {uh::cluster::ENDPOINT_PORT, "endpoint_port"},
+        {vrm::cluster::ENDPOINT_HOST, "endpoint_host"},
+        {vrm::cluster::ENDPOINT_PORT, "endpoint_port"},
     }};
 
 inline static std::string get_service_root_path(role r) {
@@ -125,7 +125,7 @@ inline static unsigned long get_id(const std::string& path) {
 }
 
 constexpr const char* get_etcd_service_attribute_string(
-    const uh::cluster::etcd_service_attributes& param) {
+    const vrm::cluster::etcd_service_attributes& param) {
     for (const auto& entry : string_by_service_attribute) {
         if (entry.first == param)
             return entry.second;
@@ -134,7 +134,7 @@ constexpr const char* get_etcd_service_attribute_string(
     throw std::invalid_argument("invalid etcd parameter");
 }
 
-constexpr uh::cluster::etcd_service_attributes
+constexpr vrm::cluster::etcd_service_attributes
 get_etcd_service_attribute_enum(const std::string& param) {
     for (const auto& entry : string_by_service_attribute) {
         if (entry.second == param)
@@ -214,7 +214,7 @@ struct service_t : public key_t {
     using key_t::key_t;
 };
 
-struct uh_t : public key_t {
+struct vrm_t : public key_t {
     storage_groups_t storage_groups{"storage_groups", this};
     service_t deduplicator{"deduplicator", this};
     service_t entrypoint{"entrypoint", this};
@@ -223,8 +223,8 @@ struct uh_t : public key_t {
     using key_t::key_t;
 };
 
-inline uh_t root{"uh"};
+inline vrm_t root{"vrm"};
 
 } // namespace ns
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

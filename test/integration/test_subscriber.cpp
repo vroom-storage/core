@@ -21,7 +21,7 @@
 #include <common/etcd/namespace.h>
 #include <common/etcd/subscriber.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class fixture {
 public:
@@ -84,4 +84,4 @@ BOOST_AUTO_TEST_CASE(returns_default_value_when_the_key_has_empty_value) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

@@ -23,7 +23,7 @@
 #include <boost/beast.hpp>
 #include <boost/property_tree/ptree.hpp>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 namespace beast = boost::beast;
 
@@ -86,4 +86,4 @@ void put(boost::property_tree::ptree& tree, const std::string& key,
     }
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

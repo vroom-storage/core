@@ -20,7 +20,7 @@
 #include <list>
 #include <string>
 
-namespace uh::cluster::ep::policy {
+namespace vrm::cluster::ep::policy {
 
 class parser {
 public:
@@ -30,4 +30,4 @@ public:
     inline static const std::string UNDEFINED_SID = "<Sid undefined>";
 };
 
-} // namespace uh::cluster::ep::policy
+} // namespace vrm::cluster::ep::policy

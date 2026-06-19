@@ -26,7 +26,7 @@
 #include <storage/group/state.h>
 #include <storage/group/storage_state_manager.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 /*
  * etcd key interfaces, which doesn't need to remove key on destruction
@@ -56,4 +56,4 @@ struct storage_assignment_triggers_manager {
     };
 };
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

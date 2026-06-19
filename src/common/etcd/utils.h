@@ -28,7 +28,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct etcd_config {
     // URL of the etcd service
@@ -238,4 +238,4 @@ private:
     void unlock(const std::string& unlock_key);
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

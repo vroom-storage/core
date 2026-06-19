@@ -19,7 +19,7 @@
 #include "entrypoint/directory.h"
 #include <entrypoint/commands/command.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class delete_bucket_policy : public command {
 public:
@@ -35,4 +35,4 @@ private:
     directory& m_dir;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

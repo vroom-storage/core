@@ -26,7 +26,7 @@
 #include <map>
 #include <span>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 class request {
 public:
@@ -140,4 +140,4 @@ inline std::optional<bool> query<bool>(const request& req,
 
 std::ostream& operator<<(std::ostream& out, const request& req);
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

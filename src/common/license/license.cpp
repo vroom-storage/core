@@ -21,7 +21,7 @@
 
 using nlohmann::json;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 std::vector<std::pair<std::string, std::string>>
 license::to_key_value_iterable() const {
@@ -93,4 +93,4 @@ license license::create(const std::string& json_str, verify option) {
     return rv;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

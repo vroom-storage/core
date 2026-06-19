@@ -19,7 +19,7 @@
 #include <common/types/scoped_buffer.h>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 shared_buffer<char> random_buffer(
     std::size_t length = 16,

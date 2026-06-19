@@ -23,7 +23,7 @@
 #include <util/coroutine.h>
 
 using nlohmann::json;
-using namespace uh::cluster;
+using namespace vrm::cluster;
 using namespace boost::asio;
 
 class fixture : public coro_fixture {
@@ -31,9 +31,9 @@ public:
     fixture()
         : coro_fixture{1},
           ioc{coro_fixture::get_io_context()},
-          server("ultihash", "passwd"),
+          server("vroom", "passwd"),
           expected_license("sample_license"),
-          sut{"ultihash", "passwd", cpr::AuthMode::BASIC} {
+          sut{"vroom", "passwd", cpr::AuthMode::BASIC} {
 
         server.set_get_handler("/v1/license", [&](httplib::Response& resp) {
             resp.set_content(expected_license, "text/plain");
@@ -47,7 +47,7 @@ public:
     io_context& ioc;
     http_server server;
     std::string expected_license;
-    uh::cluster::http_client sut;
+    vrm::cluster::http_client sut;
 };
 
 BOOST_FIXTURE_TEST_SUITE(a_http_client, fixture)

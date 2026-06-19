@@ -22,7 +22,7 @@
 #include <list>
 #include <memory>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename type, typename function>
 concept factory = requires(function f) {
@@ -117,4 +117,4 @@ private:
     std::list<promise<std::unique_ptr<resource>>> m_promises;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

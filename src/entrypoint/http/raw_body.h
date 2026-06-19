@@ -20,7 +20,7 @@
 #include "raw_request.h"
 #include "stream.h"
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 class raw_body : public body {
 public:
@@ -38,4 +38,4 @@ private:
     std::size_t m_length;
 };
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

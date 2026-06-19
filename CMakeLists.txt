@@ -14,7 +14,7 @@
 
 cmake_minimum_required(VERSION 3.22.0 FATAL_ERROR)
 
-project(uh-cluster VERSION 1.7.0)
+project(vrm-cluster VERSION 1.7.0)
 
 #
 # Option handling
@@ -34,7 +34,7 @@ if(ENABLE_CCACHE)
     if(CCACHE_PROGRAM)
         # https://ccache.dev/manual/4.9.1.html#_precompiled_headers
         set(CMAKE_C_COMPILER_LAUNCHER
-            "${CCACHE_PROGRAM};namespace=uh-core;sloppiness=pch_defines,time_macros"
+            "${CCACHE_PROGRAM};namespace=vrm-core;sloppiness=pch_defines,time_macros"
         )
         set(CMAKE_CXX_COMPILER_LAUNCHER ${CMAKE_C_COMPILER_LAUNCHER})
     endif()
@@ -186,9 +186,9 @@ set(CMAKE_BUILD_RPATH_USE_ORIGIN On)
 #
 message(STATUS "Building ${PROJECT_NAME} ${PROJECT_VERSION}...")
 
-set(UH_BINARY_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/bin)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UH_BINARY_OUTPUT_DIR})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${UH_BINARY_OUTPUT_DIR})
+set(VRM_BINARY_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${VRM_BINARY_OUTPUT_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${VRM_BINARY_OUTPUT_DIR})
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)

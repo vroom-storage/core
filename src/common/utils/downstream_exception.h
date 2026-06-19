@@ -21,7 +21,7 @@
 #include <sstream>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class downstream_exception : public std::exception {
 public:
@@ -52,4 +52,4 @@ private:
     std::string m_full_message;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

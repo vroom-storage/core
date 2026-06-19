@@ -18,7 +18,7 @@
 
 #include <entrypoint/http/request_factory.h>
 
-namespace uh::cluster::proxy {
+namespace vrm::cluster::proxy {
 
 class request_factory {
 public:
@@ -26,4 +26,4 @@ public:
                                                     ep::http::raw_request& req);
 };
 
-} // namespace uh::cluster::proxy
+} // namespace vrm::cluster::proxy

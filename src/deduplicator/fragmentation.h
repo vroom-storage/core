@@ -22,7 +22,7 @@
 
 #include <list>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 /**
  * Buffer fragments and send them to storage as bulk request.
@@ -101,4 +101,4 @@ private:
     address m_buffer_address;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

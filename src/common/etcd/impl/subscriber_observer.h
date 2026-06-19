@@ -20,7 +20,7 @@
 #include <common/etcd/utils.h>
 #include <common/utils/strings.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct subscriber_observer {
     virtual bool on_watch(etcd_manager::response resp) = 0;
@@ -33,4 +33,4 @@ concept Serializable = requires(const T& t, const std::string& s) {
     { deserialize<T>(s) } -> std::same_as<T>;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

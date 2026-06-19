@@ -20,7 +20,7 @@
 
 #include <atomic>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class limits {
 public:
@@ -48,4 +48,4 @@ private:
     unsigned m_warn_counter = SIZE_LIMIT_WARNING_INTERVAL;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

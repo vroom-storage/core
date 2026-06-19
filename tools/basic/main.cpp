@@ -22,7 +22,7 @@
 #include <fstream>
 #include <future>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 struct params {
     std::string address;

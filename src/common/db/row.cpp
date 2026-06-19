@@ -18,7 +18,7 @@
 #include <iomanip>
 #include <endian.h>
 
-namespace uh::cluster::db {
+namespace vrm::cluster::db {
 
 row::row(std::shared_ptr<PGresult> result, int id)
     : m_result(result),
@@ -128,4 +128,4 @@ std::optional<bool> row::boolean(int col) {
     return rv != 0;
 }
 
-} // namespace uh::cluster::db
+} // namespace vrm::cluster::db

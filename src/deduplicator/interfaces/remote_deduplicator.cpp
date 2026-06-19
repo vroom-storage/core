@@ -14,7 +14,7 @@
 
 #include "remote_deduplicator.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <>
 std::shared_ptr<deduplicator_interface>
@@ -24,4 +24,4 @@ service_factory<deduplicator_interface>::make_remote_service(
         client(m_ioc, hostname, port, m_connections));
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

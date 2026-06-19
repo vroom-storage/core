@@ -18,7 +18,7 @@
 #include <boost/asio.hpp>
 #include <functional>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename ResponseType, typename CallbackAPI, typename CompletionToken,
           typename... Args>
@@ -51,4 +51,4 @@ auto async_wrap(CallbackAPI&& api, CompletionToken&& token, Args&&... args) {
         std::forward<Args>(args)...);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

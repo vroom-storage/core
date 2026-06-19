@@ -22,7 +22,7 @@
 
 #include <filesystem>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 constexpr std::size_t PREFIX_SIZE = 16;
 
@@ -35,7 +35,7 @@ struct deduplicator_config {
     };
 
     global_data_view_config global_data_view;
-    std::filesystem::path working_dir = "/var/lib/uh/deduplicator";
+    std::filesystem::path working_dir = "/var/lib/vrm/deduplicator";
     std::size_t min_fragment_size = 32ul;
     std::size_t max_fragment_size = DEFAULT_PAGE_SIZE;
     std::size_t worker_thread_count = 16ul;
@@ -43,4 +43,4 @@ struct deduplicator_config {
     std::optional<storage_config> m_attached_storage;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

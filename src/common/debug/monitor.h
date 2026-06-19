@@ -24,7 +24,7 @@
 #include <sstream>
 #include <thread>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 struct monitor {
 
     class monitor_scope {
@@ -136,4 +136,4 @@ private:
     std::thread m_watcher;
     std::mutex m_mutex;
 };
-} // namespace uh::cluster
+} // namespace vrm::cluster

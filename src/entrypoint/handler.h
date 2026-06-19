@@ -21,7 +21,7 @@
 #include "http/request_factory.h"
 #include "policy/module.h"
 
-namespace uh::cluster::ep {
+namespace vrm::cluster::ep {
 
 class handler : public protocol_handler {
 public:
@@ -44,4 +44,4 @@ private:
         const std::string& id);
 };
 
-} // end namespace uh::cluster::ep
+} // end namespace vrm::cluster::ep

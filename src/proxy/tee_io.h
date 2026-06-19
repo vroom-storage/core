@@ -19,7 +19,7 @@
 #include <common/telemetry/trace/awaitable_operators.h>
 #include <common/types/common_types.h>
 
-namespace uh::cluster::proxy {
+namespace vrm::cluster::proxy {
 
 template <typename T, typename U> class tee {
 public:
@@ -41,4 +41,4 @@ private:
     U& m_u;
 };
 
-} // namespace uh::cluster::proxy
+} // namespace vrm::cluster::proxy

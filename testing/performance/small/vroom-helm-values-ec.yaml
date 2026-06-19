@@ -1,0 +1,215 @@
+# Copyright 2026 Vroom Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+global:
+  image: $CORE_IMAGE
+  imagePullPolicy: Always
+  imagePullSecrets:               
+    - registry-credentials
+  vroomSecret:
+    name: vroom
+    key: license
+  logLevel: DEBUG
+  telemetryExportInterval: 30000
+  securityContext:
+    capabilities:
+      add:
+      - SYS_PTRACE
+  policies: |
+    {
+      "Version": "2012-10-17",
+      "Statement": {
+         "Sid":  "AllowAllForAnybody",
+         "Effect": "Allow",
+         "Action": "*",
+         "Principal": "*",
+         "Resource": "*"
+       }
+    }
+
+coordinator:
+  nodeSelector:
+    workload-type: directory
+    purpose: performance-testing-small
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+
+etcd:
+  replicaCount: 1
+  nodeSelector:
+    workload-type: directory
+    purpose: performance-testing-small
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+  persistence:
+    size: 8Gi
+    storageClass: local-path
+
+entrypoint:
+  replicas: 2
+  nodeSelector:
+    workload-type: storage
+    purpose: performance-testing-small
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: role
+            operator: In
+            values:
+            - entrypoint
+        topologyKey: kubernetes.io/hostname
+  extraEnv:
+    - name: VRM_DB_DIRECTORY_CONNECTIONS
+      value: "5"
+    - name: VRM_DB_MULTIPART_CONNECTIONS
+      value: "5"
+
+  ingress:
+    enabled: false
+
+storage:
+  groups:
+    - id: 0
+      type: ERASURE_CODING
+      storages: 3
+      data_shards: 2
+      parity_shards: 1
+      stripe_size_kib: 256
+      storageClass: local-path
+      size: 70Gi
+      mountPath: /var/lib/vrm/storage
+      nodeSelector:
+        workload-type: storage
+        purpose: performance-testing-small
+      tolerations:
+        - key: "purpose"
+          operator: "Equal"
+          value: "testing"
+          effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - storage
+            topologyKey: kubernetes.io/hostname
+
+deduplicator:
+  replicas: 2
+  storageClass: local-path
+  storageSize: 10Gi
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: role
+            operator: In
+            values:
+            - deduplicator
+        topologyKey: kubernetes.io/hostname
+  nodeSelector:
+    workload-type: storage
+    purpose: performance-testing-small
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+
+database:
+  primary:
+    nodeSelector:
+      workload-type: directory
+      purpose: performance-testing-small
+    tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+
+    persistence:
+      storageClass: local-path
+      size: 20Gi
+
+databaseInit:
+  image: $DATABASE_INIT_IMAGE
+  nodeSelector:
+    workload-type: directory
+    purpose: performance-testing-small
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+
+collector:
+  nodeSelector:
+    purpose: performance-testing-small
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+  extraEnvs:
+  - name: VRM_POD_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.podIP
+  - name: VRM_NODE_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.hostIP
+  - name: VRM_EXPORTER_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vroom
+        key: token
+  presets:
+    kubeletMetrics:              
+      enabled: false           
+  config:                         
+    exporters:
+      otlphttp/uptrace:
+        endpoint: http://uptrace-backend.uptrace.svc.cluster.local:14318
+        headers:
+          uptrace-dsn: http://${env:VRM_EXPORTER_TOKEN}@uptrace-backend.uptrace.svc.cluster.local:14318
+    receivers:
+      prometheus: null
+      kubeletstats: null
+    service:
+      pipelines:
+        metrics:
+          receivers:
+            - otlp
+
+exporter:
+  enabled: false
+                   

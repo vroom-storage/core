@@ -25,7 +25,7 @@
 #include <storage/group/externals.h>
 #include <storage/interfaces/data_view.h>
 
-namespace uh::cluster::storage::global {
+namespace vrm::cluster::storage::global {
 
 class global_data_view : public data_view {
     friend class cache;
@@ -134,4 +134,4 @@ private:
     std::unique_ptr<storage::data_view> m_group_view;
 };
 
-} // namespace uh::cluster::storage::global
+} // namespace vrm::cluster::storage::global

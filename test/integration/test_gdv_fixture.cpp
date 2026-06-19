@@ -18,10 +18,10 @@
 
 #include <util/gdv_fixture.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_FIXTURE_TEST_CASE(test_fixture, global_data_view_fixture) {
     // Do nothing. I'd like to test it's constructor and destuctor only.
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

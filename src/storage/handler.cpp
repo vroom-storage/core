@@ -21,7 +21,7 @@
 
 #include <utility>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 handler::handler(local_storage& storage)
     : m_storage(storage) {}
@@ -165,7 +165,7 @@ coro<void> handler::handle_unlink(messenger& m, const messenger::header& h) {
     co_await m.send_primitive<size_t>(SUCCESS, freed_bytes);
 }
 
-coro<void> handler::handle_get_refcounts(uh::cluster::messenger& m,
+coro<void> handler::handle_get_refcounts(vrm::cluster::messenger& m,
                                          const messenger::header& h) {
     std::vector<std::size_t> stripe_ids(h.size / sizeof(std::size_t));
     m.register_read_buffer(stripe_ids);
@@ -190,4 +190,4 @@ coro<void> handler::handle_allocate(messenger& m, const messenger::header& h) {
     co_await m.send_allocation(SUCCESS, rv);
 }
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

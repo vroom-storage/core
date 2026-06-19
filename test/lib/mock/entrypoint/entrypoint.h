@@ -19,7 +19,7 @@
 #include <entrypoint/commands/command.h>
 #include <entrypoint/policy/variables.h>
 
-namespace uh::cluster::test {
+namespace vrm::cluster::test {
 
 class mock_command : public command {
 public:
@@ -47,4 +47,4 @@ make_request(const std::string& code,
 ep::policy::variables
 vars(std::initializer_list<std::pair<std::string, std::string>> v);
 
-} // namespace uh::cluster::test
+} // namespace vrm::cluster::test

@@ -21,7 +21,7 @@
 #include <storage/group/internals.h>
 #include <util/temp_directory.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class fixture {
 public:
@@ -51,4 +51,4 @@ BOOST_AUTO_TEST_CASE(is_created_and_well_detected) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

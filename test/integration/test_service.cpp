@@ -30,7 +30,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_FIXTURE_TEST_SUITE(rr_storage, global_data_view_fixture)
 
@@ -107,4 +107,4 @@ BOOST_AUTO_TEST_CASE(supports_repeated_killing_and_reviving_all_storages) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -21,7 +21,7 @@
 #include <span>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 enum class hash_algorithm { md5, sha256 };
 
@@ -68,4 +68,4 @@ template <hash_algorithm algo> struct hash : public hash_base {
 using md5 = hash<hash_algorithm::md5>;
 using sha256 = hash<hash_algorithm::sha256>;
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -2,7 +2,7 @@
 
 #include "address.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct dedupe_response {
     std::size_t effective_size{};

@@ -28,7 +28,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct fixture : public global_data_view_fixture {
 
@@ -1019,4 +1019,4 @@ BOOST_AUTO_TEST_CASE(write_chunk_fragmentation_padded) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

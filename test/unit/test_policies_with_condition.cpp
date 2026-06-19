@@ -21,10 +21,10 @@
 
 // ------------- Tests Suites Follow --------------
 
-using namespace uh::cluster;
-using namespace uh::cluster::ep::policy;
-using namespace uh::cluster::ep::user;
-using namespace uh::cluster::test;
+using namespace vrm::cluster;
+using namespace vrm::cluster::ep::policy;
+using namespace vrm::cluster::ep::user;
+using namespace vrm::cluster::test;
 
 using json = nlohmann::json;
 static std::string

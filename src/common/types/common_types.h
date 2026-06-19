@@ -18,7 +18,7 @@
 
 #include <chrono>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct allocation_t {
     std::size_t offset;
@@ -36,4 +36,4 @@ struct refcount_t {
 
 using utc_time = std::chrono::time_point<std::chrono::system_clock>;
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

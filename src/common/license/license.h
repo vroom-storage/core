@@ -19,7 +19,7 @@
 #include <magic_enum/magic_enum.hpp>
 #include <vector>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct license {
     enum type { NONE, FREEMIUM, PREMIUM };
@@ -47,4 +47,4 @@ private:
     std::string m_compact_json;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

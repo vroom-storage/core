@@ -18,7 +18,7 @@
 
 #include <memory>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename service_interface> class service_observer {
 
@@ -28,4 +28,4 @@ public:
 
     virtual ~service_observer() = default;
 };
-} // namespace uh::cluster
+} // namespace vrm::cluster

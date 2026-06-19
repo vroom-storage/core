@@ -18,7 +18,7 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include <common/utils/strings.h>
 
-namespace uh::cluster::ep::cors {
+namespace vrm::cluster::ep::cors {
 
 namespace {
 
@@ -95,4 +95,4 @@ std::vector<info> parser::parse(std::string code) {
     return rv;
 }
 
-} // namespace uh::cluster::ep::cors
+} // namespace vrm::cluster::ep::cors

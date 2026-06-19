@@ -18,7 +18,7 @@
 
 #include "body.h"
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 class string_body : public body {
 public:
@@ -36,4 +36,4 @@ private:
     std::size_t m_read;
 };
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

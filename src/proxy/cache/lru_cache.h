@@ -27,7 +27,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace uh::cluster::proxy::cache {
+namespace vrm::cluster::proxy::cache {
 
 template <typename Key, EntryType Entry>
 class lru_cache : public cache_interface<Key, Entry> {
@@ -101,4 +101,4 @@ private:
     mutable std::shared_mutex m_mutex;
 };
 
-} // namespace uh::cluster::proxy::cache
+} // namespace vrm::cluster::proxy::cache

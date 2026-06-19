@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project(uh-access)
+project(vrm-access)
 
-add_executable(uh-access main.cpp)
-target_link_libraries(uh-access db conf)
+add_executable(vrm-access main.cpp)
+target_link_libraries(vrm-access db conf)

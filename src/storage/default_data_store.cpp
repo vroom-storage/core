@@ -23,7 +23,7 @@
 #include <set>
 #include <fcntl.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -372,4 +372,4 @@ default_data_store::get_refcounts(const std::vector<std::size_t>& stripe_ids) {
     return m_refcounter.get_refcounts(stripe_ids);
 }
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

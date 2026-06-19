@@ -14,6 +14,6 @@
 
 include(profiler)
 
-#uh_add_profiler(profile_deduplicator PRIVATE uh_mock_global_data uh_test_util deduplicator group_data)
-#uh_add_profiler(profile_ec_write PRIVATE uh_test_util storage)
-uh_add_profiler(benchmark_local_storage PRIVATE uh_test_util storage)
+#vrm_add_profiler(profile_deduplicator PRIVATE vrm_mock_global_data vrm_test_util deduplicator group_data)
+#vrm_add_profiler(profile_ec_write PRIVATE vrm_test_util storage)
+vrm_add_profiler(benchmark_local_storage PRIVATE vrm_test_util storage)

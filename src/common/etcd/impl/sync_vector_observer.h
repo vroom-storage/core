@@ -18,7 +18,7 @@
 
 #include "subscriber_observer.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <Serializable T>
 class sync_vector_observer : public subscriber_observer {
@@ -87,4 +87,4 @@ private:
     std::vector<T> m_values;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

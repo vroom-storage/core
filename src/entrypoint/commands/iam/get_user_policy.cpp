@@ -14,7 +14,7 @@
 
 #include "get_user_policy.h"
 
-namespace uh::cluster::ep::iam {
+namespace vrm::cluster::ep::iam {
 
 get_user_policy::get_user_policy(user::db& users)
     : m_users(users) {}
@@ -52,4 +52,4 @@ bool get_user_policy::can_handle(const ep::http::request& req) {
            req.query("Action").value_or("") == "GetUserPolicy";
 }
 
-} // namespace uh::cluster::ep::iam
+} // namespace vrm::cluster::ep::iam

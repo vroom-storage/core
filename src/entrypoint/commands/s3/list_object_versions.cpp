@@ -21,9 +21,9 @@
 
 #include <set>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 list_object_versions::list_object_versions(directory& dir)
     : m_dir(dir) {}
@@ -126,4 +126,4 @@ std::string list_object_versions::action_id() const {
     return "s3:ListBucketVersions"; // sic!
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

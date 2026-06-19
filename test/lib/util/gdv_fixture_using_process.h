@@ -37,7 +37,7 @@
 namespace bp = boost::process;
 using namespace std::chrono_literals;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 void send_signal_to_process(pid_t pid, int signal) {
     if (kill(pid, signal) == 0) {
@@ -187,7 +187,7 @@ public:
                                          "--port", serialize(port_offset + id)};
 
         m_storage_instances[id] = std::make_unique<bp::child>(
-            UH_CLUSTER_EXECUTABLE, bp::env = env, bp::args = args);
+            VRM_CLUSTER_EXECUTABLE, bp::env = env, bp::args = args);
 
         LOG_DEBUG() << "storage " << id << " is spawned with process id: "
                     << m_storage_instances[id]->id();
@@ -222,4 +222,4 @@ private:
     std::shared_ptr<storage::global::global_data_view> m_gdv;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

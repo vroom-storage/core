@@ -22,7 +22,7 @@
 #include <string>
 #include <utility>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class error {
 public:
@@ -54,15 +54,15 @@ private:
 
 class error_exception : public std::exception {
 public:
-    error_exception(uh::cluster::error e = uh::cluster::error())
+    error_exception(vrm::cluster::error e = vrm::cluster::error())
         : m_error(std::move(e)) {}
 
     const char* what() const noexcept override;
 
-    const uh::cluster::error& error() const { return m_error; }
+    const vrm::cluster::error& error() const { return m_error; }
 
 private:
-    uh::cluster::error m_error;
+    vrm::cluster::error m_error;
 };
 
 std::string errno_message();
@@ -71,4 +71,4 @@ std::string errno_message();
 std::ostream& operator<<(std::ostream& out, const error& e);
 std::ostream& operator<<(std::ostream& out, const error_exception& e);
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -22,7 +22,7 @@
 
 using namespace std::chrono_literals;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_AUTO_TEST_SUITE(when_client_has_system_failure_a_etcd_manager)
 
@@ -59,4 +59,4 @@ BOOST_AUTO_TEST_CASE(
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

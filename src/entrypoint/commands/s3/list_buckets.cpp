@@ -17,9 +17,9 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -60,4 +60,4 @@ coro<response> list_buckets::handle(request& req) {
 
 std::string list_buckets::action_id() const { return "s3:ListBuckets"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

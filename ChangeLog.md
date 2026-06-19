@@ -35,7 +35,7 @@
 ## [1.3.0] 2025-02-24
 
 - Implement support for pay-as-you-go licensing
-- Add API call to query configured UH cluster license
+- Add API call to query configured VRM cluster license
 - Add support for AWS signature version 4 pre-signed URL
 - Add support for per-bucket CORS configuration using `s3:PutBucketCors`,
   `s3:GetBucketCors` and `s3:DeleteBucketCors`
@@ -70,7 +70,7 @@
 - Support authentication against etcd
 - Correctly report original size in responses to PutObject and CompleteMultipartUpload
 - Fix request ID for `100 Continue` responses
-- Add support for policy variables: `uh:ActionId`, `uh:ResourceArn`,
+- Add support for policy variables: `vrm:ActionId`, `vrm:ResourceArn`,
   `aws:username`, `aws:userid`, `aws:PrincipalArn`, `aws:SourceIp`, `aws:referer`,
   `aws:UserAgent`, `s3:x-amz-content-sha256`, `s3:x-amz-copy-source`, `s3:delimiter`,
   `s3:prefix`, `aws:CurrentTime`

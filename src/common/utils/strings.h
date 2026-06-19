@@ -23,7 +23,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 static constexpr const char* CHARS_CAPITALS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 static constexpr const char* CHARS_LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
@@ -313,4 +313,4 @@ auto split_buffer(std::span<T> buffer, size_t chunk_size) {
     return result;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

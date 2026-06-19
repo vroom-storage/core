@@ -20,7 +20,7 @@
 #include <openssl/err.h>
 #include <stdexcept>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -75,4 +75,4 @@ std::string hash_base::finalize() {
     return {hash_value, length};
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -34,7 +34,7 @@
 
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 enum metric_type {
     gdv_l1_cache_hit_counter,
@@ -199,4 +199,4 @@ template <metric_type type> struct counter_guard {
     ~counter_guard() { metric<type, count, int64_t>::decrease(1); }
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

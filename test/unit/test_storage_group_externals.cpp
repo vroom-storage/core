@@ -22,7 +22,7 @@
 #include <storage/group/externals.h>
 #include <storage/group/state.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class fixture {
 public:
@@ -113,4 +113,4 @@ BOOST_AUTO_TEST_CASE(gets_storage_states) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

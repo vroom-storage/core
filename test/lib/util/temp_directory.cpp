@@ -16,7 +16,7 @@
 
 #include "common/utils/random.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -58,4 +58,4 @@ const std::filesystem::path& temp_directory::path() const { return m_path; }
 
 // ---------------------------------------------------------------------
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

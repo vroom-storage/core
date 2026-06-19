@@ -22,7 +22,7 @@
 #include <common/etcd/utils.h>
 #include <common/telemetry/log.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 /*
  * Subscriber manages multiple keys by using recursive watch.
@@ -49,4 +49,4 @@ private:
     etcd_manager::watch_guard m_wg;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -19,7 +19,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-using namespace uh::cluster::ep::policy;
+using namespace vrm::cluster::ep::policy;
 
 BOOST_AUTO_TEST_CASE(parse_success) {
     auto policies = parser::parse(

@@ -14,7 +14,7 @@ FROM ubuntu:22.04 as deploy
 
 ARG DebugTools=False
 
-LABEL org.opencontainers.image.description="This container image contains a nightly snapshot of the UltiHash object storage cluster."
+LABEL org.opencontainers.image.description="This container image contains a nightly snapshot of the Vroom object storage cluster."
 
 # Install curl to test if dependencies are already available (temporary workaround)
 ENV DEBIAN_FRONTEND=noninteractive
@@ -25,16 +25,16 @@ RUN apt-get update \
         apt-get install --yes --no-install-recommends net-tools gdb gdbserver; \
     fi
 
-COPY --from=build /core/build/uh-cluster /usr/local/bin
-COPY --from=build /core/build/libuh-cluster_shared.so /usr/local/bin
+COPY --from=build /core/build/vrm-cluster /usr/local/bin
+COPY --from=build /core/build/libvrm-cluster_shared.so /usr/local/bin
 
-RUN addgroup --system --gid 234 uh
-RUN adduser --system --uid 234 --gid 234 --shell /bin/bash uh
+RUN addgroup --system --gid 234 vrm
+RUN adduser --system --uid 234 --gid 234 --shell /bin/bash vrm
 
 # create working directory
-RUN install -d -m 0755 -o uh -g uh /var/lib/uh
+RUN install -d -m 0755 -o vrm -g vrm /var/lib/vrm
 
-USER uh
-WORKDIR /home/uh
+USER vrm
+WORKDIR /home/vrm
 
-CMD ["/usr/bin/bash", "-l", "-c", "sleep 8 && uh-cluster --registry etcd:2379 storage"]
+CMD ["/usr/bin/bash", "-l", "-c", "sleep 8 && vrm-cluster --registry etcd:2379 storage"]

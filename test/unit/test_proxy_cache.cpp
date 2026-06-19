@@ -24,7 +24,7 @@
 #include <thread>
 #include <vector>
 
-namespace uh::cluster::proxy::cache {
+namespace vrm::cluster::proxy::cache {
 
 BOOST_AUTO_TEST_SUITE(a_lru_cache)
 
@@ -289,4 +289,4 @@ BOOST_AUTO_TEST_CASE(supports_concurrent_put) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster::proxy::cache
+} // namespace vrm::cluster::proxy::cache

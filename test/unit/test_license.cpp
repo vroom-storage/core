@@ -21,7 +21,7 @@
 #include <common/license/license.h>
 #include <nlohmann/json.hpp>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 BOOST_AUTO_TEST_SUITE(a_license)
 
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(throws_for_no_signature) {
 BOOST_AUTO_TEST_CASE(can_skip_validation) {
     static constexpr const char* json_literal = R"({
         "version": "v1",
-        "customer_id": "UltiHash-Test",
+        "customer_id": "Vroom-Test",
         "license_type": "freemium",
         "storage_cap_gib": 1048576
     })";

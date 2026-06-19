@@ -1,15 +1,15 @@
 #!/bin/bash
 
-[ -z "$UH_DB_USER" ] || [ -z "$UH_DB_PASS" ] || [ -z "$UH_DB_HOSTPORT" ] && {
-    echo "You need to set the environment variables UH_DB_HOSTPORT, UH_DB_USER "
-    echo "and UH_DB_PASS in order to run this script."
+[ -z "$VRM_DB_USER" ] || [ -z "$VRM_DB_PASS" ] || [ -z "$VRM_DB_HOSTPORT" ] && {
+    echo "You need to set the environment variables VRM_DB_HOSTPORT, VRM_DB_USER "
+    echo "and VRM_DB_PASS in order to run this script."
     exit 1
 }
 
-databases="uh_directory uh_multipart uh_user"
+databases="vrm_directory vrm_multipart vrm_user"
 for db in $databases; do
     echo "DROP DATABASE $db" |
-        psql "postgresql://$UH_DB_USER:$UH_DB_PASS@$UH_DB_HOSTPORT/postgres"
+        psql "postgresql://$VRM_DB_USER:$VRM_DB_PASS@$VRM_DB_HOSTPORT/postgres"
 done
 
 SQL_PATH=@PROJECT_SOURCE_DIR@/data/sql
@@ -19,26 +19,26 @@ cat $SQL_PATH/provision_databases.sql | psql postgres
 for dir in $SQL_PATH/*; do
     if [ -d  "$dir" ]; then
         dbname=$(basename "$dir")
-        flyway -locations="filesystem:$dir" -url="jdbc:postgresql://$UH_DB_HOSTPORT/$dbname" -user="$UH_DB_USER" -password="$UH_DB_PASS" migrate
+        flyway -locations="filesystem:$dir" -url="jdbc:postgresql://$VRM_DB_HOSTPORT/$dbname" -user="$VRM_DB_USER" -password="$VRM_DB_PASS" migrate
     fi
 done
 
-access=$<TARGET_FILE:uh-access>
-$access user-add --superuser 'root' 'arn:uh:iam::0:users/root'
+access=$<TARGET_FILE:vrm-access>
+$access user-add --superuser 'root' 'arn:vrm:iam::0:users/root'
 $access key-add 'root' 'FANCY-ROOT-KEY' 'SECRET'
 
-$access user-add 'john.doe' 'arn:uh:iam::0:users/john.doe'
+$access user-add 'john.doe' 'arn:vrm:iam::0:users/john.doe'
 $access key-add 'john.doe' 'NOPQRSTUVWXYZABCDEFG' 'nopqrstuvwxyzabcdefghijklmnabcdefghijklm' 86400
-$access policy-add 'john.doe' 'allow-all' '{ "Version": "2012-10-17", "Statement": { "Sid":  "AllowAll", "Effect": "Allow", "Action": "*", "Principal": "arn:uh:iam::0:users/*", "Resource": "*" } }'
+$access policy-add 'john.doe' 'allow-all' '{ "Version": "2012-10-17", "Statement": { "Sid":  "AllowAll", "Effect": "Allow", "Action": "*", "Principal": "arn:vrm:iam::0:users/*", "Resource": "*" } }'
 
-$access user-add 'tenant' 'arn:uh:iam::0:users/tenant'
+$access user-add 'tenant' 'arn:vrm:iam::0:users/tenant'
 $access key-add 'tenant' 'HIJKLMNOPQRSTUVWXYZA' 'opqrstuvwxyzabcdefghijklmnopqrstuvwxyzab' 86400
-$access policy-add 'tenant' 'allow-all' '{ "Version": "2012-10-17", "Statement": { "Sid":  "AllowAll", "Effect": "Allow", "Action": "*", "Principal": "arn:uh:iam::0:users/*", "Resource": "*" } }'
+$access policy-add 'tenant' 'allow-all' '{ "Version": "2012-10-17", "Statement": { "Sid":  "AllowAll", "Effect": "Allow", "Action": "*", "Principal": "arn:vrm:iam::0:users/*", "Resource": "*" } }'
 
-$access user-add 'iam' 'arn:uh:iam::0:users/iam'
+$access user-add 'iam' 'arn:vrm:iam::0:users/iam'
 $access key-add 'iam' 'ABCDEFGHIJKLMNOPQRST' 'abcdefghijklmnopqrstuvwxyzabcdefghijklmn' 86400
-$access policy-add 'iam' 'allow-all' '{ "Version": "2012-10-17", "Statement": { "Sid":  "AllowAll", "Effect": "Allow", "Action": "*", "Principal": "arn:uh:iam::0:users/*", "Resource": "*" } }'
+$access policy-add 'iam' 'allow-all' '{ "Version": "2012-10-17", "Statement": { "Sid":  "AllowAll", "Effect": "Allow", "Action": "*", "Principal": "arn:vrm:iam::0:users/*", "Resource": "*" } }'
 
-uh_dir=$<TARGET_FILE:uh-dir>
-$uh_dir mkb test-aws-s3a
-$uh_dir mkb datasets
+vrm_dir=$<TARGET_FILE:vrm-dir>
+$vrm_dir mkb test-aws-s3a
+$vrm_dir mkb datasets

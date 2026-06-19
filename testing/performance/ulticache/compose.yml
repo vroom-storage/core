@@ -2,7 +2,7 @@ services:
   database:
     image: bitnami/postgresql:16.3.0
     environment:
-      POSTGRESQL_PASSWORD: uh
+      POSTGRESQL_PASSWORD: vrm
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
@@ -20,7 +20,7 @@ services:
       - database
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: uh
+      POSTGRES_PASSWORD: vrm
       SUPER_USER_USERNAME: root
       SUPER_USER_ACCESS_KEY_ID: TEST-USER
       SUPER_USER_SECRET_KEY: SECRET
@@ -28,28 +28,28 @@ services:
       DB_USER: postgres
       DB_HOST: database
       DB_PORT: 5432
-      PGPASSWORD: uh
+      PGPASSWORD: vrm
 
   coordinator:
     image: registry.ultihash.io/dev/core:ulticache-nightly-build
     depends_on:
        - etcd
     environment:
-      UH_LICENSE: ${UH_LICENSE}
-      UH_LOG_LEVEL: INFO
-      UH_DB_USER: postgres
-      UH_DB_HOSTPORT: database:5432
-      UH_DB_PASS: uh
-    command: ["/usr/bin/bash", "-l", "-c", "sleep 10 && uh-cluster --registry etcd:2379 coordinator"]
+      VRM_LICENSE: ${VRM_LICENSE}
+      VRM_LOG_LEVEL: INFO
+      VRM_DB_USER: postgres
+      VRM_DB_HOSTPORT: database:5432
+      VRM_DB_PASS: vrm
+    command: ["/usr/bin/bash", "-l", "-c", "sleep 10 && vrm-cluster --registry etcd:2379 coordinator"]
 
   storage:
     image: registry.ultihash.io/dev/core:ulticache-nightly-build
     depends_on:
        - etcd
     environment:
-      UH_LOG_LEVEL: INFO
-      UH_OTEL_ENDPOINT: http://otel:4317
-    command: ["/usr/bin/bash", "-l", "-c", "sleep 10 && uh-cluster --registry etcd:2379 storage"]
+      VRM_LOG_LEVEL: INFO
+      VRM_OTEL_ENDPOINT: http://otel:4317
+    command: ["/usr/bin/bash", "-l", "-c", "sleep 10 && vrm-cluster --registry etcd:2379 storage"]
 
   deduplicator:
     image: registry.ultihash.io/dev/core:ulticache-nightly-build
@@ -57,9 +57,9 @@ services:
       - etcd
       - storage
     environment:
-      UH_LOG_LEVEL: INFO
-      UH_OTEL_ENDPOINT: http://otel:4317
-    command: ["/usr/bin/bash", "-l", "-c", "sleep 10 && uh-cluster --registry etcd:2379 deduplicator"]
+      VRM_LOG_LEVEL: INFO
+      VRM_OTEL_ENDPOINT: http://otel:4317
+    command: ["/usr/bin/bash", "-l", "-c", "sleep 10 && vrm-cluster --registry etcd:2379 deduplicator"]
 
   entrypoint:
     image: registry.ultihash.io/dev/core:ulticache-nightly-build
@@ -68,15 +68,15 @@ services:
       - storage
       - deduplicator
     environment:
-      UH_LOG_LEVEL: INFO
-      UH_OTEL_ENDPOINT: http://otel:4317
-      UH_DB_HOSTPORT: database:5432
-      UH_DB_USER: postgres
-      UH_DB_PASS: uh
+      VRM_LOG_LEVEL: INFO
+      VRM_OTEL_ENDPOINT: http://otel:4317
+      VRM_DB_HOSTPORT: database:5432
+      VRM_DB_USER: postgres
+      VRM_DB_PASS: vrm
     configs:
       - source: policies_config
-        target: /etc/uh/policies.json
-    command: ["/usr/bin/bash", "-l", "-c", "sleep 15 && uh-cluster --registry etcd:2379 entrypoint"]
+        target: /etc/vrm/policies.json
+    command: ["/usr/bin/bash", "-l", "-c", "sleep 15 && vrm-cluster --registry etcd:2379 entrypoint"]
     ports:
       - 8080:8080
 
@@ -105,8 +105,8 @@ configs:
       exporters:
         debug: {}
         otlphttp/uptrace:
-          endpoint: https://collector.ultihash.io
-          headers: { 'uptrace-dsn': https://${UH_MONITORING_TOKEN}@collector.ultihash.io }
+          endpoint: https://collector.vroom.io
+          headers: { 'uptrace-dsn': https://${VRM_MONITORING_TOKEN}@collector.vroom.io }
 
       service:
         pipelines:

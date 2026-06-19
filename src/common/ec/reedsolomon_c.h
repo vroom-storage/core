@@ -27,7 +27,7 @@ extern "C" {
 #include <rs.h>
 }
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 enum data_stat : uint8_t {
     valid = 0,
@@ -124,4 +124,4 @@ private:
     const std::unique_ptr<reed_solomon, void (*)(reed_solomon*)> m_rs;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

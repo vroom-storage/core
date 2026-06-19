@@ -18,7 +18,7 @@
 #include "common/utils/misc.h"
 #include "parser.h"
 
-namespace uh::cluster::ep::policy {
+namespace vrm::cluster::ep::policy {
 
 namespace {
 
@@ -36,7 +36,7 @@ std::list<policy> read_global_policies(const std::filesystem::path& path) {
 
 } // namespace
 
-const std::filesystem::path module::GLOBAL_CONFIG = "/etc/uh/policies.json";
+const std::filesystem::path module::GLOBAL_CONFIG = "/etc/vrm/policies.json";
 
 module::module(directory& dir) :m_directory(dir),
     m_policies(read_global_policies(GLOBAL_CONFIG)) {}
@@ -118,4 +118,4 @@ coro<effect> module::check(const http::request& request,
     co_return has_allow ? effect::allow : effect::deny;
 }
 
-} // namespace uh::cluster::ep::policy
+} // namespace vrm::cluster::ep::policy

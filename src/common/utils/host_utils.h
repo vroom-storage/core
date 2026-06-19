@@ -19,10 +19,10 @@
 #include <boost/asio.hpp>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 bool is_valid_ip(const std::string& ip);
 
 std::string get_host();
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

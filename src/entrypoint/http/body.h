@@ -19,7 +19,7 @@
 #include <common/coroutines/coro.h>
 #include <span>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 class body {
 public:
@@ -66,4 +66,4 @@ coro<container> copy_to_buffer(body& s) {
     co_return std::move(rv);
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

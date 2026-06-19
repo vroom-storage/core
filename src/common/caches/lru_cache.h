@@ -21,7 +21,7 @@
 #include <optional>
 #include <unordered_map>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename K, typename V> class lru_cache {
 
@@ -105,4 +105,4 @@ public:
         return std::nullopt;
     }
 };
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

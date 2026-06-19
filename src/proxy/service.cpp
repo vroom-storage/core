@@ -25,7 +25,7 @@
 namespace net = boost::asio;
 namespace ssl = net::ssl;
 
-namespace uh::cluster::proxy {
+namespace vrm::cluster::proxy {
 
 using tcp = boost::asio::ip::tcp;
 
@@ -36,7 +36,7 @@ socket_factory(boost::asio::io_context& ioc, const std::string& server,
     if (insecure) {
         LOG_INFO() << "Creating insecure connection to " << server << ":"
                    << port;
-        auto addr = uh::cluster::resolve(server, port);
+        auto addr = vrm::cluster::resolve(server, port);
         if (addr.empty()) {
             throw std::runtime_error("lookup failed");
         }
@@ -90,4 +90,4 @@ service::service(boost::asio::io_context& ioc, const service_config& sc,
                    *m_dv, m_mgr, c.buffer_size),
                m_ioc) {}
 
-} // namespace uh::cluster::proxy
+} // namespace vrm::cluster::proxy

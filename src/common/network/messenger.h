@@ -20,7 +20,7 @@
 #include "messenger_core.h"
 #include <map>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct write_request_store {
     allocation_t allocation;
@@ -102,4 +102,4 @@ public:
     }
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

@@ -19,9 +19,9 @@
 #include <entrypoint/http/stream.h>
 #include <format>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster::ep {
+namespace vrm::cluster::ep {
 
 handler::handler(command_factory&& comm_factory, request_factory&& factory,
                  std::unique_ptr<ep::policy::module> policy,
@@ -161,4 +161,4 @@ handler::handle_request(const boost::asio::ip::tcp::endpoint& peer, stream& s,
     co_return response;
 }
 
-} // namespace uh::cluster::ep
+} // namespace vrm::cluster::ep

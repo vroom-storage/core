@@ -37,9 +37,9 @@
 #include <boost/beast/ssl.hpp>
 #include <variant>
 
-namespace uh::cluster::proxy {
+namespace vrm::cluster::proxy {
 
-namespace http = uh::cluster::ep::http;
+namespace http = vrm::cluster::ep::http;
 
 class handler : public protocol_handler {
     template <typename StreamType>
@@ -264,4 +264,4 @@ coro<void> handler::handle(boost::asio::ip::tcp::socket s) {
     co_await std::visit(handle_visitor{this, std::move(s)}, *downstream);
 }
 
-} // namespace uh::cluster::proxy
+} // namespace vrm::cluster::proxy

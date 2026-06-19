@@ -20,7 +20,7 @@
 #include <common/utils/strings.h>
 #include <unordered_set>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 ec_data_view::ec_data_view(boost::asio::io_context& ioc, etcd_manager& etcd,
                            std::size_t group_id, group_config config,
                            std::size_t service_connections)
@@ -506,4 +506,4 @@ coro<std::size_t> ec_data_view::unlink(const address& addr) {
     co_return freed_bytes;
 }
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

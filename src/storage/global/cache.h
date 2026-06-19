@@ -19,7 +19,7 @@
 #include <common/caches/lru_cache.h>
 #include <storage/interfaces/data_view.h>
 
-namespace uh::cluster::storage::global {
+namespace vrm::cluster::storage::global {
 
 class cache {
 public:
@@ -36,4 +36,4 @@ private:
     lru_cache<uint128_t, shared_buffer<char>> m_lru;
 };
 
-} // namespace uh::cluster::storage::global
+} // namespace vrm::cluster::storage::global

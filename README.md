@@ -1,4 +1,4 @@
-# UltiHash Patches
+# Vroom Patches
 
 > Fork of https://github.com/UltiHash/core/ with patches aiming to keep
 > the project alive.

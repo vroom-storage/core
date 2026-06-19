@@ -16,9 +16,9 @@
 
 #include "entrypoint/http/string_body.h"
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 get_bucket_policy::get_bucket_policy(directory& dir)
     : m_dir(dir) {}
@@ -46,4 +46,4 @@ std::string get_bucket_policy::action_id() const {
     return "s3:GetBucketPolicy";
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

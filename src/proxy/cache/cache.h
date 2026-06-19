@@ -36,7 +36,7 @@
 #include <string>
 #include <vector>
 
-namespace uh::cluster::proxy::cache {
+namespace vrm::cluster::proxy::cache {
 
 namespace detail {
 
@@ -78,4 +78,4 @@ public:
     virtual std::size_t size() const = 0;
 };
 
-} // namespace uh::cluster::proxy::cache
+} // namespace vrm::cluster::proxy::cache

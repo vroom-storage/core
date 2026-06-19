@@ -30,7 +30,7 @@
 #include <boost/beast/core/tcp_stream.hpp>
 #include <chrono>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 using size_type = size_t;
 
@@ -156,4 +156,4 @@ private:
     origin m_origin;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

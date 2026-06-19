@@ -45,7 +45,7 @@ namespace otel_otlp = opentelemetry::exporter::otlp;
 namespace otel_logs_sdk = opentelemetry::sdk::logs;
 namespace otel_logs = opentelemetry::logs;
 
-namespace uh::log {
+namespace vrm::log {
 
 namespace {
 
@@ -91,8 +91,8 @@ void initialize_otel_log_exporter(const sink_config& cfg) {
     auto processor = otel_logs_sdk::SimpleLogRecordProcessorFactory::Create(
         std::move(exporter));
     auto resource = opentelemetry::sdk::resource::Resource::Create(
-        {{"service.name", uh::project_info::get().project_name},
-         {"service.version", uh::project_info::get().project_version},
+        {{"service.name", vrm::project_info::get().project_name},
+         {"service.version", vrm::project_info::get().project_version},
          {"service.role",
           std::string(magic_enum::enum_name(cfg.service_role))}});
     std::shared_ptr<otel_logs::LoggerProvider> provider(
@@ -198,7 +198,7 @@ std::string to_string(boost::log::trivial::severity_level level) {
 std::ostream& operator<<(std::ostream& out, const sink_config& c) {
     out << "sink(" << to_string(c.type) << ", "
         << (c.filename ? *c.filename : "<empty>") << ", "
-        << uh::log::to_string(c.level) << ")";
+        << vrm::log::to_string(c.level) << ")";
 
     return out;
 }
@@ -221,4 +221,4 @@ void set_level(logging::trivial::severity_level level) {
 
 // ---------------------------------------------------------------------
 
-} // namespace uh::log
+} // namespace vrm::log

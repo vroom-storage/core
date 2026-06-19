@@ -18,7 +18,7 @@
 
 using namespace boost;
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 chunked_body::chunked_body(stream& s, trailing_headers trailing)
     : m_s(s),
@@ -104,4 +104,4 @@ coro<chunked_body::chunk_header> chunked_body::read_chunk_header() {
     co_return hdr;
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

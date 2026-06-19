@@ -17,7 +17,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 std::size_t safe_pread(int fd, std::span<char> buffer, std::size_t offset) {
 
@@ -69,4 +69,4 @@ int open_file(const std::filesystem::path& path) {
     return fd;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

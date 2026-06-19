@@ -18,7 +18,7 @@
 #include <common/utils/strings.h>
 #include <entrypoint/http/command_exception.h>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 std::size_t range_spec::range::length() const {
     return end < start ? 0 : end - start;
@@ -95,4 +95,4 @@ address apply_range(address addr, const range_spec& spec) {
     return rv;
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

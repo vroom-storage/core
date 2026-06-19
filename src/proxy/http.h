@@ -122,7 +122,7 @@ std::optional<std::uint64_t> get_content_length(const Message& msg) {
 
 } // namespace boost::beast::http
 
-namespace uh::cluster::proxy {
+namespace vrm::cluster::proxy {
 
 inline coro<void> async_noop() { co_return; };
 
@@ -292,4 +292,4 @@ coro<void> async_write(SocketType& s, SourceType& source) {
     co_await async_write<chunk_size>(async_noop(), s, source);
 }
 
-} // namespace uh::cluster::proxy
+} // namespace vrm::cluster::proxy

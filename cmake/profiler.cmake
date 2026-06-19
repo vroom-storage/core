@@ -26,7 +26,7 @@ CPMAddPackage(
     CPM_ARGS
     "TIMEOUT 300")
 
-function(uh_add_profiler name)
+function(vrm_add_profiler name)
     # Parse Arguments
     set(options "")
     set(multi_value_args PRIVATE PUBLIC)

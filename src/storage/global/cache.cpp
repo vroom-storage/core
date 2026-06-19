@@ -17,7 +17,7 @@
 #include <common/telemetry/log.h>
 #include <common/telemetry/metrics.h>
 
-namespace uh::cluster::storage::global {
+namespace vrm::cluster::storage::global {
 
 cache::cache(boost::asio::io_context& ioc, data_view& storage,
              std::size_t capacity)
@@ -72,4 +72,4 @@ coro<shared_buffer<>> cache::read(const uint128_t& pointer, size_t size) {
     co_return buffer;
 }
 
-} // namespace uh::cluster::storage::global
+} // namespace vrm::cluster::storage::global

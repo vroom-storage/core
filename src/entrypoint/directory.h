@@ -24,7 +24,7 @@
 
 #include "object.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 using ep::object;
 
@@ -139,4 +139,4 @@ coro<std::optional<std::string>>
 safe_put_object(directory& dir, storage::global::global_data_view& gdv,
                 const std::string& bucket, const object& obj);
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

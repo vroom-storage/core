@@ -22,7 +22,7 @@
 #include <common/license/license.h>
 #include <common/telemetry/log.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class license_watcher {
 public:
@@ -38,4 +38,4 @@ private:
     subscriber m_subscriber;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

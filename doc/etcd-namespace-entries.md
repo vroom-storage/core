@@ -1,6 +1,6 @@
 # Overview
 
-This document defines the etcd directory structure implemented by UltiHash
+This document defines the etcd directory structure implemented by Vroom
 cluster.
 
 
@@ -8,7 +8,7 @@ cluster.
 
 The following variables will be used in this document:
 
-- `<namespace>` the namespace assigned to the cluster, defaults to `uh`
+- `<namespace>` the namespace assigned to the cluster, defaults to `vrm`
 - `<service_class>` specifies a type of service, possible values being `storage`,
   `deduplicator`, `coordinator`, `entrypoint`
 - `<service_id>` the (numeric) id of a service, currently a serial number

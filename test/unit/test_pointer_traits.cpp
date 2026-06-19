@@ -23,7 +23,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_AUTO_TEST_CASE(random_test) {
     int failures = 0;
@@ -90,4 +90,4 @@ BOOST_AUTO_TEST_CASE(translates_global_pointer_to_storage_pointer) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

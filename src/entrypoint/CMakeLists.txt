@@ -27,9 +27,9 @@ add_library(entrypoint
             commands/iam/create_user.cpp
             commands/iam/delete_user.cpp
             commands/iam/get_user_policy.cpp
-            commands/uh/get_license_info.cpp
-            commands/uh/get_ready.cpp
-            commands/uh/get_metrics.cpp
+            commands/vrm/get_license_info.cpp
+            commands/vrm/get_ready.cpp
+            commands/vrm/get_metrics.cpp
             commands/s3/put_bucket_cors.cpp
             commands/s3/list_objects.cpp
             commands/s3/list_object_versions.cpp
@@ -84,4 +84,4 @@ add_library(entrypoint
             policy/module.cpp
             policy/variables.cpp)
 
-target_link_libraries(entrypoint db etcd nlohmann_json deduplicator storage uhcrypto utils license)
+target_link_libraries(entrypoint db etcd nlohmann_json deduplicator storage vrmcrypto utils license)

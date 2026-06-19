@@ -14,7 +14,7 @@
 
 #include "connstr.h"
 
-namespace uh::cluster::db {
+namespace vrm::cluster::db {
 
 namespace {
 
@@ -68,4 +68,4 @@ std::ostream& operator<<(std::ostream& out, const connstr& c) {
     return out;
 }
 
-} // namespace uh::cluster::db
+} // namespace vrm::cluster::db
