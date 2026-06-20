@@ -14,7 +14,7 @@
 
 cmake_minimum_required(VERSION 3.22.0 FATAL_ERROR)
 
-project(vrm-cluster VERSION 1.7.0)
+project(vrm-cluster VERSION 1.0.0)
 
 #
 # Option handling

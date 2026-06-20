@@ -63,6 +63,11 @@ coro<address> ec_data_view::write(std::span<const char> data,
         throw std::runtime_error("Invalid leader id: " +
                                  std::to_string(leader));
 
+    if (storages.at(leader) == nullptr)
+    {
+        throw std::runtime_error("Leader storage is not available");
+    }
+
     auto num_stripes = div_ceil(data.size(), m_stripe_size);
     auto allocation = co_await storages.at(leader)->allocate(
         num_stripes * m_chunk_size, m_chunk_size);
