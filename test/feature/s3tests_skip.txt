@@ -377,6 +377,7 @@ s3tests/functional/test_s3.py::test_bucket_logging_multi_delete
 s3tests/functional/test_s3.py::test_bucket_logging_multi_delete_versioned
 s3tests/functional/test_s3.py::test_bucket_logging_multiple_prefixes
 s3tests/functional/test_s3.py::test_bucket_logging_single_prefix
+s3tests/functional/test_s3.py::test_bucket_logging_requester_assumed_role
 s3tests/functional/test_s3.py::test_get_multipart_checksum_object_attributes
 s3tests/functional/test_s3.py::test_get_multipart_object_attributes
 s3tests/functional/test_s3.py::test_get_paginated_multipart_object_attributes
