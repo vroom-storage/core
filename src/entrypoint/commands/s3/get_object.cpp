@@ -22,13 +22,13 @@
 #include <entrypoint/http/range.h>
 #include <entrypoint/utils.h>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
-class local_read_handle : public uh::cluster::ep::http::body {
+class local_read_handle : public vrm::cluster::ep::http::body {
 public:
     local_read_handle(storage::global::global_data_view& storage,
                       directory::object_lock&& obj,
@@ -209,4 +209,4 @@ coro<response> get_object::handle(request& req) {
 
 std::string get_object::action_id() const { return "s3:GetObject"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

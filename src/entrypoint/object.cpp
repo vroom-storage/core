@@ -15,7 +15,7 @@
 #include "object.h"
 
 
-namespace uh::cluster::ep {
+namespace vrm::cluster::ep {
 
 object_state to_object_state(const std::string& s) {
     if (s == "Normal") {
@@ -43,4 +43,4 @@ std::string to_string(object_state os) {
     throw std::runtime_error("unsupport object state");
 }
 
-} // namespace uh::cluster::ep
+} // namespace vrm::cluster::ep

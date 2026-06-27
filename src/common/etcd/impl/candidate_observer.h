@@ -20,7 +20,7 @@
 
 #include <atomic>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class candidate_observer : public subscriber_observer {
 public:
@@ -126,4 +126,4 @@ private:
     std::atomic<bool> m_is_leader{false};
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

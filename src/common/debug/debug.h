@@ -26,7 +26,7 @@ namespace std {
 
 inline ostream& operator<<(ostream& out, const source_location& loc) {
     std::string path = loc.file_name();
-    boost::replace_all(path, uh::project_info::get().project_source_dir, "");
+    boost::replace_all(path, vrm::project_info::get().project_source_dir, "");
 
     out << loc.function_name() << " -- " << path << ":" << loc.line();
     return out;

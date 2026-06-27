@@ -20,7 +20,7 @@
 
 #include <common/crypto/hash.h>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 class raw_body_sha256 : public raw_body {
 public:
@@ -33,4 +33,4 @@ private:
     sha256 m_hash;
 };
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

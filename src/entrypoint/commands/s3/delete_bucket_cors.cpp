@@ -14,9 +14,9 @@
 
 #include "delete_bucket_cors.h"
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 delete_bucket_cors::delete_bucket_cors(directory& dir)
     : m_dir(dir) {}
@@ -37,4 +37,4 @@ std::string delete_bucket_cors::action_id() const {
     return "s3:DeleteBucketCORS";
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

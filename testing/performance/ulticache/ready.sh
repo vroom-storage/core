@@ -17,7 +17,7 @@
 set -e
 
 while true; do
-  RESPONSE=$(curl -s "$CLUSTER_URL/ultihash/v1/ready")
+  RESPONSE=$(curl -s "$CLUSTER_URL/vroom/v1/ready")
   READY=$(echo "$RESPONSE" | grep -o '"ready": true')
 
   if [ -n "$READY" ]; then

@@ -24,7 +24,7 @@
 
 #include <common/utils/common.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 struct group_config {
     enum type_t { ROUND_ROBIN, ERASURE_CODING, REPLICA };
@@ -68,4 +68,4 @@ struct group_configs {
     }
 };
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

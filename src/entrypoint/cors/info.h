@@ -20,7 +20,7 @@
 #include <set>
 #include <string>
 
-namespace uh::cluster::ep::cors {
+namespace vrm::cluster::ep::cors {
 
 struct info {
     std::string origin;
@@ -30,4 +30,4 @@ struct info {
     std::optional<unsigned> max_age_seconds;
 };
 
-} // namespace uh::cluster::ep::cors
+} // namespace vrm::cluster::ep::cors

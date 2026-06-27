@@ -14,7 +14,7 @@
 
 #include "fragment_set_element.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 fragment_set_element::fragment_set_element(const uint128_t& ptr, uint16_t size,
                                            std::string prefix,
                                            storage::global::cache& storage)
@@ -89,4 +89,4 @@ const std::string& fragment_set_element::prefix() const noexcept {
     return m_prefix;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

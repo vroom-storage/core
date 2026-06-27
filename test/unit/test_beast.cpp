@@ -27,7 +27,7 @@ using namespace boost::beast;
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_AUTO_TEST_SUITE(a_beast_parser)
 
@@ -343,4 +343,4 @@ BOOST_AUTO_TEST_CASE(supports_vector_of_const_buffers) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

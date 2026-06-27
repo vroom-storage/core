@@ -21,13 +21,13 @@
 #include <format>
 #include <magic_enum/magic_enum.hpp>
 
-namespace uh::cluster::ep {
+namespace vrm::cluster::ep {
 
 namespace {
 
 static const auto LIMITS_UPDATE_INTERVAL = std::chrono::seconds(5);
 
-coro<void> update_limits(uh::cluster::directory& directory, limits& l) {
+coro<void> update_limits(vrm::cluster::directory& directory, limits& l) {
     boost::asio::steady_timer timer(co_await boost::asio::this_coro::executor);
     std::atomic<std::size_t> size = co_await directory.data_size();
     l.set_storage_size(size);
@@ -114,4 +114,4 @@ service::~service() {
            int64_t>::remove_gauge_callback();
 }
 
-} // namespace uh::cluster::ep
+} // namespace vrm::cluster::ep

@@ -23,7 +23,7 @@
 
 using namespace boost;
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 coro<raw_request> raw_request::read(stream& s,
                                     boost::asio::ip::tcp::endpoint peer) {
@@ -112,4 +112,4 @@ parse_values_string(std::string_view values, char pair_separator,
     return rv;
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

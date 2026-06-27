@@ -20,7 +20,7 @@
 #include <common/types/dedupe_response.h>
 #include <common/utils/common.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct deduplicator_interface {
     virtual coro<dedupe_response> deduplicate(std::string_view data) = 0;
@@ -28,4 +28,4 @@ struct deduplicator_interface {
     virtual ~deduplicator_interface() = default;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

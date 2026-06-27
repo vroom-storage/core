@@ -17,9 +17,9 @@
 #include <common/telemetry/log.h>
 #include <entrypoint/http/command_exception.h>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 limits::limits(license_watcher& watcher)
     : m_watcher{watcher},
@@ -60,4 +60,4 @@ void limits::check_storage_size(std::size_t increment) {
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

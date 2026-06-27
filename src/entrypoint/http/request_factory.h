@@ -22,7 +22,7 @@
 
 #include <memory>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 class request_factory {
 public:
@@ -34,4 +34,4 @@ private:
     user::db& m_users;
 };
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

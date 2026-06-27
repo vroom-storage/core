@@ -20,7 +20,7 @@
 #include <functional>
 #include <list>
 
-namespace uh::cluster::ep::policy {
+namespace vrm::cluster::ep::policy {
 
 enum class undefined_variable { ignore, do_not_match };
 
@@ -64,4 +64,4 @@ bool match_any(const auto& list, auto pred) {
     return false;
 }
 
-} // namespace uh::cluster::ep::policy
+} // namespace vrm::cluster::ep::policy

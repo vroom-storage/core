@@ -22,7 +22,7 @@
 #include <cctype>
 #include <iostream>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 struct config {
     enum class command { read, write };
@@ -45,7 +45,7 @@ struct config {
 };
 
 std::optional<::config> read_config(int argc, char** argv) {
-    CLI::App app("UH storage CLI");
+    CLI::App app("VRM storage CLI");
     argv = app.ensure_utf8(argv);
 
     ::config rv;
@@ -67,7 +67,7 @@ std::optional<::config> read_config(int argc, char** argv) {
     sub_write->add_option("file", rv.file, "read buffer from file");
     sub_write->add_option("-j,--jobs", rv.jobs, "number of jobs")->default_val(rv.jobs);
 
-    uh::cluster::configure(app, rv.log_level);
+    vrm::cluster::configure(app, rv.log_level);
 
     try {
         app.parse(argc, argv);
@@ -76,7 +76,7 @@ std::optional<::config> read_config(int argc, char** argv) {
         return {};
     }
 
-    uh::log::set_level(rv.log_level);
+    vrm::log::set_level(rv.log_level);
     if (sub_read->parsed()) {
         rv.cmd = ::config::command::read;
     } else if (sub_write->parsed()) {
@@ -87,7 +87,7 @@ std::optional<::config> read_config(int argc, char** argv) {
     return rv;
 }
 
-uh::cluster::coro<void> read_addr(uh::cluster::storage_interface& svc,
+vrm::cluster::coro<void> read_addr(vrm::cluster::storage_interface& svc,
                                   uint128_t ptr, std::size_t length,
                                   std::optional<std::string> outfile,
                                   bool no_output) {
@@ -131,7 +131,7 @@ uh::cluster::coro<void> read_addr(uh::cluster::storage_interface& svc,
     }
 }
 
-uh::cluster::coro<void> partial_write(uh::cluster::storage_interface& svc,
+vrm::cluster::coro<void> partial_write(vrm::cluster::storage_interface& svc,
                                       std::span<const char> buffer)
 {
     auto alloc = co_await svc.allocate(buffer.size());
@@ -150,9 +150,9 @@ uh::cluster::coro<void> partial_write(uh::cluster::storage_interface& svc,
     co_await svc.write(alloc, {buffer}, refcounts);
 }
 
-uh::cluster::coro<void> write_file(
+vrm::cluster::coro<void> write_file(
         boost::asio::io_context& executor,
-        uh::cluster::storage_interface& svc,
+        vrm::cluster::storage_interface& svc,
         const std::string& file,
         std::size_t jobs) {
     auto buffer = read_file(file);
@@ -209,8 +209,8 @@ int main(int argc, char** argv) {
             executor.run(); } );
 
         std::cout << "connection\n";
-        uh::cluster::remote_storage storage(
-            uh::cluster::client(executor, cfg->hostname, cfg->port, 1));
+        vrm::cluster::remote_storage storage(
+            vrm::cluster::client(executor, cfg->hostname, cfg->port, 1));
         std::cout << "connection done\n";
 
         switch (cfg->cmd) {

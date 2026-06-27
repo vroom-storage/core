@@ -24,7 +24,7 @@
 #include <lmdbxx/lmdb++.h>
 #include <unordered_set>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 class reference_counter {
 public:
     reference_counter(const std::filesystem::path& root,
@@ -78,4 +78,4 @@ private:
                           lmdb::txn& txn, lmdb::dbi& dbi);
     std::size_t free_stripes(std::vector<std::size_t>& stripes_to_free);
 };
-} // namespace uh::cluster
+} // namespace vrm::cluster

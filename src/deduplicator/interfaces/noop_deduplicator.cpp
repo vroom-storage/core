@@ -14,7 +14,7 @@
 
 #include "noop_deduplicator.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 noop_deduplicator::noop_deduplicator(storage::global::global_data_view& storage)
     : m_storage(storage) {}
@@ -26,4 +26,4 @@ coro<dedupe_response> noop_deduplicator::deduplicate(std::string_view data) {
                               .addr = std::move(addr)};
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

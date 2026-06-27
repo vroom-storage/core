@@ -16,7 +16,7 @@
 
 using namespace boost::asio;
 
-namespace uh::test {
+namespace vrm::test {
 
 namespace {
 
@@ -54,4 +54,4 @@ void server::run() {
     m_ioc.run();
 }
 
-} // namespace uh::test
+} // namespace vrm::test

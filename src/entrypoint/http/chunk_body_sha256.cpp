@@ -20,7 +20,7 @@
 
 using namespace boost;
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 namespace {
 
@@ -74,4 +74,4 @@ void chunk_body_sha256::on_body_done() {
     }
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

@@ -17,7 +17,7 @@
 #include "ossl_base.h"
 #include <stdexcept>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -74,4 +74,4 @@ std::string hmac_base::finalize() {
     return {hmac_value, length};
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -15,7 +15,7 @@
 #include "dedupe_array.h"
 #include "remote_deduplicator.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 dedupe_array::dedupe_array(boost::asio::io_context& ioc, etcd_manager& etcd,
                            std::size_t connections)
@@ -30,4 +30,4 @@ coro<dedupe_response> dedupe_array::deduplicate(std::string_view data) {
     co_return co_await client->deduplicate(data);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

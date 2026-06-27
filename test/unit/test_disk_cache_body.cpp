@@ -30,7 +30,7 @@
 
 using namespace boost::beast::http;
 
-namespace uh::cluster::proxy::cache::disk {
+namespace vrm::cluster::proxy::cache::disk {
 
 BOOST_FIXTURE_TEST_SUITE(a_disk_cache_body, dedupe_fixture)
 
@@ -234,4 +234,4 @@ BOOST_AUTO_TEST_CASE(test_relay_body) {
     BOOST_TEST(received_body == std::string_view(body.data(), body.size()));
 }
 
-} // namespace uh::cluster::proxy::cache::disk
+} // namespace vrm::cluster::proxy::cache::disk

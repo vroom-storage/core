@@ -23,7 +23,7 @@
 
 using namespace boost::asio;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 service_registry::service_registry(etcd_manager& etcd, const std::string& key,
                                    uint16_t port)
@@ -35,4 +35,4 @@ service_registry::service_registry(etcd_manager& etcd, const std::string& key,
 
 service_registry::~service_registry() { m_etcd.rm(m_key); }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

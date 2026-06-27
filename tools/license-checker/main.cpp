@@ -17,7 +17,7 @@
 
 #include <CLI/CLI.hpp>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 std::optional<license> read_config(int argc, char** argv) {
     CLI::App app("Upload test");
@@ -36,7 +36,7 @@ std::optional<license> read_config(int argc, char** argv) {
                }
                return true;
            },
-           "UltiHash license json-string")
+           "Vroom license json-string")
         ->envname("TEST_LICENSE")
         ->default_val(lic);
 
@@ -50,12 +50,12 @@ std::optional<license> read_config(int argc, char** argv) {
     return lic;
 }
 
-uh::log::config
+vrm::log::config
 make_log_config(const boost::log::trivial::severity_level& log_level,
-                const uh::cluster::role service_role) {
-    uh::log::config lc;
+                const vrm::cluster::role service_role) {
+    vrm::log::config lc;
 
-    lc = {.sinks = {uh::log::sink_config{.type = uh::log::sink_type::cout,
+    lc = {.sinks = {vrm::log::sink_config{.type = vrm::log::sink_type::cout,
                                          .level = log_level,
                                          .service_role = COORDINATOR_SERVICE}}};
     return lc;
@@ -63,9 +63,9 @@ make_log_config(const boost::log::trivial::severity_level& log_level,
 
 int main(int argc, char** argv) {
 
-    uh::log::config log_config =
+    vrm::log::config log_config =
         make_log_config(boost::log::trivial::debug, COORDINATOR_SERVICE);
-    uh::log::init(log_config);
+    vrm::log::init(log_config);
 
     try {
         auto lic = read_config(argc, argv);

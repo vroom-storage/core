@@ -16,7 +16,7 @@
 
 #include <common/utils/strings.h>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 raw_body_sha256::raw_body_sha256(stream& s,
                                  raw_request& req, std::string signature)
@@ -39,4 +39,4 @@ coro<std::span<const char>> raw_body_sha256::read(std::size_t count) {
     co_return rv;
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

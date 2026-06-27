@@ -27,7 +27,7 @@
 #include <string>
 #include <utility>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class async_http_client {
 public:
@@ -105,4 +105,4 @@ private:
     cpr::AuthMode m_auth_type;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

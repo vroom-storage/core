@@ -20,7 +20,7 @@
 
 using namespace std::chrono_literals;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 etcd_manager::etcd_manager(const etcd_config& cfg, int lease_timeout)
     : m_cfg{cfg},
@@ -266,4 +266,4 @@ void etcd_manager::restore_watchers(void) {
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

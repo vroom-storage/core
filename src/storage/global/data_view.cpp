@@ -19,7 +19,7 @@
 #include <storage/group/ec_data_view.h>
 #include <storage/group/rr_data_view.h>
 
-namespace uh::cluster::storage::global {
+namespace vrm::cluster::storage::global {
 
 std::unique_ptr<data_view> group_factory(boost::asio::io_context& ioc,
                                          etcd_manager& etcd,
@@ -94,4 +94,4 @@ coro<std::size_t> global_data_view::unlink(const address& addr) {
     co_return co_await m_group_view->unlink(addr);
 }
 
-} // namespace uh::cluster::storage::global
+} // namespace vrm::cluster::storage::global

@@ -27,7 +27,7 @@
 #include <utility>
 #include <vector>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 class chunked_body : public ep::http::body {
 public:
@@ -62,4 +62,4 @@ private:
     bool m_end = false;
 };
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

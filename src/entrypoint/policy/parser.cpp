@@ -24,7 +24,7 @@
 
 using namespace nlohmann;
 
-namespace uh::cluster::ep::policy {
+namespace vrm::cluster::ep::policy {
 
 namespace {
 
@@ -295,4 +295,4 @@ std::list<policy> parser::parse(const std::string& code) {
     return multi_element<std::list>(statements, parse_policy);
 }
 
-} // namespace uh::cluster::ep::policy
+} // namespace vrm::cluster::ep::policy

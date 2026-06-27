@@ -21,7 +21,7 @@
 #include <iosfwd>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 /**
  * Output a timestamp in IMF fixdate format as defined in
@@ -59,10 +59,10 @@ std::chrono::hours read_timezone(std::string_view str);
 
 } // namespace detail
 
-} // namespace uh::cluster
+} // namespace vrm::cluster
 
 namespace std {
 
-ostream& operator<<(ostream& out, const uh::cluster::utc_time& t);
+ostream& operator<<(ostream& out, const vrm::cluster::utc_time& t);
 
 }

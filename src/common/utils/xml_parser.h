@@ -20,7 +20,7 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include <string_view>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 namespace pt = boost::property_tree;
 
 class xml_parser {
@@ -58,4 +58,4 @@ private:
     };
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

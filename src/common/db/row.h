@@ -25,7 +25,7 @@
 #include <span>
 #include <string>
 
-namespace uh::cluster::db {
+namespace vrm::cluster::db {
 
 class connection;
 
@@ -47,4 +47,4 @@ private:
     int m_row;
 };
 
-} // namespace uh::cluster::db
+} // namespace vrm::cluster::db

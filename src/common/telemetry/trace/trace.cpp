@@ -50,7 +50,7 @@ namespace {
 class HeaderMapCarrier
     : public opentelemetry::context::propagation::TextMapCarrier {
   public:
-    explicit HeaderMapCarrier(uh::cluster::trace_headers& headers)
+    explicit HeaderMapCarrier(vrm::cluster::trace_headers& headers)
         : m_headers(headers) {}
 
     opentelemetry::nostd::string_view
@@ -70,7 +70,7 @@ class HeaderMapCarrier
     }
 
   private:
-    uh::cluster::trace_headers& m_headers;
+    vrm::cluster::trace_headers& m_headers;
 };
 
 void init_propagation() {
@@ -87,15 +87,15 @@ void init_propagation() {
 }
 } // namespace
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 void initialize_trace(const std::string& tracer_name,
                       const std::string& tracer_version,
                       const std::string& endpoint) {
     boost::asio::traced_asio_initialize(tracer_name, tracer_version);
 
-    const auto& info = uh::project_info::get();
-    const char* env_name = std::getenv("UH_SERVICE_NAME");
+    const auto& info = vrm::project_info::get();
+    const char* env_name = std::getenv("VRM_SERVICE_NAME");
     std::string service_name = env_name ? env_name : info.project_name;
     auto resource = opentelemetry::sdk::resource::Resource::Create(
         {{"service.name", service_name},
@@ -173,4 +173,4 @@ trace_context decode_context(std::string traceparent) {
     return decode_context_headers(headers);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -32,7 +32,7 @@
 #include <entrypoint/limits.h>
 #include <storage/global/data_view.h>
 
-namespace uh::cluster::ep {
+namespace vrm::cluster::ep {
 
 class service {
 public:
@@ -61,4 +61,4 @@ private:
     scoped_task m_task;
 };
 
-} // namespace uh::cluster::ep
+} // namespace vrm::cluster::ep

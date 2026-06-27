@@ -21,15 +21,15 @@
 #include <common/license/license.h>
 #include <storage/group/config.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct coordinator_config {
     std::size_t num_threads = 2;
 
-    uh::cluster::license license;
+    vrm::cluster::license license;
     storage::group_configs storage_groups;
     default_backend_client::config backend_config;
     db::config database_config;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

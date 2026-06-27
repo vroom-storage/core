@@ -17,9 +17,9 @@
 #include <common/utils/xml_parser.h>
 
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 put_bucket_versioning::put_bucket_versioning(directory& dir)
     : m_dir(dir) {}
@@ -57,4 +57,4 @@ coro<response> put_bucket_versioning::handle(request& req) {
 
 std::string put_bucket_versioning::action_id() const { return "s3:PutBucketVersioning"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

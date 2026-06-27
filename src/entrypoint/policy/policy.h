@@ -22,7 +22,7 @@
 #include <list>
 #include <optional>
 
-namespace uh::cluster::ep::policy {
+namespace vrm::cluster::ep::policy {
 
 class policy {
 public:
@@ -40,4 +40,4 @@ private:
     ep::policy::effect m_effect;
 };
 
-} // namespace uh::cluster::ep::policy
+} // namespace vrm::cluster::ep::policy

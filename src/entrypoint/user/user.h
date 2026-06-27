@@ -22,7 +22,7 @@
 #include <optional>
 #include <string>
 
-namespace uh::cluster::ep::user {
+namespace vrm::cluster::ep::user {
 
 struct key {
     std::string id;
@@ -46,4 +46,4 @@ struct user {
     inline static const std::string ANONYMOUS_ARN = "arn:aws:iam::1:anonymous";
 };
 
-} // namespace uh::cluster::ep::user
+} // namespace vrm::cluster::ep::user

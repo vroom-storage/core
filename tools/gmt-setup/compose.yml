@@ -2,7 +2,7 @@ services:
   database:
     image: bitnami/postgresql:16.3.0
     environment:
-      POSTGRESQL_PASSWORD: uh
+      POSTGRESQL_PASSWORD: vrm
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
@@ -22,20 +22,20 @@ services:
       - database
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: uh
+      POSTGRES_PASSWORD: vrm
 
       DB_USER: postgres
       DB_HOST: database
       DB_PORT: 5432
-      PGPASSWORD: uh
+      PGPASSWORD: vrm
 
   storage:
     image: ghcr.io/ultihash/core:gmt-storage-0.6.0
     depends_on:
        - etcd
     environment:
-      UH_LICENSE: '{"version":"v1","customer_id":"UltiHash-Test","license_type":"freemium","storage_cap_gib":1048576,"signature":"E5ulpGbxd5F5mHQA8r0RKxK+nFUKc7dAMHHJxgrNsPEJuqhj54F6LfDx0RAY2vFNPvkYmkwNy8LvJIv9UqS1Bw=="}'
-      UH_LOG_LEVEL: DEBUG
+      VRM_LICENSE: '{"version":"v1","customer_id":"Vroom-Test","license_type":"freemium","storage_cap_gib":1048576,"signature":"E5ulpGbxd5F5mHQA8r0RKxK+nFUKc7dAMHHJxgrNsPEJuqhj54F6LfDx0RAY2vFNPvkYmkwNy8LvJIv9UqS1Bw=="}'
+      VRM_LOG_LEVEL: DEBUG
 
   deduplicator:
     image: ghcr.io/ultihash/core:gmt-deduplicator-0.6.0
@@ -43,8 +43,8 @@ services:
       - etcd
       - storage
     environment:
-      UH_LICENSE: '{"version":"v1","customer_id":"UltiHash-Test","license_type":"freemium","storage_cap_gib":1048576,"signature":"E5ulpGbxd5F5mHQA8r0RKxK+nFUKc7dAMHHJxgrNsPEJuqhj54F6LfDx0RAY2vFNPvkYmkwNy8LvJIv9UqS1Bw=="}'
-      UH_LOG_LEVEL: DEBUG
+      VRM_LICENSE: '{"version":"v1","customer_id":"Vroom-Test","license_type":"freemium","storage_cap_gib":1048576,"signature":"E5ulpGbxd5F5mHQA8r0RKxK+nFUKc7dAMHHJxgrNsPEJuqhj54F6LfDx0RAY2vFNPvkYmkwNy8LvJIv9UqS1Bw=="}'
+      VRM_LOG_LEVEL: DEBUG
 
   entrypoint:
     image: ghcr.io/ultihash/core:gmt-entrypoint-0.6.0
@@ -53,11 +53,11 @@ services:
       - storage
       - deduplicator
     environment:
-      UH_LICENSE: '{"version":"v1","customer_id":"UltiHash-Test","license_type":"freemium","storage_cap_gib":1048576,"signature":"E5ulpGbxd5F5mHQA8r0RKxK+nFUKc7dAMHHJxgrNsPEJuqhj54F6LfDx0RAY2vFNPvkYmkwNy8LvJIv9UqS1Bw=="}'
-      UH_LOG_LEVEL: DEBUG
-      UH_DB_HOSTPORT: database:5432
-      UH_DB_USER: postgres
-      UH_DB_PASS: uh
+      VRM_LICENSE: '{"version":"v1","customer_id":"Vroom-Test","license_type":"freemium","storage_cap_gib":1048576,"signature":"E5ulpGbxd5F5mHQA8r0RKxK+nFUKc7dAMHHJxgrNsPEJuqhj54F6LfDx0RAY2vFNPvkYmkwNy8LvJIv9UqS1Bw=="}'
+      VRM_LOG_LEVEL: DEBUG
+      VRM_DB_HOSTPORT: database:5432
+      VRM_DB_USER: postgres
+      VRM_DB_PASS: vrm
     ports:
       - 8080:8080
 

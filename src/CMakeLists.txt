@@ -20,5 +20,5 @@ add_subdirectory(entrypoint)
 add_subdirectory(coordinator)
 add_subdirectory(proxy)
 
-add_executable(uh-cluster main.cpp)
-target_link_libraries(uh-cluster Threads::Threads types telemetry conf entrypoint deduplicator storage coordinator proxy project)
+add_executable(vrm-cluster main.cpp)
+target_link_libraries(vrm-cluster Threads::Threads types telemetry conf entrypoint deduplicator storage coordinator proxy project)

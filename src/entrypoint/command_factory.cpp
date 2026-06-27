@@ -41,9 +41,9 @@
 #include <entrypoint/commands/s3/put_bucket_versioning.h>
 #include <entrypoint/commands/s3/put_object.h>
 
-#include <entrypoint/commands/uh/get_license_info.h>
-#include <entrypoint/commands/uh/get_metrics.h>
-#include <entrypoint/commands/uh/get_ready.h>
+#include <entrypoint/commands/vrm/get_license_info.h>
+#include <entrypoint/commands/vrm/get_metrics.h>
+#include <entrypoint/commands/vrm/get_ready.h>
 
 #include <entrypoint/commands/iam/create_access_key.h>
 #include <entrypoint/commands/iam/create_user.h>
@@ -54,7 +54,7 @@
 #include <entrypoint/commands/iam/list_user_policies.h>
 #include <entrypoint/commands/iam/put_user_policy.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 coro<std::unique_ptr<command>>
 command_factory::action_command(ep::http::request& req) {
@@ -214,4 +214,4 @@ limits& command_factory::get_limits() const { return m_limits; }
 
 directory& command_factory::get_directory() const { return m_directory; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

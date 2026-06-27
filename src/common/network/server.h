@@ -34,7 +34,7 @@
 #include <utility>
 #include <vector>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct server_config {
     uint16_t port;
@@ -173,4 +173,4 @@ private:
 
 //------------------------------------------------------------------------------
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

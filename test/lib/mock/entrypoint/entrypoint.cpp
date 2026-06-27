@@ -14,11 +14,11 @@
 
 #include "entrypoint.h"
 
-using namespace uh::cluster::ep::http;
-using namespace uh::cluster::ep::policy;
-using namespace uh::cluster::ep::user;
+using namespace vrm::cluster::ep::http;
+using namespace vrm::cluster::ep::policy;
+using namespace vrm::cluster::ep::user;
 
-namespace uh::cluster::test {
+namespace vrm::cluster::test {
 
 mock_command::mock_command(const std::string& id)
     : m_id(id) {}
@@ -64,4 +64,4 @@ variables vars(std::initializer_list<std::pair<std::string, std::string>> v) {
     return rv;
 }
 
-} // namespace uh::cluster::test
+} // namespace vrm::cluster::test

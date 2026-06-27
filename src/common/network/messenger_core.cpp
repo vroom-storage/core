@@ -15,7 +15,7 @@
 #include "messenger_core.h"
 #include <common/telemetry/trace/trace.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 messenger_core::messenger_core(boost::asio::io_context& ioc,
                                const std::string& ip_addr,
@@ -266,4 +266,4 @@ boost::asio::ip::tcp::socket& messenger_core::get_socket() noexcept {
     return m_tcp_stream.socket();
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

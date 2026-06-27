@@ -37,17 +37,17 @@
 #endif
 
 #define LOG_DEBUG()                                                            \
-    BOOST_LOG_SEV(uh::log::lg, boost::log::trivial::debug) << LOCATION
+    BOOST_LOG_SEV(vrm::log::lg, boost::log::trivial::debug) << LOCATION
 #define LOG_INFO()                                                             \
-    BOOST_LOG_SEV(uh::log::lg, boost::log::trivial::info) << LOCATION
+    BOOST_LOG_SEV(vrm::log::lg, boost::log::trivial::info) << LOCATION
 #define LOG_WARN()                                                             \
-    BOOST_LOG_SEV(uh::log::lg, boost::log::trivial::warning) << LOCATION
+    BOOST_LOG_SEV(vrm::log::lg, boost::log::trivial::warning) << LOCATION
 #define LOG_ERROR()                                                            \
-    BOOST_LOG_SEV(uh::log::lg, boost::log::trivial::error) << LOCATION
+    BOOST_LOG_SEV(vrm::log::lg, boost::log::trivial::error) << LOCATION
 #define LOG_FATAL()                                                            \
-    BOOST_LOG_SEV(uh::log::lg, boost::log::trivial::fatal) << LOCATION
+    BOOST_LOG_SEV(vrm::log::lg, boost::log::trivial::fatal) << LOCATION
 
-namespace uh::log {
+namespace vrm::log {
 
 // ---------------------------------------------------------------------
 
@@ -73,7 +73,7 @@ struct sink_config {
     std::string otel_endpoint;
 
     boost::log::trivial::severity_level level = boost::log::trivial::info;
-    uh::cluster::role service_role;
+    vrm::cluster::role service_role;
 
     bool operator==(const sink_config&) const = default;
 };
@@ -108,6 +108,6 @@ static boost::log::sources::severity_logger<boost::log::trivial::severity_level>
 
 // ---------------------------------------------------------------------
 
-} // namespace uh::log
+} // namespace vrm::log
 
 #pragma GCC diagnostic pop

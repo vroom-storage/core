@@ -22,7 +22,7 @@
 #include <entrypoint/directory.h>
 #include <storage/global/data_view.h>
 
-namespace uh::cluster::ep {
+namespace vrm::cluster::ep {
 
 class garbage_collector {
 public:
@@ -40,4 +40,4 @@ private:
     scoped_task m_task;
 };
 
-} // namespace uh::cluster::ep
+} // namespace vrm::cluster::ep

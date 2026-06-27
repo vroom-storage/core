@@ -21,9 +21,9 @@
 #include <boost/property_tree/ptree.hpp>
 
 namespace http = boost::beast::http;
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -144,4 +144,4 @@ coro<response> list_objects::handle(request& req) {
 
 std::string list_objects::action_id() const { return "s3:ListObjects"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

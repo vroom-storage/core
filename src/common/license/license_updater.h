@@ -25,7 +25,7 @@
 #include <common/license/license_updater.h>
 #include <common/types/common_types.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class license_updater {
 
@@ -105,4 +105,4 @@ private:
     scoped_task m_task;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

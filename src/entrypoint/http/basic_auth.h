@@ -19,7 +19,7 @@
 #include <entrypoint/http/request.h>
 #include <entrypoint/user/db.h>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 class basic_auth {
 public:
@@ -27,4 +27,4 @@ public:
     create(stream& s, user::db& users, raw_request req);
 };
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

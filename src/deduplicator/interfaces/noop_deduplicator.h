@@ -19,7 +19,7 @@
 #include <common/service_interfaces/deduplicator_interface.h>
 #include <storage/global/data_view.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class noop_deduplicator : public deduplicator_interface {
 public:
@@ -31,4 +31,4 @@ private:
     storage::global::global_data_view& m_storage;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

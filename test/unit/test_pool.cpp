@@ -21,7 +21,7 @@
 #include <boost/test/unit_test.hpp>
 
 using namespace boost::asio;
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 namespace {
 
@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(get) {
     std::thread thread([&]() { ioc.run(); });
 
     int id = 5;
-    uh::cluster::pool<int> p(
+    vrm::cluster::pool<int> p(
         [&]() { return std::make_unique<int>(id++); }, 3);
 
     co_spawn(
@@ -63,15 +63,15 @@ BOOST_AUTO_TEST_CASE(block) {
     std::thread thread([&]() { ioc.run(); });
 
     int id = 5;
-    uh::cluster::pool<int> p(
+    vrm::cluster::pool<int> p(
         [&]() { return std::make_unique<int>(id++); }, 1);
 
-    std::unique_ptr<uh::cluster::pool<int>::handle> handle;
+    std::unique_ptr<vrm::cluster::pool<int>::handle> handle;
 
     co_spawn(
         ioc,
         [&]() -> coro<void> {
-            handle = std::make_unique<uh::cluster::pool<int>::handle>(
+            handle = std::make_unique<vrm::cluster::pool<int>::handle>(
                 co_await p.get());
         },
         use_future)

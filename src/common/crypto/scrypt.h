@@ -19,7 +19,7 @@
 #include <openssl/kdf.h>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class scrypt {
 public:
@@ -39,4 +39,4 @@ private:
     config m_c;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

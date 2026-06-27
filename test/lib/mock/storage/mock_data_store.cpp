@@ -21,7 +21,7 @@
 #include <iostream>
 #include <unordered_set>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct ds_file_info {
     std::size_t storage_id;
@@ -218,4 +218,4 @@ mock_data_store::~mock_data_store() {
     }
 }
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

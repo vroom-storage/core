@@ -19,7 +19,7 @@
 #include <common/types/address.h>
 #include <common/types/big_int.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct pointer_traits {
 
@@ -90,4 +90,4 @@ struct pointer_traits {
     }
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

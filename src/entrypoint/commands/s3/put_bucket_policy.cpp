@@ -14,9 +14,9 @@
 
 #include "put_bucket_policy.h"
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 put_bucket_policy::put_bucket_policy(directory& dir)
     : m_dir(dir) {}
@@ -37,4 +37,4 @@ std::string put_bucket_policy::action_id() const {
     return "s3:PutBucketPolicy";
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -27,7 +27,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct fragment_set_fixture : public global_data_view_fixture {
     temp_directory tmp_dir;
@@ -236,4 +236,4 @@ BOOST_FIXTURE_TEST_CASE(less_operator, global_data_view_fixture) {
     BOOST_TEST(frag_element_b < frag_element_c);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

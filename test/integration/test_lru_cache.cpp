@@ -23,7 +23,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 void concurrent_insertions(lru_cache<int, int>& cache, int start, int end) {
     for (int i = start; i <= end; ++i) {
@@ -165,4 +165,4 @@ BOOST_AUTO_TEST_CASE(concurrent_insertion_and_retrieval) {
     BOOST_CHECK_EQUAL(failure_count, 0);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -22,7 +22,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 const storage::group_config& config_rr = {
     .id = 0,
@@ -128,4 +128,4 @@ BOOST_AUTO_TEST_CASE(start_mismatching_config) {
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

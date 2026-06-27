@@ -17,7 +17,7 @@
 #include <common/coroutines/promise.h>
 #include <common/utils/error.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 std::unordered_map<std::size_t, storage_address_info> extract_node_address_map(
     const address& addr,
@@ -51,4 +51,4 @@ std::unordered_map<std::size_t, storage_address_info> extract_node_address_map(
     return addr_map;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

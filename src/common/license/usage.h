@@ -19,7 +19,7 @@
 #include <common/db/db.h>
 #include <common/utils/pool.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class usage {
 public:
@@ -33,4 +33,4 @@ public:
 private:
     pool<db::connection> m_db;
 };
-} // namespace uh::cluster
+} // namespace vrm::cluster

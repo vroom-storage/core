@@ -21,7 +21,7 @@
 #include <common/telemetry/log.h>
 #include <exception>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class worker_pool {
 
@@ -98,4 +98,4 @@ private:
     boost::asio::thread_pool m_threads;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

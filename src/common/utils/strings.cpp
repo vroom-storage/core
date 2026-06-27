@@ -23,7 +23,7 @@
 
 using namespace boost;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -188,4 +188,4 @@ std::size_t ctoul(const char& c, std::size_t* pos, int base) {
     return stoul(std::string_view(&c, 1), pos, base);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

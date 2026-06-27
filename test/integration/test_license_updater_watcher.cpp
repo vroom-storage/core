@@ -28,7 +28,7 @@
 
 using namespace fakeit;
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 using namespace boost::asio;
 
 class fixture : public coro_fixture {

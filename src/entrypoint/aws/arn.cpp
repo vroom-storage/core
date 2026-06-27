@@ -17,16 +17,16 @@
 #include <common/utils/strings.h>
 #include <stdexcept>
 
-namespace uh::cluster::ep::aws {
+namespace vrm::cluster::ep::aws {
 
 namespace id {
 
-enum { arn = 0, uh, service, region, account, resource, count };
+enum { arn = 0, vrm, service, region, account, resource, count };
 
 }
 
 arn::arn(std::string service, std::string account, std::string resource_id)
-    : m_fields({"arn", "uh", std::move(service), "", std::move(account),
+    : m_fields({"arn", "vrm", std::move(service), "", std::move(account),
                 std::move(resource_id)}) {}
 
 arn::arn(std::string text)
@@ -52,4 +52,4 @@ void arn::resource_id(const std::string& value) {
 
 std::string arn::to_string() const { return join(m_fields, ":"); }
 
-} // namespace uh::cluster::ep::aws
+} // namespace vrm::cluster::ep::aws

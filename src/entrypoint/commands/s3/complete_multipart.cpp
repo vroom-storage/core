@@ -19,9 +19,9 @@
 #include "entrypoint/http/command_exception.h"
 #include <entrypoint/constant.h>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -88,10 +88,10 @@ std::string multipart_etag(const upload_info& info) {
 complete_multipart::complete_multipart(directory& dir,
                                        storage::global::global_data_view& gdv,
                                        multipart_state& uploads,
-                                       limits& uhlimits)
+                                       limits& vrmlimits)
     : m_dir(dir),
       m_uploads(uploads),
-      m_limits(uhlimits) {}
+      m_limits(vrmlimits) {}
 
 bool complete_multipart::can_handle(const request& req) {
     return req.method() == verb::post && req.bucket() != RESERVED_BUCKET_NAME &&
@@ -156,4 +156,4 @@ std::string complete_multipart::action_id() const {
     return "s3:CompleteMultipartUpload";
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

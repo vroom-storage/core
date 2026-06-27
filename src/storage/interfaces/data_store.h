@@ -21,7 +21,7 @@
 #include <common/utils/common.h>
 #include <span>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct data_store_config {
     size_t max_file_size = 1_GiB;
@@ -54,4 +54,4 @@ struct data_store {
     virtual ~data_store() = default;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

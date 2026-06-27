@@ -21,7 +21,7 @@
 #include "deduplicator/config.h"
 #include "storage/global/config.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct entrypoint_config {
     std::size_t num_threads = 4;
@@ -41,4 +41,4 @@ struct entrypoint_config {
     global_data_view_config global_data_view;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

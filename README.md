@@ -1,6 +1,6 @@
-# UltiHash Patches
+# Vroom Storage
 
-> Fork of https://github.com/UltiHash/core/ with patches aiming to keep
+> Patches to [UltiHash](https://github.com/UltiHash/core) aiming to keep
 > the project alive.
 
 ## Overview

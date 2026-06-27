@@ -20,7 +20,7 @@
 #include <common/utils/random.h>
 #include <util/dedupe_fixture.h>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 BOOST_FIXTURE_TEST_CASE(deduplicate, dedupe_fixture) {
 

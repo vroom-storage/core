@@ -31,7 +31,7 @@
 #include <storage/global/config.h>
 #include <storage/group/ec_maintainer.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 namespace {
 data_store_config make_ds_config(const data_store_config& current_config,
@@ -120,4 +120,4 @@ private:
     std::optional<ec_maintainer> m_ec_maintainer;
 };
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

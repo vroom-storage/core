@@ -21,7 +21,7 @@
 #include <common/network/server.h>
 #include <storage/global/config.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct storage_config {
     std::size_t num_threads = 4;
@@ -43,4 +43,4 @@ struct storage_config {
     std::size_t group_id = 0;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

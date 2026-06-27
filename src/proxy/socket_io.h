@@ -21,7 +21,7 @@
 
 #include <common/types/common_types.h>
 
-namespace uh::cluster::proxy {
+namespace vrm::cluster::proxy {
 
 template <typename SocketType> class socket_sink {
 public:
@@ -54,4 +54,4 @@ private:
     SocketType& m_s;
 };
 
-} // namespace uh::cluster::proxy
+} // namespace vrm::cluster::proxy

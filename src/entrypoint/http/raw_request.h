@@ -29,7 +29,7 @@
 #include <string>
 #include <tuple>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 namespace beast = boost::beast;
 using verb = beast::http::verb;
@@ -62,4 +62,4 @@ std::map<std::string_view, std::string_view>
 parse_values_string(std::string_view values, char pair_separator = ',',
                     char field_separator = '=');
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

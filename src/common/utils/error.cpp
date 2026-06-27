@@ -17,7 +17,7 @@
 #include <ostream>
 #include <vector>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -82,4 +82,4 @@ std::ostream& operator<<(std::ostream& out, const error_exception& e) {
     return out;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

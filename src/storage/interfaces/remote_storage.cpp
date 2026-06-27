@@ -14,7 +14,7 @@
 
 #include "remote_storage.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <>
 std::shared_ptr<storage_interface>
@@ -24,4 +24,4 @@ service_factory<storage_interface>::make_remote_service(
         client(m_ioc, hostname, port, m_connections));
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

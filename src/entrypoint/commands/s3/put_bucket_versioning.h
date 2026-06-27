@@ -19,7 +19,7 @@
 #include <entrypoint/commands/command.h>
 #include <entrypoint/directory.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class put_bucket_versioning : public command {
 public:

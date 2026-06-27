@@ -180,7 +180,7 @@ def print_stats ():
     print ("")
     print (tabulate(prefixes_str_count.most_common(20), headers=['Prefix', 'Count'], tablefmt='orgtbl'))
 
-filename = "/var/lib/uh/deduplicator/dedupe_log"    
+filename = "/var/lib/vrm/deduplicator/dedupe_log"    
 load_data(filename)
 
 x11, y11 = zip(*sorted (pointers_count.items()))

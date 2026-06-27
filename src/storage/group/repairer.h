@@ -24,7 +24,7 @@
 #include <storage/group/internals.h>
 #include <storage/interfaces/local_storage.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class storages_reader {
 public:
@@ -259,4 +259,4 @@ private:
     }
 };
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

@@ -22,7 +22,7 @@
 #include <storage/global/data_view.h>
 #include <entrypoint/commands/command.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class multipart : public command {
 public:
@@ -43,4 +43,4 @@ private:
     multipart_state& m_uploads;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

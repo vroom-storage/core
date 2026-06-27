@@ -24,7 +24,7 @@
 #include <entrypoint/http/command_exception.h>
 #include <entrypoint/http/request.h>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 namespace {
 
@@ -287,4 +287,4 @@ aws4_hmac_sha256::create_from_url(stream& s, user::db& users, raw_request req) {
                                         std::move(user));
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

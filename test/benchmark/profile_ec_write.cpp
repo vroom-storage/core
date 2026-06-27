@@ -27,7 +27,7 @@
 #include <boost/asio.hpp>
 #include <memory>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 #define MAX_FILE_SIZE_BYTES (128 * KIBI_BYTE)
 #define DATA_STORE_ID 1
@@ -72,4 +72,4 @@ BENCHMARK_REGISTER_F(deduplicator_benchmark, profile_dedup_with_same_data)
     ->UseRealTime()
     ->MinTime(1.0);
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

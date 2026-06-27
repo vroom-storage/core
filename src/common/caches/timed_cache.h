@@ -20,7 +20,7 @@
 #include <map>
 #include <mutex>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 /**
  * A cache implementation that stores values under a certain key and ensures
@@ -69,4 +69,4 @@ private:
     std::mutex m_mutex;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

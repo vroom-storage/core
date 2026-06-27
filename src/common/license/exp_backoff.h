@@ -21,7 +21,7 @@
 #include <common/types/common_types.h>
 #include <random>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 enum class backoff_action : uint8_t { RETRY, ABORT };
 
@@ -90,4 +90,4 @@ private:
     }
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

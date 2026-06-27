@@ -16,7 +16,7 @@
 
 #include <format>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 socket_stream::socket_stream(boost::asio::ip::tcp::socket& s,
                              std::size_t buffer_size)
@@ -90,4 +90,4 @@ coro<void> socket_stream::fill() {
     m_put_ptr += count;
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

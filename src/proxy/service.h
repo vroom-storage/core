@@ -25,7 +25,7 @@
 #include <boost/asio.hpp>
 
 
-namespace uh::cluster::proxy {
+namespace vrm::cluster::proxy {
 
 class service {
 public:
@@ -41,4 +41,4 @@ private:
     server m_server;
 };
 
-} // namespace uh::cluster::proxy
+} // namespace vrm::cluster::proxy

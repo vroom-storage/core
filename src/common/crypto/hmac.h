@@ -18,7 +18,7 @@
 
 #include "hash.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class hmac_base {
 public:
@@ -58,4 +58,4 @@ template <hash_algorithm algo> struct hmac : public hmac_base {
 using hmac_md5 = hmac<hash_algorithm::md5>;
 using hmac_sha256 = hmac<hash_algorithm::sha256>;
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -24,7 +24,7 @@
 #include <string_view>
 #include <utility>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 inline constexpr std::string TRACE_STDOUT_ENDPOINT = "stdout";
 
@@ -127,4 +127,4 @@ constexpr auto get_encoded_context_len() {
 std::string encode_context(const trace_context& context);
 trace_context decode_context(std::string traceparent);
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

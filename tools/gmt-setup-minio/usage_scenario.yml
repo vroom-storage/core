@@ -1,7 +1,7 @@
 ---
-name: UltiHash Energy/Carbon benchmark
-author: Max Plauth <max@ultihash.io>
-description: This usage_scenario sets up a UH cluster and measures it carbon footprint using the stability test workflow.
+name: Vroom Energy/Carbon benchmark
+author: Max Plauth <max@vroom.io>
+description: This usage_scenario sets up a VRM cluster and measures it carbon footprint using the stability test workflow.
 
 compose-file: !include compose.yml
 
@@ -17,8 +17,8 @@ flow:
     container: stability
     commands:
       - type: console
-        command: /testing/howto-uh/scripts/boto3/multithread_upload/uh_upload.py -B gmt-test --url http://minio:9000 /data
-        note: Upload test data to uh cluster
+        command: /testing/howto-vrm/scripts/boto3/multithread_upload/vrm_upload.py -B gmt-test --url http://minio:9000 /data
+        note: Upload test data to vrm cluster
         ignore-errors: true
         log-stdout: false
         log-stderr: false
@@ -26,8 +26,8 @@ flow:
     container: stability
     commands:
       - type: console
-        command: /testing/howto-uh/scripts/boto3/multithread_download/uh_download.py --url http://minio:9000 gmt-test
-        note: Download test data from uh cluster
+        command: /testing/howto-vrm/scripts/boto3/multithread_download/vrm_download.py --url http://minio:9000 gmt-test
+        note: Download test data from vrm cluster
         ignore-errors: true
         log-stdout: false
         log-stderr: false

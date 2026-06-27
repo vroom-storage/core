@@ -15,7 +15,7 @@
 #include "host_utils.h"
 #include "common.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 bool is_valid_ip(const std::string& ip) {
     try {
@@ -41,4 +41,4 @@ std::string get_host() {
                 std::string(var_value) + "'");
     }
 }
-} // namespace uh::cluster
+} // namespace vrm::cluster

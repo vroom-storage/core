@@ -19,7 +19,7 @@
 #include <storage/global/cache.h>
 #include <storage/global/data_view.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 class fragment_set_element {
 public:
     /**
@@ -99,4 +99,4 @@ inline std::ostream& operator<<(std::ostream& os,
     return os;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

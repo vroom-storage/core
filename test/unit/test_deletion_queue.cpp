@@ -24,7 +24,7 @@
 #include <thread>
 #include <vector>
 
-namespace uh::cluster::proxy::cache {
+namespace vrm::cluster::proxy::cache {
 
 BOOST_AUTO_TEST_SUITE(a_deletion_queue)
 
@@ -118,4 +118,4 @@ BOOST_AUTO_TEST_CASE(supports_concurrent_push_and_pop) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster::proxy::cache
+} // namespace vrm::cluster::proxy::cache

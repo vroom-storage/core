@@ -26,7 +26,7 @@
 
 #include <variant>
 
-namespace uh::cluster::ep::cors {
+namespace vrm::cluster::ep::cors {
 
 struct result {
     // if set, use this response as HTTP response and do not run any other
@@ -58,4 +58,4 @@ private:
         m_info_cache;
 };
 
-} // namespace uh::cluster::ep::cors
+} // namespace vrm::cluster::ep::cors

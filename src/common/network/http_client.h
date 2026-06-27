@@ -24,7 +24,7 @@
 #include <string>
 #include <utility>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class http_error_category : public std::error_category {
 public:
@@ -108,4 +108,4 @@ private:
     async_http_client m_async_client;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

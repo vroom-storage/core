@@ -15,7 +15,7 @@
 #include "fragment_set.h"
 #include "deduplicator/config.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 fragment_set::fragment_set(size_t capacity, storage::global::cache& storage)
     : m_storage(storage),
@@ -96,4 +96,4 @@ void fragment_set::erase(const fragment& set_element, bool header) {
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster
