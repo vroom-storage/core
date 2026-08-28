@@ -21,7 +21,6 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-VRM_LICENSE=$(<@PROJECT_SOURCE_DIR@/data/licenses/Vroom-Test-1PB.lic)
 BUILD_DIR=@PROJECT_BINARY_DIR@
 VRM_DATA=${VRM_DATA:-/var/lib/vrm}
 export VRM_LOG_LEVEL=DEBUG
