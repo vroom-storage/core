@@ -32,17 +32,15 @@ struct command_factory {
     command_factory(deduplicator_interface& dedupe, directory& dir,
                     multipart_state& uploads,
                     storage::global::global_data_view& gdv,
-                    ep::user::db& users, license_watcher& watcher)
+                    ep::user::db& users)
         : m_dedupe(dedupe),
           m_directory(dir),
           m_uploads(uploads),
           m_gdv(gdv),
-          m_users(users),
-          m_license_watcher(watcher) {}
+          m_users(users) {}
 
     coro<std::unique_ptr<command>> create(ep::http::request& req);
 
-    [[nodiscard]] limits& get_limits() const;
     [[nodiscard]] directory& get_directory() const;
 
 private:
@@ -55,7 +53,6 @@ private:
     multipart_state& m_uploads;
     storage::global::global_data_view& m_gdv;
     ep::user::db& m_users;
-    license_watcher& m_license_watcher;
 };
 
 } // end namespace vrm::cluster
