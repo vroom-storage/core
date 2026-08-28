@@ -15,6 +15,7 @@
 #include "service.h"
 #include "handler.h"
 
+#include <common/project/project.h>
 #include <common/telemetry/metrics.h>
 #include <deduplicator/interfaces/dedupe_array.h>
 #include <deduplicator/interfaces/noop_deduplicator.h>
@@ -77,7 +78,6 @@ service::service(boost::asio::io_context& ioc, const service_config& sc,
       m_directory(ioc, m_config.database),
       m_uploads(ioc, m_config.database),
       m_users(ioc, m_config.database),
-      m_license_watcher(m_etcd),
       m_server(m_config.server,
                std::make_unique<handler>(
                    command_factory(*m_dedupe, m_directory, m_uploads, m_gdv,
@@ -98,10 +98,10 @@ service::service(boost::asio::io_context& ioc, const service_config& sc,
         register_gauge_callback(
             [this]() { return m_size.load(); },
             [this]() {
-                auto label =
-                    m_license_watcher.get_license()->to_key_value_iterable();
-                label.push_back({"service_id", std::to_string(m_service_id)});
-                return label;
+                return std::vector<std::pair<std::string, std::string>> {
+                    { "service_id", std::to_string(m_service_id) },
+                    { "version", project_info::get().project_version }
+                };
             });
 }
 
