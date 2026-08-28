@@ -147,8 +147,6 @@ do_start() {
     local root_secret_key="${VRM_ROOT_SECRET_KEY:-$DEFAULT_ROOT_SECRET_KEY}"
     local project
     project="$(compose_project)"
-    local vrm_license
-    vrm_license="$(<"$REPO_ROOT/data/licenses/Vroom-Test-1PB.lic")"
 
     echo "Starting cluster (mode: $mode, project: $project)"
 
@@ -176,10 +174,10 @@ do_start() {
 
     echo "Starting VRM services..."
     if [[ "$mode" == "native" ]]; then
-        _start_native "$bin_dir" "$storage_groups" "$vrm_license" "$project" \
+        _start_native "$bin_dir" "$storage_groups" "$project" \
             "$root_user" "$root_access_key" "$root_secret_key" "$enable_traces"
     else
-        _start_docker "$bin_dir" "$storage_groups" "$vrm_license" "$project" \
+        _start_docker "$bin_dir" "$storage_groups" "$project" \
             "$root_user" "$root_access_key" "$root_secret_key" "$enable_traces"
     fi
 
@@ -197,14 +195,13 @@ do_start() {
 }
 
 _start_native() {
-    local bin_dir="$1" storage_groups="$2" vrm_license="$3" project="$4"
-    local root_user="$5" root_access_key="$6" root_secret_key="$7" enable_traces="${8:-false}"
+    local bin_dir="$1" storage_groups="$2" project="$3"
+    local root_user="$4" root_access_key="$5" root_secret_key="$6" enable_traces="${7:-false}"
     local registry="http://localhost:$ETCD_PORT"
     local cluster_abs
     cluster_abs="$(cd "$CLUSTER_DIR" && pwd)"
 
     export VRM_LOG_LEVEL=DEBUG
-    export VRM_LICENSE="$vrm_license"
     export VRM_DB_HOSTPORT="localhost:$DB_PORT"
     export VRM_DB_USER=postgres
     export VRM_DB_PASS=vrm
@@ -263,8 +260,8 @@ _start_native() {
 }
 
 _start_docker() {
-    local bin_dir="$1" storage_groups="$2" vrm_license="$3" project="$4"
-    local root_user="$5" root_access_key="$6" root_secret_key="$7" enable_traces="${8:-false}"
+    local bin_dir="$1" storage_groups="$2" project="$3"
+    local root_user="$4" root_access_key="$5" root_secret_key="$6" enable_traces="${7:-false}"
     local registry="http://localhost:$ETCD_PORT"
     local cluster_abs
     cluster_abs="$(cd "$CLUSTER_DIR" && pwd)"
@@ -279,8 +276,8 @@ _start_docker() {
 
     # Write env file to avoid shell quoting issues with JSON values
     local env_file="$cluster_abs/cluster.env"
-    printf 'VRM_LOG_LEVEL=DEBUG\nVRM_LICENSE=%s\nVRM_DB_HOSTPORT=localhost:%s\nVRM_DB_USER=postgres\nVRM_DB_PASS=vrm\nVRM_STORAGE_GROUPS=%s\n' \
-        "$vrm_license" "$DB_PORT" "$storage_groups" > "$env_file"
+    printf 'VRM_LOG_LEVEL=DEBUG\nVRM_DB_HOSTPORT=localhost:%s\nVRM_DB_USER=postgres\nVRM_DB_PASS=vrm\nVRM_STORAGE_GROUPS=%s\n' \
+        "$DB_PORT" "$storage_groups" > "$env_file"
 
     if [[ "$enable_traces" == "true" ]]; then
         printf 'VRM_TRACES_ENABLED=true\nVRM_TRACE_ENDPOINT=localhost:%s\n' \
