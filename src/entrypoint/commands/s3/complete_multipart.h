@@ -17,7 +17,6 @@
 #pragma once
 
 #include "entrypoint/directory.h"
-#include "entrypoint/limits.h"
 #include "entrypoint/multipart_state.h"
 #include "storage/global/data_view.h"
 #include <entrypoint/commands/command.h>
