@@ -23,7 +23,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 std::size_t dummy_delete(std::size_t offset, std::size_t size) { return 0; }
 
@@ -110,4 +110,4 @@ BOOST_AUTO_TEST_CASE(test_bulk_increment_decrement) {
     BOOST_CHECK_NO_THROW(refcounter.increment(test_refcounts, 0));
 }
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

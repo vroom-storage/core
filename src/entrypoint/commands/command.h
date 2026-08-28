@@ -19,7 +19,7 @@
 #include <entrypoint/http/request.h>
 #include <entrypoint/http/response.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class command {
 public:
@@ -29,4 +29,4 @@ public:
     virtual ~command() = default;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

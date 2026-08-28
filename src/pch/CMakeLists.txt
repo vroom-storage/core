@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(uh_precompile_headers STATIC pch.cpp)
+add_library(vrm_precompile_headers STATIC pch.cpp)
 
-target_link_libraries(uh_precompile_headers
+target_link_libraries(vrm_precompile_headers
                       PUBLIC
                       Boost::log
                       Boost::url
@@ -33,7 +33,7 @@ target_link_libraries(uh_precompile_headers
                       nlohmann_json)
 
 target_precompile_headers(
-    uh_precompile_headers
+    vrm_precompile_headers
     PRIVATE
     <algorithm>
     <array>

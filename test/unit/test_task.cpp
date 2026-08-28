@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class task_owner {
 public:
@@ -60,4 +60,4 @@ BOOST_AUTO_TEST_CASE(cancels_tasks_on_destruction) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

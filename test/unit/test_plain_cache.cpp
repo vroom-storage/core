@@ -17,7 +17,7 @@
 #include "common/caches/plain_cache.h"
 #include <boost/test/unit_test.hpp>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 constexpr std::string_view data1 =
     "d41d8cd98f00b204e9800998ecf8427ed41d8cd98f00b204e9800998ecab32f";

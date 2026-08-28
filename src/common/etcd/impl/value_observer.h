@@ -18,7 +18,7 @@
 
 #include "subscriber_observer.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <Serializable T> class value_observer : public subscriber_observer {
 public:
@@ -83,4 +83,4 @@ private:
     std::atomic<std::shared_ptr<T>> m_value;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

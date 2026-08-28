@@ -17,7 +17,7 @@
 #include "common/etcd/namespace.h"
 #include <fstream>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -88,4 +88,4 @@ std::size_t get_service_id(etcd_manager& etcd, const std::string& service,
     return current_id;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

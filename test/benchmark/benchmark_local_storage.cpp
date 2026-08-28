@@ -9,7 +9,7 @@
 
 namespace {
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 struct storage_fixture : public benchmark::Fixture {
 

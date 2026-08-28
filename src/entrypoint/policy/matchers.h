@@ -20,16 +20,16 @@
 #include "matcher.h"
 #include <set>
 
-namespace uh::cluster::ep::policy {
+namespace vrm::cluster::ep::policy {
 
 inline matcher match_action(std::set<std::string> actions) {
     return [actions = std::move(actions)](const variables& vars) {
         return match_any(actions, [&vars](auto value) {
-            if (auto action = vars.get("uh:ActionId"); action) {
+            if (auto action = vars.get("vrm:ActionId"); action) {
                 return equals_wildcard(value, *action);
             }
 
-            throw std::runtime_error("uh:ActionId cannot be evaluated");
+            throw std::runtime_error("vrm:ActionId cannot be evaluated");
         });
     };
 }
@@ -37,11 +37,11 @@ inline matcher match_action(std::set<std::string> actions) {
 inline matcher match_not_action(std::set<std::string> actions) {
     return [actions = std::move(actions)](const variables& vars) {
         return !match_any(actions, [&vars](auto value) {
-            if (auto action = vars.get("uh:ActionId"); action) {
+            if (auto action = vars.get("vrm:ActionId"); action) {
                 return equals_wildcard(value, *action);
             }
 
-            throw std::runtime_error("uh:ActionId cannot be evaluated");
+            throw std::runtime_error("vrm:ActionId cannot be evaluated");
         });
     };
 }
@@ -56,11 +56,11 @@ inline matcher match_not_action(std::set<std::string> actions) {
 inline matcher match_resource(std::set<std::string> resources) {
     return [resources = std::move(resources)](const variables& vars) {
         return match_any(resources, [&vars](auto value) {
-            if (auto arn = vars.get("uh:ResourceArn"); arn) {
+            if (auto arn = vars.get("vrm:ResourceArn"); arn) {
                 return equals_wildcard(value, *arn, vars);
             }
 
-            throw std::runtime_error("uh:ResourceArn cannot be evaluated");
+            throw std::runtime_error("vrm:ResourceArn cannot be evaluated");
         });
     };
 }
@@ -68,11 +68,11 @@ inline matcher match_resource(std::set<std::string> resources) {
 inline matcher match_not_resource(std::set<std::string> resources) {
     return [resources = std::move(resources)](const variables& vars) {
         return !match_any(resources, [&vars](auto value) {
-            if (auto arn = vars.get("uh:ResourceArn"); arn) {
+            if (auto arn = vars.get("vrm:ResourceArn"); arn) {
                 return equals_wildcard(value, *arn, vars);
             }
 
-            throw std::runtime_error("uh:ResourceArn cannot be evaluated");
+            throw std::runtime_error("vrm:ResourceArn cannot be evaluated");
         });
     };
 }
@@ -309,4 +309,4 @@ match_null(std::map<std::string, std::list<std::string>> strings) {
     };
 }
 
-} // namespace uh::cluster::ep::policy
+} // namespace vrm::cluster::ep::policy

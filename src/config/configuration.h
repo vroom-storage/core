@@ -29,12 +29,12 @@
 #include <CLI/CLI.hpp>
 #include <optional>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct config {
     cluster::role role;
     service_config service;
-    uh::log::config log;
+    vrm::log::config log;
 
     entrypoint_config entrypoint;
     storage_config storage;
@@ -48,4 +48,4 @@ std::optional<config> read_config(int argc, char** argv);
 void configure(CLI::App& app, db::config& cfg);
 void configure(CLI::App& app, boost::log::trivial::severity_level& log_level);
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -27,7 +27,7 @@
 using namespace fakeit;
 using namespace std::chrono_literals;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class callback_interface {
 public:
@@ -238,4 +238,4 @@ BOOST_FIXTURE_TEST_CASE(watches_deletion, fixture) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

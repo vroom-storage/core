@@ -19,7 +19,7 @@
 #include <chrono>
 #include <thread>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename T1, typename R1, typename T2, typename R2>
 auto wait_for_success(std::chrono::duration<T1, R1> timeout,
@@ -87,4 +87,4 @@ std::ostream& operator<<(std::ostream& out, const basic_timer<clock>& t) {
 
 using timer = basic_timer<std::chrono::steady_clock>;
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

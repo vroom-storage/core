@@ -19,7 +19,7 @@
 #include <random>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 // ---------------------------------------------------------------------
 
@@ -47,4 +47,4 @@ std::string generate_unique_id();
 
 // ---------------------------------------------------------------------
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

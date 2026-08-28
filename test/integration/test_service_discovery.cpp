@@ -30,7 +30,7 @@
 
 using namespace boost::asio;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct fixture {
     temp_directory tmp;
@@ -43,7 +43,7 @@ struct fixture {
     std::size_t num_storages = 5;
     storage_index services{num_storages};
     service_load_balancer<storage_interface> load_balancer;
-    uh::cluster::service_maintainer<storage_interface> service_maintainer;
+    vrm::cluster::service_maintainer<storage_interface> service_maintainer;
 
     fixture()
         : work_guard(boost::asio::make_work_guard(ioc)),
@@ -228,4 +228,4 @@ BOOST_FIXTURE_TEST_CASE(WaitForDependency, fixture) {
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

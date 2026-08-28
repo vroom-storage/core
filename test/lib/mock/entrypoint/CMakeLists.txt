@@ -12,5 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(uh_mock_entrypoint entrypoint.cpp)
-target_link_libraries(uh_mock_entrypoint PUBLIC entrypoint)
+add_library(vrm_mock_entrypoint entrypoint.cpp)
+target_link_libraries(vrm_mock_entrypoint PUBLIC entrypoint)

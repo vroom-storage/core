@@ -23,7 +23,7 @@
 #include <opentelemetry/trace/context.h>
 #include <opentelemetry/trace/provider.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 BOOST_AUTO_TEST_SUITE(a_context)
 
@@ -61,4 +61,4 @@ BOOST_AUTO_TEST_CASE(is_accessible_after_creating_subspan) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

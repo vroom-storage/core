@@ -23,7 +23,7 @@
 
 #include <fstream>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -160,4 +160,4 @@ void data_file::write_metadata() {
                 0);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

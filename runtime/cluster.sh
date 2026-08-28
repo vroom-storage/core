@@ -30,14 +30,14 @@ Actions:
   delete  Stop and remove .cluster/
 
 Start options:
-  --native              Run UH services as native host processes (default)
-  --docker              Run UH services in Docker containers
-  --bin-dir PATH        Binary directory with uh-cluster, uh-access (required)
+  --native              Run VRM services as native host processes (default)
+  --docker              Run VRM services in Docker containers
+  --bin-dir PATH        Binary directory with vrm-cluster, vrm-access (required)
   --storage-groups JSON Storage groups JSON (default: ROUND_ROBIN, 1 storage)
   --enable-traces       Start Jaeger and enable OTel trace export
 
 Root user (env vars, defaults match s3tests.conf):
-  UH_ROOT_USER, UH_ROOT_ACCESS_KEY, UH_ROOT_SECRET_KEY
+  VRM_ROOT_USER, VRM_ROOT_ACCESS_KEY, VRM_ROOT_SECRET_KEY
 EOF
     exit 1
 }
@@ -74,7 +74,7 @@ services:
     image: postgres:17.9
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: uh
+      POSTGRES_PASSWORD: vrm
     ports:
       - "${DB_PORT}:5432"
     healthcheck:
@@ -95,7 +95,7 @@ services:
       DB_USER: postgres
       DB_HOST: localhost
       DB_PORT: ${DB_PORT}
-      PGPASSWORD: uh
+      PGPASSWORD: vrm
     restart: "no"
 
   etcd:
@@ -142,13 +142,13 @@ do_start() {
 
     [[ -e "$CLUSTER_DIR" ]] && die ".cluster/ already exists — run 'stop' or 'delete' first"
 
-    local root_user="${UH_ROOT_USER:-$DEFAULT_ROOT_USER}"
-    local root_access_key="${UH_ROOT_ACCESS_KEY:-$DEFAULT_ROOT_ACCESS_KEY}"
-    local root_secret_key="${UH_ROOT_SECRET_KEY:-$DEFAULT_ROOT_SECRET_KEY}"
+    local root_user="${VRM_ROOT_USER:-$DEFAULT_ROOT_USER}"
+    local root_access_key="${VRM_ROOT_ACCESS_KEY:-$DEFAULT_ROOT_ACCESS_KEY}"
+    local root_secret_key="${VRM_ROOT_SECRET_KEY:-$DEFAULT_ROOT_SECRET_KEY}"
     local project
     project="$(compose_project)"
-    local uh_license
-    uh_license="$(<"$REPO_ROOT/data/licenses/UltiHash-Test-1PB.lic")"
+    local vrm_license
+    vrm_license="$(<"$REPO_ROOT/data/licenses/Vroom-Test-1PB.lic")"
 
     echo "Starting cluster (mode: $mode, project: $project)"
 
@@ -174,12 +174,12 @@ do_start() {
     echo "Waiting for database initialization..."
     docker compose -f "$COMPOSE_FILE" -p "$project" wait db-init
 
-    echo "Starting UH services..."
+    echo "Starting VRM services..."
     if [[ "$mode" == "native" ]]; then
-        _start_native "$bin_dir" "$storage_groups" "$uh_license" "$project" \
+        _start_native "$bin_dir" "$storage_groups" "$vrm_license" "$project" \
             "$root_user" "$root_access_key" "$root_secret_key" "$enable_traces"
     else
-        _start_docker "$bin_dir" "$storage_groups" "$uh_license" "$project" \
+        _start_docker "$bin_dir" "$storage_groups" "$vrm_license" "$project" \
             "$root_user" "$root_access_key" "$root_secret_key" "$enable_traces"
     fi
 
@@ -197,18 +197,18 @@ do_start() {
 }
 
 _start_native() {
-    local bin_dir="$1" storage_groups="$2" uh_license="$3" project="$4"
+    local bin_dir="$1" storage_groups="$2" vrm_license="$3" project="$4"
     local root_user="$5" root_access_key="$6" root_secret_key="$7" enable_traces="${8:-false}"
     local registry="http://localhost:$ETCD_PORT"
     local cluster_abs
     cluster_abs="$(cd "$CLUSTER_DIR" && pwd)"
 
-    export UH_LOG_LEVEL=DEBUG
-    export UH_LICENSE="$uh_license"
-    export UH_DB_HOSTPORT="localhost:$DB_PORT"
-    export UH_DB_USER=postgres
-    export UH_DB_PASS=uh
-    export UH_STORAGE_GROUPS="$storage_groups"
+    export VRM_LOG_LEVEL=DEBUG
+    export VRM_LICENSE="$vrm_license"
+    export VRM_DB_HOSTPORT="localhost:$DB_PORT"
+    export VRM_DB_USER=postgres
+    export VRM_DB_PASS=vrm
+    export VRM_STORAGE_GROUPS="$storage_groups"
 
     local trace_args=()
     if [[ "$enable_traces" == "true" ]]; then
@@ -216,14 +216,14 @@ _start_native() {
     fi
 
     echo "Initializing root user..."
-    "$bin_dir/uh-access" user-add --superuser --if-not-exists "$root_user" 'root:::'
-    "$bin_dir/uh-access" key-add "$root_user" "$root_access_key" "$root_secret_key" 2000000000
+    "$bin_dir/vrm-access" user-add --superuser --if-not-exists "$root_user" 'root:::'
+    "$bin_dir/vrm-access" key-add "$root_user" "$root_access_key" "$root_secret_key" 2000000000
 
     declare -A pids
 
     mkdir -p "$cluster_abs/data/coordinator"
-    UH_SERVICE_NAME="coordinator" \
-        "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" coordinator \
+    VRM_SERVICE_NAME="coordinator" \
+        "$bin_dir/vrm-cluster" --registry "$registry" "${trace_args[@]}" coordinator \
         >> "$cluster_abs/logs/coordinator.log" 2>&1 &
     pids[coordinator]=$!
 
@@ -235,16 +235,16 @@ _start_native() {
             local sname="storage-${gid}-${i}"
             local port=$((9311 + gid * 100 + i))
             mkdir -p "$cluster_abs/data/$sname"
-            UH_STORAGE_GROUP_ID="$gid" UH_STORAGE_INSTANCE_ID="$i" UH_SERVICE_NAME="$sname" \
-                "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" \
+            VRM_STORAGE_GROUP_ID="$gid" VRM_STORAGE_INSTANCE_ID="$i" VRM_SERVICE_NAME="$sname" \
+                "$bin_dir/vrm-cluster" --registry "$registry" "${trace_args[@]}" \
                     --workdir "$cluster_abs/data/$sname" storage --port "$port" \
                     >> "$cluster_abs/logs/${sname}.log" 2>&1 &
             pids[$sname]=$!
         done
     done < <(jq -c '.[]' <<< "$storage_groups")
 
-    UH_SERVICE_NAME="entrypoint" \
-        "$bin_dir/uh-cluster" --registry "$registry" "${trace_args[@]}" entrypoint --no-dedupe \
+    VRM_SERVICE_NAME="entrypoint" \
+        "$bin_dir/vrm-cluster" --registry "$registry" "${trace_args[@]}" entrypoint --no-dedupe \
         >> "$cluster_abs/logs/entrypoint.log" 2>&1 &
     pids[entrypoint]=$!
 
@@ -263,12 +263,12 @@ _start_native() {
 }
 
 _start_docker() {
-    local bin_dir="$1" storage_groups="$2" uh_license="$3" project="$4"
+    local bin_dir="$1" storage_groups="$2" vrm_license="$3" project="$4"
     local root_user="$5" root_access_key="$6" root_secret_key="$7" enable_traces="${8:-false}"
     local registry="http://localhost:$ETCD_PORT"
     local cluster_abs
     cluster_abs="$(cd "$CLUSTER_DIR" && pwd)"
-    local image_tag="uh-cluster-test:${project}"
+    local image_tag="vrm-cluster-test:${project}"
 
     echo "Building cluster image from $bin_dir..."
     docker build \
@@ -279,11 +279,11 @@ _start_docker() {
 
     # Write env file to avoid shell quoting issues with JSON values
     local env_file="$cluster_abs/cluster.env"
-    printf 'UH_LOG_LEVEL=DEBUG\nUH_LICENSE=%s\nUH_DB_HOSTPORT=localhost:%s\nUH_DB_USER=postgres\nUH_DB_PASS=uh\nUH_STORAGE_GROUPS=%s\n' \
-        "$uh_license" "$DB_PORT" "$storage_groups" > "$env_file"
+    printf 'VRM_LOG_LEVEL=DEBUG\nVRM_LICENSE=%s\nVRM_DB_HOSTPORT=localhost:%s\nVRM_DB_USER=postgres\nVRM_DB_PASS=vrm\nVRM_STORAGE_GROUPS=%s\n' \
+        "$vrm_license" "$DB_PORT" "$storage_groups" > "$env_file"
 
     if [[ "$enable_traces" == "true" ]]; then
-        printf 'UH_TRACES_ENABLED=true\nUH_TRACE_ENDPOINT=localhost:%s\n' \
+        printf 'VRM_TRACES_ENABLED=true\nVRM_TRACE_ENDPOINT=localhost:%s\n' \
             "$JAEGER_OTLP_PORT" >> "$env_file"
     fi
 
@@ -292,12 +292,12 @@ _start_docker() {
         --network host \
         --env-file "$env_file" \
         "$image_tag" \
-        /usr/local/bin/uh-access user-add --superuser --if-not-exists "$root_user" 'root:::'
+        /usr/local/bin/vrm-access user-add --superuser --if-not-exists "$root_user" 'root:::'
     docker run --rm \
         --network host \
         --env-file "$env_file" \
         "$image_tag" \
-        /usr/local/bin/uh-access key-add "$root_user" "$root_access_key" "$root_secret_key" 2000000000
+        /usr/local/bin/vrm-access key-add "$root_user" "$root_access_key" "$root_secret_key" 2000000000
 
     local containers=()
 
@@ -309,7 +309,7 @@ _start_docker() {
             --name "${project}-${name}" \
             --user root \
             --env-file "$env_file" \
-            -v "$cluster_abs/data/$name:/var/lib/uh" \
+            -v "$cluster_abs/data/$name:/var/lib/vrm" \
             -v "$cluster_abs/logs:/cluster-logs" \
             "$@" \
             "$image_tag" \
@@ -318,8 +318,8 @@ _start_docker() {
     }
 
     _run_service "coordinator" \
-        "/usr/local/bin/uh-cluster --registry $registry coordinator" \
-        -e "UH_SERVICE_NAME=coordinator"
+        "/usr/local/bin/vrm-cluster --registry $registry coordinator" \
+        -e "VRM_SERVICE_NAME=coordinator"
 
     while IFS= read -r group; do
         local gid num_s
@@ -328,10 +328,10 @@ _start_docker() {
         for ((i = 0; i < num_s; i++)); do
             local sname="storage-${gid}-${i}"
             _run_service "$sname" \
-                "/usr/local/bin/uh-cluster --registry $registry storage" \
-                -e "UH_STORAGE_GROUP_ID=$gid" \
-                -e "UH_STORAGE_INSTANCE_ID=$i" \
-                -e "UH_SERVICE_NAME=$sname"
+                "/usr/local/bin/vrm-cluster --registry $registry storage" \
+                -e "VRM_STORAGE_GROUP_ID=$gid" \
+                -e "VRM_STORAGE_INSTANCE_ID=$i" \
+                -e "VRM_SERVICE_NAME=$sname"
         done
     done < <(jq -c '.[]' <<< "$storage_groups")
 
@@ -342,12 +342,12 @@ _start_docker() {
         --name "${project}-entrypoint" \
         --user root \
         --env-file "$env_file" \
-        -e "UH_SERVICE_NAME=entrypoint" \
-        -v "$cluster_abs/data/entrypoint:/var/lib/uh" \
+        -e "VRM_SERVICE_NAME=entrypoint" \
+        -v "$cluster_abs/data/entrypoint:/var/lib/vrm" \
         -v "$cluster_abs/logs:/cluster-logs" \
-        -v "$cluster_abs/policies.json:/etc/uh/policies.json:ro" \
+        -v "$cluster_abs/policies.json:/etc/vrm/policies.json:ro" \
         "$image_tag" \
-        sh -c "/usr/local/bin/uh-cluster --registry $registry entrypoint --no-dedupe >> /cluster-logs/entrypoint.log 2>&1"
+        sh -c "/usr/local/bin/vrm-cluster --registry $registry entrypoint --no-dedupe >> /cluster-logs/entrypoint.log 2>&1"
     containers+=("${project}-entrypoint")
 
     local containers_json
@@ -378,7 +378,7 @@ do_stop() {
         return 0
     fi
 
-    echo "Stopping UH services..."
+    echo "Stopping VRM services..."
     set +e
 
     if [[ "$mode" == "native" ]]; then

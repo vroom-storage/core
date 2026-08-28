@@ -1,7 +1,7 @@
 #include "project.h"
 #include "config.h"
 
-namespace uh {
+namespace vrm {
 
 const project_info& project_info::get() {
     static project_info info {

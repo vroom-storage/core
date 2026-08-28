@@ -28,7 +28,7 @@
 #include <storage/group/impl/address_utils.h>
 #include <storage/interfaces/data_view.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class ec_data_view : public data_view {
     friend class cache;
@@ -200,4 +200,4 @@ private:
         const address& original_addr);
 };
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

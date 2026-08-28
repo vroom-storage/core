@@ -27,7 +27,7 @@
 #include "test_config.h"
 
 namespace bp = boost::process;
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 struct fixture : public gdv_fixture_using_process {
 

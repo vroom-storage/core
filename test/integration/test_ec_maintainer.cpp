@@ -27,7 +27,7 @@
 #include <storage/group/state.h>
 #include <util/temp_directory.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class basic_fixture {
 public:
@@ -355,4 +355,4 @@ BOOST_AUTO_TEST_CASE(determine_repairing_group_state) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

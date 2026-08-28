@@ -19,7 +19,7 @@
 #include <boost/asio.hpp>
 #include <memory>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename service_interface> struct service_factory {
 public:
@@ -40,4 +40,4 @@ private:
     int m_connections;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

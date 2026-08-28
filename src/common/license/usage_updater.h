@@ -29,7 +29,7 @@
 
 #include <nlohmann/json.hpp>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class usage_updater {
 
@@ -114,4 +114,4 @@ private:
     }
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

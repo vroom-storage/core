@@ -25,11 +25,11 @@ using namespace boost::asio;
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_FIXTURE_TEST_CASE(future_get, coro_fixture) {
     {
-        uh::cluster::promise<int> p;
+        vrm::cluster::promise<int> p;
 
         auto f = [&p]() -> coro<int> {
             auto f = p.get_future();
@@ -42,7 +42,7 @@ BOOST_FIXTURE_TEST_CASE(future_get, coro_fixture) {
     }
 
     {
-        uh::cluster::promise<int> p;
+        vrm::cluster::promise<int> p;
         p.set_value(4711);
 
         auto f = [&]() -> coro<int> {
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(basic) {
 }
 
 BOOST_FIXTURE_TEST_CASE(pass_exception, coro_fixture) {
-    uh::cluster::promise<int> p;
+    vrm::cluster::promise<int> p;
 
     auto f = [&]() -> coro<int> {
         auto f = p.get_future();
@@ -128,4 +128,4 @@ BOOST_FIXTURE_TEST_CASE(errors, coro_fixture) {
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -22,7 +22,7 @@
 #include <common/types/common_types.h>
 #include <magic_enum/magic_enum.hpp>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class backend_client {
 public:
@@ -101,4 +101,4 @@ coro<std::string> fetch_response_body(boost::asio::io_context& io_context,
                                       const std::string& username = "",
                                       const std::string& password = "");
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

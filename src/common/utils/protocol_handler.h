@@ -19,7 +19,7 @@
 #include <common/coroutines/coro.h>
 #include <boost/asio/ip/tcp.hpp>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class protocol_handler {
 public:
@@ -28,4 +28,4 @@ public:
     virtual ~protocol_handler() = default;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

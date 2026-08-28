@@ -22,7 +22,7 @@
 
 #include <nlohmann/json.hpp>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 BOOST_AUTO_TEST_SUITE(a_storage_group_config)
 
@@ -110,4 +110,4 @@ BOOST_AUTO_TEST_CASE(parses_json_string_to_license) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

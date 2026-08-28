@@ -23,7 +23,7 @@
 #include <set>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 using nlohmann::json;
 
@@ -84,4 +84,4 @@ auto multi_element(std::optional<std::reference_wrapper<const json>> element,
     return multi_element<container>(element->get(), reader);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

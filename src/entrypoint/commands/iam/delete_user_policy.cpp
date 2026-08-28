@@ -14,7 +14,7 @@
 
 #include "delete_user_policy.h"
 
-namespace uh::cluster::ep::iam {
+namespace vrm::cluster::ep::iam {
 
 delete_user_policy::delete_user_policy(user::db& users)
     : m_users(users) {}
@@ -51,4 +51,4 @@ bool delete_user_policy::can_handle(const ep::http::request& req) {
            req.query("Action").value_or("") == "DeleteUserPolicy";
 }
 
-} // namespace uh::cluster::ep::iam
+} // namespace vrm::cluster::ep::iam

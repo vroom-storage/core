@@ -22,7 +22,7 @@
 #include <mutex>
 #include <optional>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 enum class state_type { promise_created, future_created };
 
@@ -481,4 +481,4 @@ auto use_promise_cospawn(promise<result>&& p) {
         }
     };
 }
-} // namespace uh::cluster
+} // namespace vrm::cluster

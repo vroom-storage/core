@@ -20,7 +20,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct hostport {
     std::string hostname{};
@@ -52,4 +52,4 @@ struct hostport {
     }
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

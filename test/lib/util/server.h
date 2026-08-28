@@ -18,7 +18,7 @@
 
 #include <boost/asio.hpp>
 
-namespace uh::test {
+namespace vrm::test {
 
 // ---------------------------------------------------------------------
 
@@ -39,4 +39,4 @@ private:
 
 // ---------------------------------------------------------------------
 
-} // namespace uh::test
+} // namespace vrm::test

@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(uh_test_util server.cpp random.cpp temp_directory.cpp)
-target_link_libraries(uh_test_util types utils)
-target_include_directories(uh_test_util PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
+add_library(vrm_test_util server.cpp random.cpp temp_directory.cpp)
+target_link_libraries(vrm_test_util types utils)
+target_include_directories(vrm_test_util PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)

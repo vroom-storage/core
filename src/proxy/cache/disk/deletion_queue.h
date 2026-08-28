@@ -24,7 +24,7 @@
 
 // TODO: See if we can use boost::lockfree::queue here.
 
-namespace uh::cluster::proxy::cache::disk {
+namespace vrm::cluster::proxy::cache::disk {
 
 template <typename Key, EntryType Entry> class deletion_queue {
 public:
@@ -67,4 +67,4 @@ private:
     std::size_t m_current_size = 0;
 };
 
-} // namespace uh::cluster::proxy::cache::disk
+} // namespace vrm::cluster::proxy::cache::disk

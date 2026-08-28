@@ -17,7 +17,7 @@
 #include "chunked_body.h"
 #include "raw_body.h"
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 coro<std::unique_ptr<request>> no_auth::create(stream& s, raw_request req) {
 
@@ -34,4 +34,4 @@ coro<std::unique_ptr<request>> no_auth::create(stream& s, raw_request req) {
     }
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

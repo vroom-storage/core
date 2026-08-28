@@ -19,9 +19,9 @@ global:
   - registry-credentials
   logLevel: DEBUG
   telemetryExportInterval: 30000
-  ultihashSecret:
+  vroomSecret:
     key: license
-    name: ultihash
+    name: vroom
   securityContext:
     capabilities:
       add:
@@ -129,7 +129,7 @@ storage:
       storages: 1
       storageClass: local-path
       size: 5Gi
-      mountPath: /var/lib/uh/storage
+      mountPath: /var/lib/vrm/storage
       nodeSelector:
         purpose: ci
       tolerations:
@@ -144,7 +144,7 @@ collector:
       otlphttp/uptrace:
         endpoint: http://uptrace-backend.uptrace.svc.cluster.local:14318
         headers:
-          uptrace-dsn: http://${env:UH_EXPORTER_TOKEN}@uptrace-backend.uptrace.svc.cluster.local:14318
+          uptrace-dsn: http://${env:VRM_EXPORTER_TOKEN}@uptrace-backend.uptrace.svc.cluster.local:14318
     receivers:
       kubeletstats: null
       prometheus: null
@@ -154,18 +154,18 @@ collector:
           receivers:
           - otlp
   extraEnvs:
-  - name: UH_POD_IP
+  - name: VRM_POD_IP
     valueFrom:
       fieldRef:
         fieldPath: status.podIP
-  - name: UH_NODE_IP
+  - name: VRM_NODE_IP
     valueFrom:
       fieldRef:
         fieldPath: status.hostIP
-  - name: UH_EXPORTER_TOKEN 
+  - name: VRM_EXPORTER_TOKEN 
     valueFrom:
       secretKeyRef:
-        name: ultihash
+        name: vroom
         key: token
   nodeSelector:
     purpose: ci

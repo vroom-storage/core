@@ -34,7 +34,7 @@ namespace metric_sdk = opentelemetry::sdk::metrics;
 namespace metrics_api = opentelemetry::metrics;
 namespace otlp_exporter = opentelemetry::exporter::otlp;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 std::string GDV_PREFIX = "gdv";
 std::string COUNTER_SUFFIX = "counter";
@@ -95,8 +95,8 @@ void initialize_metrics_exporter(const std::string& endpoint,
 
     auto views = metric_sdk::ViewRegistryFactory::Create();
     auto resource = opentelemetry::sdk::resource::Resource::Create(
-        {{"service.name", uh::project_info::get().project_name},
-         {"service.version", uh::project_info::get().project_version},
+        {{"service.name", vrm::project_info::get().project_name},
+         {"service.version", vrm::project_info::get().project_version},
          {"service.role",
           std::string(magic_enum::enum_name(global_service_role))}});
 
@@ -137,4 +137,4 @@ void measure_message_type(message_type type) {
         mt);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

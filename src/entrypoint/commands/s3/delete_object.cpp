@@ -16,13 +16,13 @@
 #include <common/telemetry/metrics.h>
 #include "entrypoint/http/command_exception.h"
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 delete_object::delete_object(directory& dir,
                              storage::global::global_data_view& gdv,
-                             limits& uhlimits)
+                             limits& vrmlimits)
     : m_dir(dir) {}
 
 bool delete_object::can_handle(const request& req) {
@@ -47,4 +47,4 @@ coro<response> delete_object::handle(request& req) {
 
 std::string delete_object::action_id() const { return "s3:DeleteObject"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

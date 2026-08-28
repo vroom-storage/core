@@ -31,7 +31,7 @@
 #include <functional>
 #include <utility>
 
-namespace uh::cluster::deduplicator {
+namespace vrm::cluster::deduplicator {
 
 class service {
 public:
@@ -62,4 +62,4 @@ private:
     server m_server;
     service_registry m_service_registry;
 };
-} // namespace uh::cluster::deduplicator
+} // namespace vrm::cluster::deduplicator

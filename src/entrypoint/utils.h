@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct collapsed_objects {
     std::optional<std::string> _prefix{};
@@ -54,4 +54,4 @@ void set_default_headers(ep::http::response& res, const ep::object& obj);
 coro<dedupe_response> deduplicate(deduplicator_interface& dd,
                                   ep::http::body& body, md5& hash);
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

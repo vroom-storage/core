@@ -23,7 +23,7 @@
 #include <magic_enum/magic_enum.hpp>
 #include <storage/group/state.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class storage_state_manager {
 
@@ -105,4 +105,4 @@ private:
     }
 };
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

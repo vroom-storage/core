@@ -22,7 +22,7 @@
 #include <common/service_interfaces/service_factory.h>
 #include <common/telemetry/log.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename service_interface> class service_maintainer {
 
@@ -44,4 +44,4 @@ public:
     subscriber m_subscriber;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

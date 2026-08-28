@@ -25,7 +25,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_AUTO_TEST_SUITE(a_ec)
 
@@ -180,4 +180,4 @@ BOOST_AUTO_TEST_CASE(ec_zeros) {
     BOOST_CHECK(std::ranges::equal(parity_view[0], parity_view[1]));
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

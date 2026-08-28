@@ -1,0 +1,180 @@
+# Copyright 2026 UltiHash Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+global:
+  imagePullSecrets:               
+    - registry-credentials
+  vroomSecret:
+    name: vroom
+    key: license
+  logLevel: WARN
+  telemetryExportInterval: 30000
+
+recovery:
+  nodeSelector:
+    purpose: parameterized-test-vrm
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+
+etcd:
+  replicaCount: 1
+  nodeSelector:
+    purpose: parameterized-test-vrm
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+  persistence:
+    size: 8Gi
+
+entrypoint:
+  replicas: $EC2_INSTANCE_COUNT
+  nodeSelector:
+    purpose: parameterized-test-vrm
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: role
+            operator: In
+            values:
+            - entrypoint
+        topologyKey: kubernetes.io/hostname
+
+  ingress:
+    enabled: false
+
+storage:
+  groups:
+    - id: 0
+      type: ROUND_ROBIN
+      storages: $EC2_INSTANCE_COUNT
+      storageClass: $VRM_STORAGE_CLASS
+      size: $STORAGE_VOLUME_SIZE
+      nodeSelector:
+        purpose: parameterized-test-vrm
+      tolerations:
+        - key: "purpose"
+          operator: "Equal"
+          value: "testing"
+          effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - storage
+            topologyKey: kubernetes.io/hostname              
+
+deduplicator:
+  replicas: $EC2_INSTANCE_COUNT
+  storageClass: $VRM_STORAGE_CLASS
+  storageSize: $DEDUPLICATOR_VOLUME_SIZE
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: role
+            operator: In
+            values:
+            - deduplicator
+        topologyKey: kubernetes.io/hostname
+  nodeSelector:
+    purpose: parameterized-test-vrm
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+
+database:
+  primary:
+    nodeSelector:
+      purpose: parameterized-test-vrm
+    tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+
+    persistence:
+      storageClass: $VRM_STORAGE_CLASS
+      size: $DATABASE_VOLUME_SIZE
+
+databaseInit:
+  nodeSelector:
+    purpose: parameterized-test-vrm
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+
+collector:
+  nodeSelector:
+    purpose: parameterized-test-vrm
+  tolerations:
+    - key: "purpose"
+      operator: "Equal"
+      value: "testing"
+      effect: "NoSchedule"
+  extraEnvs:
+  - name: VRM_POD_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.podIP
+  - name: VRM_NODE_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.hostIP
+  - name: VRM_EXPORTER_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vroom
+        key: token
+  presets:
+    kubeletMetrics:              
+      enabled: false           
+  config:                         
+    exporters:
+      otlphttp/uptrace:
+        endpoint: http://uptrace-backend.uptrace.svc.cluster.local:14318
+        headers:
+          uptrace-dsn: http://${env:VRM_EXPORTER_TOKEN}@uptrace-backend.uptrace.svc.cluster.local:14318
+    receivers:
+      prometheus: null
+      kubeletstats: null
+    service:
+      pipelines:
+        metrics:
+          receivers:
+            - otlp
+
+exporter:
+  enabled: false
+                   

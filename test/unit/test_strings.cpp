@@ -22,7 +22,7 @@
 #include <set>
 #include <vector>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_AUTO_TEST_CASE(string_split) {
     BOOST_CHECK(split("").empty());
@@ -161,4 +161,4 @@ BOOST_AUTO_TEST_CASE(nocase_map) {
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

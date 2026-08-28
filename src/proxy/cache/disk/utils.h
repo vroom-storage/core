@@ -25,7 +25,7 @@
 
 #include <memory>
 
-namespace uh::cluster::proxy::cache::disk::utils {
+namespace vrm::cluster::proxy::cache::disk::utils {
 
 inline coro<void> erase(storage::data_view& storage, const address& addr) {
     co_await storage.unlink(addr);
@@ -43,4 +43,4 @@ inline coro<void> read(storage::data_view& storage, const address& addr,
     co_await storage.read_address(addr, sv);
 }
 
-} // namespace uh::cluster::proxy::cache::disk::utils
+} // namespace vrm::cluster::proxy::cache::disk::utils

@@ -4,8 +4,8 @@ set -e
 scriptdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 cluster_url="http://localhost:8080"
-root_access_key="${UH_ROOT_ACCESS_KEY:-0555b35654ad1656d804}"
-root_secret_key="${UH_ROOT_SECRET_KEY:-h7GhxuBLTrlhVUyxSPUKUV8r/2EI4ngqJxD7iBdBYLhwluN30JaT3Q==}"
+root_access_key="${VRM_ROOT_ACCESS_KEY:-0555b35654ad1656d804}"
+root_secret_key="${VRM_ROOT_SECRET_KEY:-h7GhxuBLTrlhVUyxSPUKUV8r/2EI4ngqJxD7iBdBYLhwluN30JaT3Q==}"
 
 usage() {
     echo "Usage: $(basename "$0") [--cluster-url URL]" >&2

@@ -23,7 +23,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 BOOST_FIXTURE_TEST_CASE(invalid_read, global_data_view_fixture) {
     auto gdv = get_data_view();
     BOOST_REQUIRE_THROW(
@@ -245,4 +245,4 @@ BOOST_FIXTURE_TEST_CASE(write_offsets_unlink, global_data_view_fixture) {
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

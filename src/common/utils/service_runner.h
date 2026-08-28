@@ -26,7 +26,7 @@
 #include <thread>
 #include <vector>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class service_runner {
 public:
@@ -112,4 +112,4 @@ private:
     unsigned m_num_threads;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

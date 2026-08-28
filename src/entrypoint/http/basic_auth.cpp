@@ -18,7 +18,7 @@
 #include "raw_body.h"
 #include <common/utils/strings.h>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 coro<std::unique_ptr<request>>
 basic_auth::create(stream& s, user::db& users, raw_request req) {
@@ -50,4 +50,4 @@ basic_auth::create(stream& s, user::db& users, raw_request req) {
     }
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

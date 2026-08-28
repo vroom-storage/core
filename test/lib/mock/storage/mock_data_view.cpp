@@ -17,7 +17,7 @@
 #include <common/utils/pointer_traits.h>
 #include <storage/group/impl/address_utils.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 mock_data_view::mock_data_view(mock_data_store& storage)
     : m_storage{storage} {}
 
@@ -104,4 +104,4 @@ coro<std::size_t> mock_data_view::unlink(const address& addr) {
     co_return m_storage.unlink(refcounts);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

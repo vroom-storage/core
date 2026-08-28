@@ -18,7 +18,7 @@
 
 using namespace boost;
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 request::request(raw_request rawreq, std::unique_ptr<http::body> body,
                  ep::user::user user)
@@ -123,4 +123,4 @@ std::ostream& operator<<(std::ostream& out, const request& req) {
     return out;
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

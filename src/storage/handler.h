@@ -21,7 +21,7 @@
 #include <storage/group/storage_state_manager.h>
 #include <storage/interfaces/local_storage.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class handler : public protocol_handler {
 public:
@@ -51,4 +51,4 @@ private:
     local_storage& m_storage;
 };
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

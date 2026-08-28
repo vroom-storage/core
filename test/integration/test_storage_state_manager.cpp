@@ -28,7 +28,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class basic_fixture {
 public:
@@ -166,4 +166,4 @@ BOOST_AUTO_TEST_CASE(restores_previous_state) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

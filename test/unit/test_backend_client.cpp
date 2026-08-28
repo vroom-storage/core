@@ -33,7 +33,7 @@
 #include <string>
 
 using namespace fakeit;
-using namespace uh::cluster;
+using namespace vrm::cluster;
 using namespace boost::asio;
 
 class fixture : public coro_fixture {
@@ -41,7 +41,7 @@ public:
     fixture()
         : coro_fixture{1},
           ioc{coro_fixture::get_io_context()},
-          server("ultihash", "passwd"),
+          server("vroom", "passwd"),
           expected_license("sample_license") {
 
         server.set_get_handler("/v1/license", [&](httplib::Response& resp) {
@@ -62,7 +62,7 @@ BOOST_FIXTURE_TEST_SUITE(a_backend_client, fixture)
 
 BOOST_AUTO_TEST_CASE(returns_license) {
     auto sut = default_backend_client{
-        "localhost:" + std::to_string(server.get_port()), "ultihash", "passwd",
+        "localhost:" + std::to_string(server.get_port()), "vroom", "passwd",
         default_backend_client::type::http};
 
     auto future =
@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(returns_license) {
 
 BOOST_AUTO_TEST_CASE(pushes_usage) {
     auto sut = default_backend_client{
-        "localhost:" + std::to_string(server.get_port()), "ultihash", "passwd",
+        "localhost:" + std::to_string(server.get_port()), "vroom", "passwd",
         default_backend_client::type::http};
 
     auto future = boost::asio::co_spawn(ioc, sut.post_usage("my-usage"),

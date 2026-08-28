@@ -23,7 +23,7 @@
 #include <optional>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class command;
 
@@ -33,9 +33,9 @@ class request;
 
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster
 
-namespace uh::cluster::ep::policy {
+namespace vrm::cluster::ep::policy {
 
 class value_provider {
 public:
@@ -92,4 +92,4 @@ bool equals_wildcard(std::string_view pattern, std::string_view str,
 
 int64_t to_int(std::string_view s);
 
-} // namespace uh::cluster::ep::policy
+} // namespace vrm::cluster::ep::policy

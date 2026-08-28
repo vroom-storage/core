@@ -16,7 +16,7 @@
 #include <boost/uuid/random_generator.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 // ---------------------------------------------------------------------
 
@@ -41,4 +41,4 @@ std::string generate_unique_id() {
 
 // ---------------------------------------------------------------------
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

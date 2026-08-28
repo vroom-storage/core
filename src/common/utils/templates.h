@@ -16,7 +16,7 @@
 
 #pragma once
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename func> void foreach (func f) {}
 
@@ -31,4 +31,4 @@ void foreach (func f, const head& h, const tail&... t) {
         ;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

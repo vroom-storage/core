@@ -20,7 +20,7 @@
 #include <list>
 #include <thread>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class coro_fixture {
 public:
@@ -58,4 +58,4 @@ protected:
     std::list<std::thread> m_threads;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

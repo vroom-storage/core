@@ -18,9 +18,9 @@
 #include <entrypoint/utils.h>
 #include <entrypoint/http/command_exception.h>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 head_object::head_object(directory& dir)
     : m_dir(dir) {}
@@ -50,4 +50,4 @@ coro<response> head_object::handle(request& req) {
 
 std::string head_object::action_id() const { return "s3:HeadObject"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

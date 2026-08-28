@@ -20,7 +20,7 @@
 #include <common/crypto/hash.h>
 #include <entrypoint/http/aws4_hmac_sha256.h>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 class chunk_body_sha256 : public chunked_body {
 public:
@@ -43,4 +43,4 @@ private:
     std::string m_to_sign;
 };
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

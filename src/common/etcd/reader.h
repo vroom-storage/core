@@ -21,7 +21,7 @@
 #include <common/etcd/utils.h>
 #include <common/telemetry/log.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class subscriber;
 
@@ -91,7 +91,7 @@ private:
     int64_t m_index;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster
 
 #include <common/etcd/impl/candidate_observer.h>
 #include <common/etcd/impl/hostports_observer.h>

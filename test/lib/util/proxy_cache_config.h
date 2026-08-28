@@ -20,7 +20,7 @@
 #include <string>
 #include <vector>
 
-namespace uh::cluster::proxy::cache {
+namespace vrm::cluster::proxy::cache {
 
 struct s3_object_key {
     std::string bucket_name;
@@ -33,11 +33,11 @@ struct s3_object_key {
     }
 };
 
-} // namespace uh::cluster::proxy::cache
+} // namespace vrm::cluster::proxy::cache
 
-template <> struct std::hash<uh::cluster::proxy::cache::s3_object_key> {
+template <> struct std::hash<vrm::cluster::proxy::cache::s3_object_key> {
     size_t
-    operator()(const uh::cluster::proxy::cache::s3_object_key& key) const {
+    operator()(const vrm::cluster::proxy::cache::s3_object_key& key) const {
         std::size_t seed = 0;
 
         auto hash_combine = [](std::size_t& seed, const auto& v) {
@@ -53,7 +53,7 @@ template <> struct std::hash<uh::cluster::proxy::cache::s3_object_key> {
     }
 };
 
-namespace uh::cluster::proxy::cache {
+namespace vrm::cluster::proxy::cache {
 
 template <typename T = int> struct vector_entry {
     std::vector<T> value;
@@ -76,4 +76,4 @@ template <typename T = int> struct vector_entry {
 
 using char_vector = vector_entry<char>;
 
-} // namespace uh::cluster::proxy::cache
+} // namespace vrm::cluster::proxy::cache

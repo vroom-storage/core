@@ -23,7 +23,7 @@
 #include <cxxabi.h>
 #endif
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename T> std::string class_name() {
 #ifdef __GNUG__
@@ -38,4 +38,4 @@ template <typename T> std::string class_name() {
     return name;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

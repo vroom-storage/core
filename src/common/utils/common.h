@@ -19,7 +19,7 @@
 #include <chrono>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 constexpr unsigned long long operator""_KiB(unsigned long long value) {
     return value * 1024;
@@ -81,39 +81,39 @@ enum message_type : uint8_t {
 
 };
 
-constexpr const char* ENV_CFG_ENDPOINT_HOST = "UH_POD_IP";
-constexpr const char* UH_WORKING_DIR = "UH_WORKING_DIR";
-constexpr const char* ENV_CFG_LOG_LEVEL = "UH_LOG_LEVEL";
-constexpr const char* ENV_CFG_LICENSE = "UH_LICENSE";
-constexpr const char* ENV_CFG_STORAGE_GROUPS = "UH_STORAGE_GROUPS";
-constexpr const char* ENV_CFG_BACKEND_HOST = "UH_BACKEND_HOST";
-constexpr const char* ENV_CFG_CUSTOMER_ID = "UH_CUSTOMER_ID";
-constexpr const char* ENV_CFG_ACCESS_TOKEN = "UH_ACCESS_TOKEN";
-constexpr const char* ENV_CFG_OTEL_ENDPOINT = "UH_OTEL_ENDPOINT";
-constexpr const char* ENV_CFG_OTEL_EXPORT_INTERVAL = "UH_OTEL_INTERVAL";
-constexpr const char* ENV_CFG_ENABLE_TRACES = "UH_TRACES_ENABLED";
-constexpr const char* ENV_CFG_TRACE_ENDPOINT = "UH_TRACE_ENDPOINT";
-constexpr const char* ENV_CFG_DB_HOSTPORT = "UH_DB_HOSTPORT";
+constexpr const char* ENV_CFG_ENDPOINT_HOST = "VRM_POD_IP";
+constexpr const char* VRM_WORKING_DIR = "VRM_WORKING_DIR";
+constexpr const char* ENV_CFG_LOG_LEVEL = "VRM_LOG_LEVEL";
+constexpr const char* ENV_CFG_LICENSE = "VRM_LICENSE";
+constexpr const char* ENV_CFG_STORAGE_GROUPS = "VRM_STORAGE_GROUPS";
+constexpr const char* ENV_CFG_BACKEND_HOST = "VRM_BACKEND_HOST";
+constexpr const char* ENV_CFG_CUSTOMER_ID = "VRM_CUSTOMER_ID";
+constexpr const char* ENV_CFG_ACCESS_TOKEN = "VRM_ACCESS_TOKEN";
+constexpr const char* ENV_CFG_OTEL_ENDPOINT = "VRM_OTEL_ENDPOINT";
+constexpr const char* ENV_CFG_OTEL_EXPORT_INTERVAL = "VRM_OTEL_INTERVAL";
+constexpr const char* ENV_CFG_ENABLE_TRACES = "VRM_TRACES_ENABLED";
+constexpr const char* ENV_CFG_TRACE_ENDPOINT = "VRM_TRACE_ENDPOINT";
+constexpr const char* ENV_CFG_DB_HOSTPORT = "VRM_DB_HOSTPORT";
 constexpr const char* ENV_CFG_DB_DIRECTORY_CONNECTIONS =
-    "UH_DB_DIRECTORY_CONNECTIONS";
+    "VRM_DB_DIRECTORY_CONNECTIONS";
 constexpr const char* ENV_CFG_DB_MULTIPART_CONNECTIONS =
-    "UH_DB_MULTIPART_CONNECTIONS";
-constexpr const char* ENV_CFG_DB_USERS_CONNECTIONS = "UH_DB_USERS_CONNECTIONS";
-constexpr const char* ENV_CFG_DB_USER = "UH_DB_USER";
-constexpr const char* ENV_CFG_DB_PASS = "UH_DB_PASS";
-constexpr const char* ENV_CFG_ETCD_USERNAME = "UH_ETCD_USERNAME";
-constexpr const char* ENV_CFG_ETCD_PASSWORD = "UH_ETCD_PASSWORD";
-constexpr const char* ENV_CFG_NO_DEDUPE = "UH_NO_DEDUPE";
-constexpr const char* ENV_CFG_STORAGE_SERVICE_ID = "UH_STORAGE_INSTANCE_ID";
-constexpr const char* ENV_CFG_STORAGE_GROUP_ID = "UH_STORAGE_GROUP_ID";
-constexpr const char* ENV_CFG_DOWNSTREAM_INSECURE = "UH_DOWNSTREAM_INSECURE";
-constexpr const char* ENV_CFG_DOWNSTREAM_CERT_FILE = "UH_DOWNSTREAM_CERT_FILE";
-constexpr const char* ENV_CFG_DOWNSTREAM_HOST = "UH_DOWNSTREAM_HOST";
-constexpr const char* ENV_CFG_DOWNSTREAM_PORT = "UH_DOWNSTREAM_PORT";
+    "VRM_DB_MULTIPART_CONNECTIONS";
+constexpr const char* ENV_CFG_DB_USERS_CONNECTIONS = "VRM_DB_USERS_CONNECTIONS";
+constexpr const char* ENV_CFG_DB_USER = "VRM_DB_USER";
+constexpr const char* ENV_CFG_DB_PASS = "VRM_DB_PASS";
+constexpr const char* ENV_CFG_ETCD_USERNAME = "VRM_ETCD_USERNAME";
+constexpr const char* ENV_CFG_ETCD_PASSWORD = "VRM_ETCD_PASSWORD";
+constexpr const char* ENV_CFG_NO_DEDUPE = "VRM_NO_DEDUPE";
+constexpr const char* ENV_CFG_STORAGE_SERVICE_ID = "VRM_STORAGE_INSTANCE_ID";
+constexpr const char* ENV_CFG_STORAGE_GROUP_ID = "VRM_STORAGE_GROUP_ID";
+constexpr const char* ENV_CFG_DOWNSTREAM_INSECURE = "VRM_DOWNSTREAM_INSECURE";
+constexpr const char* ENV_CFG_DOWNSTREAM_CERT_FILE = "VRM_DOWNSTREAM_CERT_FILE";
+constexpr const char* ENV_CFG_DOWNSTREAM_HOST = "VRM_DOWNSTREAM_HOST";
+constexpr const char* ENV_CFG_DOWNSTREAM_PORT = "VRM_DOWNSTREAM_PORT";
 constexpr const char* ENV_CFG_DOWNSTREAM_CONNECTIONS =
-    "UH_DOWNSTREAM_CONNECTIONS";
+    "VRM_DOWNSTREAM_CONNECTIONS";
 
-constexpr const char* RESERVED_BUCKET_NAME = "ultihash";
+constexpr const char* RESERVED_BUCKET_NAME = "vroom";
 
 struct time_settings {
     using duration_t = std::chrono::steady_clock::duration;
@@ -142,4 +142,4 @@ constexpr std::size_t DEFAULT_PAGE_SIZE = 8 * KIBI_BYTE;
 
 const std::string& get_service_string(const role& service_role);
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

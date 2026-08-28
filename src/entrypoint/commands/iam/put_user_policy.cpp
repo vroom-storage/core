@@ -17,7 +17,7 @@
 #include <common/utils/random.h>
 #include <entrypoint/policy/parser.h>
 
-namespace uh::cluster::ep::iam {
+namespace vrm::cluster::ep::iam {
 
 put_user_policy::put_user_policy(user::db& users)
     : m_users(users) {}
@@ -60,4 +60,4 @@ bool put_user_policy::can_handle(const ep::http::request& req) {
            req.query("Action").value_or("") == "PutUserPolicy";
 }
 
-} // namespace uh::cluster::ep::iam
+} // namespace vrm::cluster::ep::iam

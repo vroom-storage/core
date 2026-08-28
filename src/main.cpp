@@ -24,8 +24,8 @@
 #include <storage/service.h>
 #include <proxy/service.h>
 
-using namespace uh;
-using namespace uh::cluster;
+using namespace vrm;
+using namespace vrm::cluster;
 
 static std::any make_service(boost::asio::io_context& ioc, const config& c) {
     switch (c.role) {

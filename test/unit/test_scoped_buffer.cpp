@@ -17,7 +17,7 @@
 #include <boost/test/unit_test.hpp>
 #include <common/types/scoped_buffer.h>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 namespace {
 

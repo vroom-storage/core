@@ -17,7 +17,7 @@
 #include "common/utils/common.h"
 #include "common/utils/pointer_traits.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 reference_counter::reference_counter(
     const std::filesystem::path& root, const std::size_t stripe_size,
@@ -167,4 +167,4 @@ reference_counter::free_stripes(std::vector<std::size_t>& stripes_to_free) {
     return freed_storage;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

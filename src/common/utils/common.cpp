@@ -16,13 +16,13 @@
 
 #include <map>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
-static const std::map<uh::cluster::role, std::string> abbreviation_by_role = {
-    {uh::cluster::STORAGE_SERVICE, "storage"},
-    {uh::cluster::DEDUPLICATOR_SERVICE, "deduplicator"},
-    {uh::cluster::ENTRYPOINT_SERVICE, "entrypoint"},
-    {uh::cluster::COORDINATOR_SERVICE, "coordinator"}};
+static const std::map<vrm::cluster::role, std::string> abbreviation_by_role = {
+    {vrm::cluster::STORAGE_SERVICE, "storage"},
+    {vrm::cluster::DEDUPLICATOR_SERVICE, "deduplicator"},
+    {vrm::cluster::ENTRYPOINT_SERVICE, "entrypoint"},
+    {vrm::cluster::COORDINATOR_SERVICE, "coordinator"}};
 
 const std::string& get_service_string(const role& service_role) {
     if (auto search = abbreviation_by_role.find(service_role);
@@ -32,4 +32,4 @@ const std::string& get_service_string(const role& service_role) {
         throw std::invalid_argument("invalid role");
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

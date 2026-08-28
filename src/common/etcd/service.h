@@ -20,15 +20,15 @@
 
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct service_config {
-    uh::cluster::etcd_config etcd_config;
-    std::filesystem::path working_dir = "/var/lib/uh";
+    vrm::cluster::etcd_config etcd_config;
+    std::filesystem::path working_dir = "/var/lib/vrm";
     std::string telemetry_url;
     unsigned telemetry_interval = 1000;
     bool enable_traces = false;
     std::string trace_url;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

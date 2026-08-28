@@ -1,6 +1,6 @@
 # Overview
 
-This document defines the metric parameters implemented by UltiHash cluster.
+This document defines the metric parameters implemented by Vroom cluster.
 
 There are two types of metrics currently supported: counters and gauges.
 - depending on the data type they are initialized with, counters can be monotonic,

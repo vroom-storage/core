@@ -22,7 +22,7 @@
 #include <condition_variable>
 #include <map>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename service_interface>
 class service_load_balancer : public service_observer<service_interface> {
@@ -89,4 +89,4 @@ private:
         m_robin_index = m_services.cend();
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

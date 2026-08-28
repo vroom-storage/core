@@ -27,7 +27,7 @@
 
 using namespace std::chrono_literals;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 class global_data_view_fixture {
 public:
 #if defined(WITH_EC)
@@ -195,4 +195,4 @@ private:
     std::shared_ptr<storage::global::global_data_view> m_gdv;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster
