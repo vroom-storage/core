@@ -27,7 +27,7 @@ namespace vrm::cluster {
 class complete_multipart : public command {
 public:
     complete_multipart(directory&, storage::global::global_data_view&,
-                       multipart_state&, limits&);
+                       multipart_state&);
 
     static bool can_handle(const ep::http::request& req);
 
@@ -38,7 +38,6 @@ public:
 private:
     directory& m_dir;
     multipart_state& m_uploads;
-    limits& m_limits;
 };
 
 } // namespace vrm::cluster

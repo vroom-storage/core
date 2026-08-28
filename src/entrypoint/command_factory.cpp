@@ -118,7 +118,7 @@ coro<std::unique_ptr<command>> command_factory::create(ep::http::request& req) {
         co_return std::make_unique<get_object>(m_directory, m_gdv);
     }
     if (put_object::can_handle(req)) {
-        co_return std::make_unique<put_object>(m_limits, m_directory, m_gdv, m_dedupe);
+        co_return std::make_unique<put_object>(m_directory, m_gdv, m_dedupe);
     }
     if (multipart::can_handle(req)) {
         co_return std::make_unique<multipart>(m_dedupe, m_gdv, m_uploads);
@@ -127,8 +127,7 @@ coro<std::unique_ptr<command>> command_factory::create(ep::http::request& req) {
         co_return std::make_unique<init_multipart>(m_directory, m_uploads);
     }
     if (complete_multipart::can_handle(req)) {
-        co_return std::make_unique<complete_multipart>(m_directory, m_gdv,
-                                                       m_uploads, m_limits);
+        co_return std::make_unique<complete_multipart>(m_directory, m_gdv, m_uploads);
     }
     if (list_object_versions::can_handle(req)) {
         co_return std::make_unique<list_object_versions>(m_directory);
@@ -152,7 +151,7 @@ coro<std::unique_ptr<command>> command_factory::create(ep::http::request& req) {
         co_return std::make_unique<create_bucket>(m_directory);
     }
     if (copy_object::can_handle(req)) {
-        co_return std::make_unique<copy_object>(m_directory, m_gdv, m_limits);
+        co_return std::make_unique<copy_object>(m_directory, m_gdv);
     }
     if (list_multipart::can_handle(req)) {
         co_return std::make_unique<list_multipart>(m_uploads);
@@ -164,11 +163,10 @@ coro<std::unique_ptr<command>> command_factory::create(ep::http::request& req) {
         co_return std::make_unique<get_metrics>(m_directory, m_gdv);
     }
     if (delete_object::can_handle(req)) {
-        co_return std::make_unique<delete_object>(m_directory, m_gdv, m_limits);
+        co_return std::make_unique<delete_object>(m_directory, m_gdv);
     }
     if (delete_objects::can_handle(req)) {
-        co_return std::make_unique<delete_objects>(m_directory, m_gdv,
-                                                   m_limits);
+        co_return std::make_unique<delete_objects>(m_directory, m_gdv);
     }
     if (delete_bucket::can_handle(req)) {
         co_return std::make_unique<delete_bucket>(m_directory);
@@ -209,8 +207,6 @@ coro<std::unique_ptr<command>> command_factory::create(ep::http::request& req) {
     throw command_exception(ep::http::status::bad_request, "InvalidURI",
                             "The specified URI couldn't be parsed.");
 }
-
-limits& command_factory::get_limits() const { return m_limits; }
 
 directory& command_factory::get_directory() const { return m_directory; }
 

@@ -31,13 +31,12 @@ namespace vrm::cluster {
 struct command_factory {
     command_factory(deduplicator_interface& dedupe, directory& dir,
                     multipart_state& uploads,
-                    storage::global::global_data_view& gdv, limits& vrmlimits,
+                    storage::global::global_data_view& gdv,
                     ep::user::db& users, license_watcher& watcher)
         : m_dedupe(dedupe),
           m_directory(dir),
           m_uploads(uploads),
           m_gdv(gdv),
-          m_limits(vrmlimits),
           m_users(users),
           m_license_watcher(watcher) {}
 
@@ -55,7 +54,6 @@ private:
     directory& m_directory;
     multipart_state& m_uploads;
     storage::global::global_data_view& m_gdv;
-    limits& m_limits;
     ep::user::db& m_users;
     license_watcher& m_license_watcher;
 };

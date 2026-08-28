@@ -55,7 +55,6 @@ private:
     user::db m_users;
     license_watcher m_license_watcher;
     std::atomic<std::size_t> m_size = 0ull;
-    limits m_limits;
     server m_server;
     service_registry m_service_registry;
     garbage_collector m_gc;

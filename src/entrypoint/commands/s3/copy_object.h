@@ -25,7 +25,7 @@ namespace vrm::cluster {
 
 class copy_object : public command {
 public:
-    copy_object(directory&, storage::global::global_data_view&, limits& limits);
+    copy_object(directory&, storage::global::global_data_view&);
 
     static bool can_handle(const ep::http::request& req);
 
@@ -36,7 +36,6 @@ public:
 private:
     directory& m_dir;
     storage::global::global_data_view& m_gdv;
-    limits& m_limits;
 };
 
 } // namespace vrm::cluster
