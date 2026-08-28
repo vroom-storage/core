@@ -25,7 +25,6 @@
 #include <common/etcd/registry/service_registry.h>
 #include <common/etcd/service.h>
 #include <common/etcd/utils.h>
-#include <common/license/license_watcher.h>
 #include <common/network/server.h>
 #include <common/utils/strings.h>
 #include <storage/global/config.h>
@@ -53,7 +52,6 @@ public:
     service(boost::asio::io_context& ioc, const service_config& service_config,
             const storage_config& sc)
         : m_etcd{service_config.etcd_config},
-          m_license_watcher(m_etcd),
           m_storage_id{sc.instance_id},
           m_group_id{sc.group_id},
           m_group_config{group_config::create([&]() -> std::string {
@@ -82,22 +80,20 @@ public:
             register_gauge_callback(
                 [this]() { return m_storage->get_available_space_func(); },
                 [this]() {
-                    auto label = m_license_watcher.get_license()
-                                     ->to_key_value_iterable();
-                    label.push_back(
-                        {"service_id", std::to_string(m_storage_id)});
-                    return label;
+                    return std::vector<std::pair<std::string, std::string>> {
+                        { "service_id", std::to_string(m_storage_id) },
+                        { "version", project_info::get().project_version }
+                    };
                 });
 
         metric<storage_used_space_gauge, byte, int64_t>::
             register_gauge_callback(
                 [this] { return m_storage->get_used_space_func(); },
                 [this]() {
-                    auto label = m_license_watcher.get_license()
-                                     ->to_key_value_iterable();
-                    label.push_back(
-                        {"service_id", std::to_string(m_storage_id)});
-                    return label;
+                    return std::vector<std::pair<std::string, std::string>> {
+                        { "service_id", std::to_string(m_storage_id) },
+                        { "version", project_info::get().project_version }
+                    };
                 });
     }
 
@@ -110,7 +106,6 @@ public:
 
 private:
     etcd_manager m_etcd;
-    license_watcher m_license_watcher;
     std::size_t m_storage_id;
     std::size_t m_group_id;
     group_config m_group_config;
