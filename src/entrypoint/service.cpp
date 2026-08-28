@@ -18,7 +18,6 @@
 #include <common/telemetry/metrics.h>
 #include <deduplicator/interfaces/dedupe_array.h>
 #include <deduplicator/interfaces/noop_deduplicator.h>
-#include <format>
 #include <magic_enum/magic_enum.hpp>
 
 namespace vrm::cluster::ep {
@@ -27,10 +26,9 @@ namespace {
 
 static const auto LIMITS_UPDATE_INTERVAL = std::chrono::seconds(5);
 
-coro<void> update_limits(vrm::cluster::directory& directory, limits& l) {
+coro<void> update_limits(vrm::cluster::directory& directory, std::atomic<std::size_t>& size) {
     boost::asio::steady_timer timer(co_await boost::asio::this_coro::executor);
-    std::atomic<std::size_t> size = co_await directory.data_size();
-    l.set_storage_size(size);
+    size = co_await directory.data_size();
 
     auto state = co_await boost::asio::this_coro::cancellation_state;
     while (state.cancelled() == boost::asio::cancellation_type::none) {
@@ -38,7 +36,6 @@ coro<void> update_limits(vrm::cluster::directory& directory, limits& l) {
         co_await timer.async_wait(boost::asio::use_awaitable);
 
         size = co_await directory.data_size();
-        l.set_storage_size(size);
     }
 }
 
@@ -96,11 +93,11 @@ service::service(boost::asio::io_context& ioc, const service_config& sc,
 
       m_gc(ioc, m_directory, m_gdv),
       m_task{"update storage metrics", ioc,
-             update_limits(m_directory, m_limits).start_trace()} {
+             update_limits(m_directory, m_size).start_trace()} {
 
     metric<entrypoint_original_data_volume_gauge, byte, int64_t>::
         register_gauge_callback(
-            [this]() { return m_limits.get_storage_size(); },
+            [this]() { return m_size.load(); },
             [this]() {
                 auto label =
                     m_license_watcher.get_license()->to_key_value_iterable();
