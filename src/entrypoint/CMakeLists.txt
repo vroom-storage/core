@@ -27,7 +27,6 @@ add_library(entrypoint
             commands/iam/create_user.cpp
             commands/iam/delete_user.cpp
             commands/iam/get_user_policy.cpp
-            commands/vrm/get_license_info.cpp
             commands/vrm/get_ready.cpp
             commands/vrm/get_metrics.cpp
             commands/s3/put_bucket_cors.cpp
