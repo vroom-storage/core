@@ -222,20 +222,6 @@ CLI::App* sub_coordinator(CLI::App& app, coordinator_config& cfg) {
         ->default_val(cfg.num_threads);
 
     rv->add_option(
-          "--license,-L",
-          [&cfg](CLI::results_t res) {
-              try {
-                  cfg.license = license::create(res[0]);
-              } catch (const std::exception& e) {
-                  return false;
-              }
-              return true;
-          },
-          "Vroom license json-string")
-        ->envname(ENV_CFG_LICENSE)
-        ->default_val(cfg.license);
-
-    rv->add_option(
           "--storage-groups,-G",
           [&cfg](CLI::results_t res) {
               try {
@@ -248,18 +234,6 @@ CLI::App* sub_coordinator(CLI::App& app, coordinator_config& cfg) {
           "Vroom storage group configuration")
         ->envname(ENV_CFG_STORAGE_GROUPS)
         ->default_val(cfg.storage_groups);
-
-    rv->add_option("--backend-host", cfg.backend_config.backend_host,
-                   "backend host")
-        ->envname(ENV_CFG_BACKEND_HOST);
-    rv->add_option("--customer-id", cfg.backend_config.customer_id,
-                   "customer ID required to connect to the backend")
-        ->envname(ENV_CFG_CUSTOMER_ID);
-    rv->add_option("--access-token", cfg.backend_config.access_token,
-                   "access token required to connect to the backend")
-        ->envname(ENV_CFG_ACCESS_TOKEN);
-
-    configure(*rv, cfg.database_config);
 
     return rv;
 }
@@ -336,14 +310,6 @@ std::optional<config> read_config(int argc, char** argv) {
         rv.role = ENTRYPOINT_SERVICE;
     } else if (sub_rk->parsed()) {
         rv.role = COORDINATOR_SERVICE;
-        auto& cfg = rv.coordinator;
-
-        if (!cfg.license && !cfg.backend_config) {
-            LOG_INFO() << "license: " << cfg.license;
-            LOG_INFO() << "backend_host: " << cfg.backend_config.backend_host;
-            throw std::invalid_argument("Either a test license or backend "
-                                        "configuration must be provided.");
-        }
     } else if (sub_px->parsed()) {
         rv.role = PROXY_SERVICE;
     } else {
