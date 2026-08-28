@@ -31,7 +31,6 @@
 #include <common/license/backend_client.h>
 #include <common/license/license_updater.h>
 #include <common/license/usage_updater.h>
-#include <ranges>
 
 namespace vrm::cluster::coordinator {
 
