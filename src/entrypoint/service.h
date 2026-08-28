@@ -24,7 +24,6 @@
 #include <common/etcd/registry/service_id.h>
 #include <common/etcd/registry/service_registry.h>
 #include <common/etcd/service_discovery/service_maintainer.h>
-#include <common/license/license_watcher.h>
 #include <deduplicator/service.h>
 #include <entrypoint/directory.h>
 #include <entrypoint/garbage_collector.h>
@@ -53,7 +52,6 @@ private:
 
     multipart_state m_uploads;
     user::db m_users;
-    license_watcher m_license_watcher;
     std::atomic<std::size_t> m_size = 0ull;
     server m_server;
     service_registry m_service_registry;
