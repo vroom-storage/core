@@ -25,7 +25,7 @@ namespace vrm::cluster {
 
 class delete_objects : public command {
 public:
-    delete_objects(directory&, storage::global::global_data_view&, limits&);
+    delete_objects(directory&, storage::global::global_data_view&);
 
     static bool can_handle(const ep::http::request& req);
 

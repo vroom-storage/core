@@ -26,7 +26,7 @@ namespace vrm::cluster {
 
 class put_object : public command {
 public:
-    put_object(limits&, directory&, storage::global::global_data_view&,
+    put_object(directory&, storage::global::global_data_view&,
                deduplicator_interface&);
 
     static bool can_handle(const ep::http::request& req);
@@ -40,7 +40,6 @@ public:
 private:
     directory& m_dir;
     storage::global::global_data_view& m_gdv;
-    limits& m_limits;
     deduplicator_interface& m_dedupe;
 };
 

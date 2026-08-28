@@ -22,8 +22,7 @@ using namespace vrm::cluster::ep::http;
 namespace vrm::cluster {
 
 delete_objects::delete_objects(directory& dir,
-                               storage::global::global_data_view& gdv,
-                               limits& vrmlimits)
+                               storage::global::global_data_view& gdv)
     : m_dir(dir) {}
 
 bool delete_objects::can_handle(const request& req) {
