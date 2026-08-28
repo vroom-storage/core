@@ -28,7 +28,6 @@
 #include <entrypoint/directory.h>
 #include <entrypoint/garbage_collector.h>
 #include <entrypoint/http/request_factory.h>
-#include <entrypoint/limits.h>
 #include <storage/global/data_view.h>
 
 namespace vrm::cluster::ep {

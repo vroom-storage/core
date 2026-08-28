@@ -15,7 +15,6 @@
 add_library(entrypoint
             garbage_collector.cpp
             object.cpp
-            limits.cpp
             cors/parser.cpp
             cors/module.cpp
             handler.cpp
