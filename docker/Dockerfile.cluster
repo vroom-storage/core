@@ -9,6 +9,8 @@ RUN apt-get update && \
         liblmdb0    \
         ca-certificates   \
         libabsl20260107 \
+        opentelemetry-cpp \
+        libatomic1 \
         libicu78 \
         libcurl4t64 \
         adduser && \
