@@ -29,6 +29,8 @@ option(ENABLE_TSAN "Enable thread-sanitizer" OFF)
 option(ENABLE_ASAN "Enable address sanitizer" OFF)
 option(ENABLE_UBSAN "Enable undefined sanitizer" OFF)
 
+set(CMAKE_CXX_STANDARD 20)
+
 if(ENABLE_CCACHE)
     find_program(CCACHE_PROGRAM ccache)
     if(CCACHE_PROGRAM)
@@ -156,7 +158,6 @@ endif()
 #
 # Compile Options
 #
-set(CMAKE_CXX_STANDARD 20)
 add_compile_options(-Wall)
 
 #
