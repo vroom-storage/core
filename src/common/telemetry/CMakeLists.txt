@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+find_package(opentelemetry-cpp CONFIG REQUIRED)
+
 add_library(telemetry
             trace/trace.cpp
             trace/trace_asio.cpp
@@ -25,8 +27,9 @@ target_link_libraries(telemetry
                       project
                       magic_enum
                       Boost::log
-                      opentelemetry_exporter_otlp_grpc_log
-                      opentelemetry_exporter_otlp_grpc
-                      opentelemetry_exporter_otlp_grpc_metrics
-                      opentelemetry_exporter_ostream_span
-                      opentelemetry_exporter_ostream_metrics)
+                      opentelemetry-cpp::api
+                      opentelemetry-cpp::ostream_span_exporter
+                      opentelemetry-cpp::otlp_grpc_exporter
+                      opentelemetry-cpp::otlp_grpc_log_record_exporter
+                      opentelemetry-cpp::otlp_grpc_metrics_exporter
+                      opentelemetry-cpp::sdk)
