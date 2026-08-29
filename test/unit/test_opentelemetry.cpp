@@ -25,6 +25,8 @@
 
 namespace vrm::cluster::storage {
 
+namespace nostd = opentelemetry::nostd;
+
 BOOST_AUTO_TEST_SUITE(a_context)
 
 BOOST_AUTO_TEST_CASE(stores_and_retrieves_custom_value) {
@@ -33,8 +35,8 @@ BOOST_AUTO_TEST_CASE(stores_and_retrieves_custom_value) {
     context = context.SetValue("peer_port", static_cast<uint64_t>(11));
 
     auto peer_port = context.GetValue("peer_port");
-    BOOST_TEST(true == std::holds_alternative<uint64_t>(peer_port));
-    BOOST_TEST(11 == std::get<uint64_t>(peer_port));
+    BOOST_TEST(true == nostd::holds_alternative<uint64_t>(peer_port));
+    BOOST_TEST(11 == nostd::get<uint64_t>(peer_port));
 }
 
 BOOST_AUTO_TEST_CASE(is_accessible_after_creating_subspan) {
@@ -55,8 +57,8 @@ BOOST_AUTO_TEST_CASE(is_accessible_after_creating_subspan) {
     context = opentelemetry::trace::SetSpan(context, sub_span);
 
     auto peer_port = context.GetValue("peer_port");
-    BOOST_TEST(true == std::holds_alternative<uint64_t>(peer_port));
-    BOOST_TEST(11 == std::get<uint64_t>(peer_port));
+    BOOST_TEST(true == nostd::holds_alternative<uint64_t>(peer_port));
+    BOOST_TEST(11 == nostd::get<uint64_t>(peer_port));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
