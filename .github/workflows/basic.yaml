@@ -13,7 +13,7 @@ jobs:
             CC: clang
         runs-on: ubuntu-latest
         container:
-            image: ghcr.io/stjank/uh-build-container/build:v2
+            image: ghcr.io/vroom-storage/build-container/build:v4
 
         steps:
             - uses: actions/checkout@v4
