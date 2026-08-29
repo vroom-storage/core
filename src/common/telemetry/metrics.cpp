@@ -86,9 +86,9 @@ void initialize_metrics_exporter(const std::string& endpoint,
     auto exporter =
         otlp_exporter::OtlpGrpcMetricExporterFactory::Create(exporter_options);
 
-    metric_sdk::PeriodicExportingMetricReaderOptions otlp_options{
-        .export_interval_millis = std::chrono::milliseconds(interval),
-        .export_timeout_millis = std::chrono::milliseconds(500)};
+    metric_sdk::PeriodicExportingMetricReaderOptions otlp_options;
+    otlp_options.export_interval_millis = std::chrono::milliseconds(interval);
+    otlp_options.export_timeout_millis = std::chrono::milliseconds(500);
 
     reader = metric_sdk::PeriodicExportingMetricReaderFactory::Create(
         std::move(exporter), otlp_options);
