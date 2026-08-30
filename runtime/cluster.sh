@@ -326,8 +326,9 @@ _start_docker() {
         num_s="$(jq -r '.storages' <<< "$group")"
         for ((i = 0; i < num_s; i++)); do
             local sname="storage-${gid}-${i}"
+            local port=$((9311 + gid * 100 + i))
             _run_service "$sname" \
-                "/usr/local/bin/vrm-cluster --registry $registry storage" \
+                "/usr/local/bin/vrm-cluster --registry $registry storage --port $port" \
                 -e "VRM_STORAGE_GROUP_ID=$gid" \
                 -e "VRM_STORAGE_INSTANCE_ID=$i" \
                 -e "VRM_SERVICE_NAME=$sname"
