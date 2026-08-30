@@ -36,7 +36,7 @@ ch:
 pg:
   addr: database:5432
   user: postgres
-  password: uh
+  password: vrm
   database: postgres
 
   # TLS configuration. Uncomment to enable.
@@ -66,8 +66,8 @@ projects:
   # Other projects can be used to monitor your applications.
   # To monitor micro-services or multiple related services, use a single project.
   - id: 2
-    name: UltiHash
-    token: uh_secret_token
+    name: Vroom
+    token: vrm_secret_token
     pinned_attrs:
       - service
       - host_name

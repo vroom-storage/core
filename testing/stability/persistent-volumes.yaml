@@ -40,7 +40,7 @@ spec:
     driver: s3.csi.aws.com
     volumeHandle: s3-csi-driver-volume
     volumeAttributes:
-      bucketName: ultihash-stability-test-corpora
+      bucketName: vroom-stability-test-corpora
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

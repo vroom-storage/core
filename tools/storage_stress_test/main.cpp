@@ -24,7 +24,7 @@
 #include <random>
 #include <deque>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 struct params {
     std::string address;

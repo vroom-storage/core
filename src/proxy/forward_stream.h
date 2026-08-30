@@ -19,7 +19,7 @@
 #include <common/telemetry/log.h>
 #include <entrypoint/http/stream.h>
 
-namespace uh::cluster::proxy {
+namespace vrm::cluster::proxy {
 
 /**
  * Copy read data to additional socket.
@@ -54,4 +54,4 @@ private:
     mode m_mode = deleting;
 };
 
-} // namespace uh::cluster::proxy
+} // namespace vrm::cluster::proxy

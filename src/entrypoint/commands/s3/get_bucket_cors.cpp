@@ -16,9 +16,9 @@
 
 #include "entrypoint/http/string_body.h"
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 get_bucket_cors::get_bucket_cors(directory& dir)
     : m_dir(dir) {}
@@ -44,4 +44,4 @@ coro<response> get_bucket_cors::handle(request& req) {
 
 std::string get_bucket_cors::action_id() const { return "s3:GetBucketCORS"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

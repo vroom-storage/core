@@ -19,8 +19,8 @@
 #include <filesystem>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 std::string read_file(const std::filesystem::path& p);
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

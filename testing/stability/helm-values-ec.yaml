@@ -17,8 +17,8 @@ global:
   imagePullPolicy: Always
   imagePullSecrets:               
     - registry-credentials
-  ultihashSecret:
-    name: ultihash
+  vroomSecret:
+    name: vroom
     key: license
   logLevel: DEBUG
   telemetryExportInterval: 30000
@@ -121,7 +121,7 @@ storage:
       nodeSelector:
         workload-type: storage
         purpose: performance-and-stability-testing
-      mountPath: /var/lib/uh/storage
+      mountPath: /var/lib/vrm/storage
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -196,18 +196,18 @@ collector:
       value: "testing"
       effect: "NoSchedule"
   extraEnvs:
-  - name: UH_POD_IP
+  - name: VRM_POD_IP
     valueFrom:
       fieldRef:
         fieldPath: status.podIP
-  - name: UH_NODE_IP
+  - name: VRM_NODE_IP
     valueFrom:
       fieldRef:
         fieldPath: status.hostIP
-  - name: UH_EXPORTER_TOKEN
+  - name: VRM_EXPORTER_TOKEN
     valueFrom:
       secretKeyRef:
-        name: ultihash
+        name: vroom
         key: token
   presets:
     kubeletMetrics:              
@@ -217,7 +217,7 @@ collector:
       otlphttp/uptrace:
         endpoint: http://uptrace-backend.uptrace.svc.cluster.local:14318
         headers:
-          uptrace-dsn: http://${env:UH_EXPORTER_TOKEN}@uptrace-backend.uptrace.svc.cluster.local:14318
+          uptrace-dsn: http://${env:VRM_EXPORTER_TOKEN}@uptrace-backend.uptrace.svc.cluster.local:14318
     receivers:
       prometheus: null
       kubeletstats: null

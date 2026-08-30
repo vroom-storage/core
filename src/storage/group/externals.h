@@ -28,7 +28,7 @@
 
 #include <common/etcd/service_discovery/storage_index.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class group_state_manager {
 public:
@@ -101,4 +101,4 @@ private:
     subscriber m_subscriber;
 };
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

@@ -14,7 +14,7 @@
 
 #include "delete_access_key.h"
 
-namespace uh::cluster::ep::iam {
+namespace vrm::cluster::ep::iam {
 
 delete_access_key::delete_access_key(user::db& users)
     : m_users(users) {}
@@ -59,4 +59,4 @@ bool delete_access_key::can_handle(const ep::http::request& req) {
            req.query("Action").value_or("") == "DeleteAccessKey";
 }
 
-} // namespace uh::cluster::ep::iam
+} // namespace vrm::cluster::ep::iam

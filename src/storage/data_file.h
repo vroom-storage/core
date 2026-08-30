@@ -22,7 +22,7 @@
 #include <filesystem>
 #include <span>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class data_file {
 public:
@@ -90,4 +90,4 @@ private:
     std::filesystem::path m_path;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

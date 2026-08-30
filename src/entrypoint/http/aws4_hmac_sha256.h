@@ -20,7 +20,7 @@
 #include <entrypoint/user/db.h>
 #include <set>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 struct aws4_signature_info {
     std::string date;
@@ -42,4 +42,4 @@ public:
     create_from_url(stream& s, user::db& users, raw_request req);
 };
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

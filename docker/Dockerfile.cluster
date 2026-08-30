@@ -9,6 +9,8 @@ RUN apt-get update && \
         liblmdb0    \
         ca-certificates   \
         libabsl20260107 \
+        opentelemetry-cpp \
+        libatomic1 \
         libicu78 \
         libcurl4t64 \
         adduser && \
@@ -17,8 +19,8 @@ RUN apt-get update && \
 ARG BIN_PATH=build/bin
 COPY --chmod=755 ${BIN_PATH}/* /usr/local/bin/
 
-RUN addgroup --system --gid 5000 uh && \
-    adduser --system --uid 5000 --gid 5000 uh && \
-    install --directory --mode=0755 --owner=uh --group=uh /var/lib/uh
+RUN addgroup --system --gid 5000 vrm && \
+    adduser --system --uid 5000 --gid 5000 vrm && \
+    install --directory --mode=0755 --owner=vrm --group=vrm /var/lib/vrm
 
-USER uh
+USER vrm

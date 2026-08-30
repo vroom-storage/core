@@ -17,7 +17,7 @@
 #include "common/utils/xml_parser.h"
 #include <boost/test/unit_test.hpp>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 namespace {
 

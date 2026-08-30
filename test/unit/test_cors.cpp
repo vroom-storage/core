@@ -18,8 +18,8 @@
 
 #include <entrypoint/cors/parser.h>
 
-using namespace uh::cluster::ep;
-using namespace uh::cluster::ep::cors;
+using namespace vrm::cluster::ep;
+using namespace vrm::cluster::ep::cors;
 
 const char* SAMPLE_CORS = R"(
 <CORSConfiguration>

@@ -19,7 +19,7 @@
 #include "common/utils/error.h"
 #include "response.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace beast = boost::beast;
 
@@ -45,4 +45,4 @@ ep::http::response make_response(const command_exception& e) noexcept;
 ep::http::response error_response(ep::http::status status, std::string code,
                                   std::string reason) noexcept;
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

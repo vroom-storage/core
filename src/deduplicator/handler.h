@@ -20,7 +20,7 @@
 #include "common/utils/protocol_handler.h"
 #include "deduplicator/interfaces/local_deduplicator.h"
 
-namespace uh::cluster::deduplicator {
+namespace vrm::cluster::deduplicator {
 
 class handler : public protocol_handler {
 
@@ -35,4 +35,4 @@ private:
     local_deduplicator& m_local_dedupe;
 };
 
-} // namespace uh::cluster::deduplicator
+} // namespace vrm::cluster::deduplicator

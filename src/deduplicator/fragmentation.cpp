@@ -16,7 +16,7 @@
 
 #include <optional>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 fragmentation::fragmentation()
     : m_effective_size(0ull),
@@ -206,4 +206,4 @@ void fragmentation::handle_rejected_fragments(const address& addr,
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

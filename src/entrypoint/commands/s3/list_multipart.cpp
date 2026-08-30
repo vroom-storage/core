@@ -18,9 +18,9 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -80,4 +80,4 @@ std::string list_multipart::action_id() const {
     return "s3:ListMultipartUploads";
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

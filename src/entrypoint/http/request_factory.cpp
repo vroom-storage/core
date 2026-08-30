@@ -21,7 +21,7 @@
 using namespace boost;
 using namespace boost::asio;
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 request_factory::request_factory(user::db& users)
     : m_users(users) {}
@@ -55,4 +55,4 @@ request_factory::create(stream& s, boost::asio::ip::tcp::endpoint peer) {
     co_return co_await no_auth::create(s, std::move(req));
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

@@ -16,9 +16,9 @@
 #include "common/telemetry/metrics.h"
 #include "entrypoint/http/command_exception.h"
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 abort_multipart::abort_multipart(multipart_state& uploads,
                                  storage::global::global_data_view& gdv)
@@ -61,4 +61,4 @@ std::string abort_multipart::action_id() const {
     return "s3:AbortMultipartUpload";
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

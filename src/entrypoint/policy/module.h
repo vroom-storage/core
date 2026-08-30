@@ -23,7 +23,7 @@
 #include "policy.h"
 #include <filesystem>
 
-namespace uh::cluster::ep::policy {
+namespace vrm::cluster::ep::policy {
 
 class module {
 public:
@@ -43,4 +43,4 @@ private:
     std::list<policy> m_policies;
 };
 
-} // namespace uh::cluster::ep::policy
+} // namespace vrm::cluster::ep::policy

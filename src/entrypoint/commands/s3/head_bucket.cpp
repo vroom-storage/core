@@ -17,9 +17,9 @@
 
 #include "entrypoint/http/command_exception.h"
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 head_bucket::head_bucket(directory& dir)
     : m_dir(dir) {}
@@ -40,4 +40,4 @@ coro<response> head_bucket::handle(request& req) {
 
 std::string head_bucket::action_id() const { return "s3:HeadBucket"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

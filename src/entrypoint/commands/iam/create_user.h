@@ -19,7 +19,7 @@
 #include <entrypoint/commands/command.h>
 #include <entrypoint/user/db.h>
 
-namespace uh::cluster::ep::iam {
+namespace vrm::cluster::ep::iam {
 
 class create_user : public command {
 public:
@@ -34,4 +34,4 @@ private:
     user::db& m_users;
 };
 
-} // namespace uh::cluster::ep::iam
+} // namespace vrm::cluster::ep::iam

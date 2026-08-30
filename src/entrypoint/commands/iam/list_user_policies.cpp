@@ -14,7 +14,7 @@
 
 #include "list_user_policies.h"
 
-namespace uh::cluster::ep::iam {
+namespace vrm::cluster::ep::iam {
 
 list_user_policies::list_user_policies(user::db& users)
     : m_users(users) {}
@@ -52,4 +52,4 @@ bool list_user_policies::can_handle(const ep::http::request& req) {
            req.query("Action").value_or("") == "ListUserPolicies";
 }
 
-} // namespace uh::cluster::ep::iam
+} // namespace vrm::cluster::ep::iam

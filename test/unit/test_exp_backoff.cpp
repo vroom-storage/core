@@ -26,7 +26,7 @@
 
 #include <fakeit.hpp>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 using namespace fakeit;
 using namespace boost::asio;
 

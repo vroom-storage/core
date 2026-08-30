@@ -16,7 +16,7 @@
 
 #include <common/utils/random.h>
 
-namespace uh::cluster::ep::iam {
+namespace vrm::cluster::ep::iam {
 
 create_access_key::create_access_key(user::db& users)
     : m_users(users) {}
@@ -60,4 +60,4 @@ bool create_access_key::can_handle(const ep::http::request& req) {
            req.query("Action").value_or("") == "CreateAccessKey";
 }
 
-} // namespace uh::cluster::ep::iam
+} // namespace vrm::cluster::ep::iam

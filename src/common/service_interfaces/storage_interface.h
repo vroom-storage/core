@@ -22,7 +22,7 @@
 #include <common/types/scoped_buffer.h>
 #include <common/utils/common.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 struct storage_interface {
     virtual coro<allocation_t>
     allocate(std::size_t size, std::size_t alignment = DEFAULT_PAGE_SIZE) = 0;
@@ -54,4 +54,4 @@ struct storage_interface {
     static constexpr role service_role = STORAGE_SERVICE;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

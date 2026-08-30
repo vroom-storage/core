@@ -22,11 +22,11 @@
 #include <entrypoint/commands/command.h>
 #include <entrypoint/http/request.h>
 
-using namespace uh::cluster;
-using namespace uh::cluster::test;
-using namespace uh::cluster::ep;
-using namespace uh::cluster::ep::http;
-using namespace uh::cluster::ep::policy;
+using namespace vrm::cluster;
+using namespace vrm::cluster::test;
+using namespace vrm::cluster::ep;
+using namespace vrm::cluster::ep::http;
+using namespace vrm::cluster::ep::policy;
 
 namespace {
 
@@ -160,12 +160,12 @@ BOOST_AUTO_TEST_CASE(default_variables) {
     auto command = mock_command("s3:GetObject");
     variables vars(request, command);
 
-    BOOST_CHECK_EQUAL(vars.get("uh:ActionId").value_or(""), "s3:GetObject");
-    BOOST_CHECK_EQUAL(vars.get("uh:actionid").value_or(""), "s3:GetObject");
+    BOOST_CHECK_EQUAL(vars.get("vrm:ActionId").value_or(""), "s3:GetObject");
+    BOOST_CHECK_EQUAL(vars.get("vrm:actionid").value_or(""), "s3:GetObject");
 
-    BOOST_CHECK_EQUAL(vars.get("uh:ResourceArn").value_or(""),
+    BOOST_CHECK_EQUAL(vars.get("vrm:ResourceArn").value_or(""),
                       "arn:aws:s3:::bucket/object");
-    BOOST_CHECK_EQUAL(vars.get("uh:resourcearn").value_or(""),
+    BOOST_CHECK_EQUAL(vars.get("vrm:resourcearn").value_or(""),
                       "arn:aws:s3:::bucket/object");
 
     BOOST_CHECK_EQUAL(vars.get("aws:PrincipalArn").value_or(""), user_arn);

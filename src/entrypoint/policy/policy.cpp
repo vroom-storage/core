@@ -14,7 +14,7 @@
 
 #include "policy.h"
 
-namespace uh::cluster::ep::policy {
+namespace vrm::cluster::ep::policy {
 
 policy::policy(std::string id, std::list<matcher> matchers,
                ep::policy::effect effect)
@@ -32,4 +32,4 @@ std::optional<ep::policy::effect> policy::check(const variables& vars) const {
     return m_effect;
 }
 
-} // namespace uh::cluster::ep::policy
+} // namespace vrm::cluster::ep::policy

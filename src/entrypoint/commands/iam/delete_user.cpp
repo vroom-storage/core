@@ -14,7 +14,7 @@
 
 #include "delete_user.h"
 
-namespace uh::cluster::ep::iam {
+namespace vrm::cluster::ep::iam {
 
 delete_user::delete_user(user::db& users)
     : m_users(users) {}
@@ -44,4 +44,4 @@ bool delete_user::can_handle(const ep::http::request& req) {
            req.query("Action").value_or("") == "DeleteUser";
 }
 
-} // namespace uh::cluster::ep::iam
+} // namespace vrm::cluster::ep::iam

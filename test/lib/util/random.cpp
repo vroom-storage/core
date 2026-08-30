@@ -16,7 +16,7 @@
 
 #include <common/utils/random.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 shared_buffer<char> random_buffer(std::size_t length,
                                   const std::string& chars) {
@@ -26,4 +26,4 @@ shared_buffer<char> random_buffer(std::size_t length,
     return buffer;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -14,7 +14,7 @@
 
 #include "local_deduplicator.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -146,4 +146,4 @@ coro<dedupe_response> local_deduplicator::deduplicate(std::string_view data) {
     co_return result;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

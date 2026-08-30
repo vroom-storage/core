@@ -14,7 +14,7 @@
 
 #include "garbage_collector.h"
 
-namespace uh::cluster::ep {
+namespace vrm::cluster::ep {
 
 garbage_collector::garbage_collector(boost::asio::io_context& ioc,
                                      directory& dir,
@@ -50,4 +50,4 @@ coro<void> garbage_collector::collect() {
     }
 }
 
-} // namespace uh::cluster::ep
+} // namespace vrm::cluster::ep

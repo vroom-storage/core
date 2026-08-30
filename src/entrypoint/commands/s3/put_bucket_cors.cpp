@@ -14,9 +14,9 @@
 
 #include "put_bucket_cors.h"
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 put_bucket_cors::put_bucket_cors(directory& dir)
     : m_dir(dir) {}
@@ -35,4 +35,4 @@ coro<response> put_bucket_cors::handle(request& req) {
 
 std::string put_bucket_cors::action_id() const { return "s3:PutBucketCORS"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

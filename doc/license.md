@@ -1,15 +1,15 @@
 # Overview
 
-This document describes the format of the UH license string.
+This document describes the format of the VRM license string.
 
 
 # Format Description
 
-A UH license string consists of two fields: the license information and a
+A VRM license string consists of two fields: the license information and a
 digital signature based on ED25519. Both fields are separated by a colon:
 
 ```
-uh-license-format ::= uh-license-data ':' uh-license-signature
+vrm-license-format ::= vrm-license-data ':' vrm-license-signature
 ```
 
 License data string is a colon-separated string of following fields:
@@ -17,7 +17,7 @@ License data string is a colon-separated string of following fields:
 - maximum data referenced by directory service in GB
 
 ```
-uh-license-data ::= customer-id ':' directory-data-gb
+vrm-license-data ::= customer-id ':' directory-data-gb
 customer-id ::= STRING
 directory-data-gb ::= NUMBER
 ```
@@ -28,6 +28,6 @@ algorithm using a signature private key. The public key used for verification
 is embedded in the application.
 
 ```
-uh-license-signature ::= base_64(ed25519-signature)
+vrm-license-signature ::= base_64(ed25519-signature)
 ed25519-signature ::= BINARY
 ```

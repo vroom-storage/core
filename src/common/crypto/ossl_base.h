@@ -18,8 +18,8 @@
 
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 [[noreturn]] void throw_from_error(const std::string& prefix);
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

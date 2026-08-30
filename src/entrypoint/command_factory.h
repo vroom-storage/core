@@ -20,30 +20,26 @@
 #include "common/service_interfaces/deduplicator_interface.h"
 #include "config.h"
 #include "directory.h"
-#include "limits.h"
 #include "multipart_state.h"
 #include "storage/global/data_view.h"
 
 #include <entrypoint/user/db.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct command_factory {
     command_factory(deduplicator_interface& dedupe, directory& dir,
                     multipart_state& uploads,
-                    storage::global::global_data_view& gdv, limits& uhlimits,
-                    ep::user::db& users, license_watcher& watcher)
+                    storage::global::global_data_view& gdv,
+                    ep::user::db& users)
         : m_dedupe(dedupe),
           m_directory(dir),
           m_uploads(uploads),
           m_gdv(gdv),
-          m_limits(uhlimits),
-          m_users(users),
-          m_license_watcher(watcher) {}
+          m_users(users) {}
 
     coro<std::unique_ptr<command>> create(ep::http::request& req);
 
-    [[nodiscard]] limits& get_limits() const;
     [[nodiscard]] directory& get_directory() const;
 
 private:
@@ -55,9 +51,7 @@ private:
     directory& m_directory;
     multipart_state& m_uploads;
     storage::global::global_data_view& m_gdv;
-    limits& m_limits;
     ep::user::db& m_users;
-    license_watcher& m_license_watcher;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

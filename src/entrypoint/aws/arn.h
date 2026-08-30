@@ -19,7 +19,7 @@
 #include <string>
 #include <vector>
 
-namespace uh::cluster::ep::aws {
+namespace vrm::cluster::ep::aws {
 
 class arn {
 public:
@@ -41,4 +41,4 @@ private:
     std::vector<std::string> m_fields;
 };
 
-} // namespace uh::cluster::ep::aws
+} // namespace vrm::cluster::ep::aws

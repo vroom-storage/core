@@ -16,12 +16,12 @@
 #include <common/project/project.h>
 #include <CLI/CLI.hpp>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
 void print_vcsid() {
-    const auto& info = uh::project_info::get();
+    const auto& info = vrm::project_info::get();
     std::cout << info.project_name << " " << info.project_version << " (" << __DATE__
               << " " << __TIME__ << ")\n"
               << info.project_repository << " (" << info.project_vcsid << ")\n";
@@ -31,7 +31,7 @@ void print_vcsid() {
 log::config
 make_log_config(const service_config& cfg,
                 const boost::log::trivial::severity_level& log_level,
-                const uh::cluster::role service_role) {
+                const vrm::cluster::role service_role) {
     log::config lc;
 
     if (cfg.telemetry_url.empty()) {
@@ -71,7 +71,7 @@ void register_service(CLI::App& app, service_config& cfg) {
                      "path to working directory ")
         ->default_val(cfg.working_dir)
         ->check(CLI::ExistingDirectory)
-        ->envname(UH_WORKING_DIR);
+        ->envname(VRM_WORKING_DIR);
 
     app.add_option("--telemetry-endpoint,-e", cfg.telemetry_url,
                    "URL to opentelemetry endpoint")
@@ -222,20 +222,6 @@ CLI::App* sub_coordinator(CLI::App& app, coordinator_config& cfg) {
         ->default_val(cfg.num_threads);
 
     rv->add_option(
-          "--license,-L",
-          [&cfg](CLI::results_t res) {
-              try {
-                  cfg.license = license::create(res[0]);
-              } catch (const std::exception& e) {
-                  return false;
-              }
-              return true;
-          },
-          "UltiHash license json-string")
-        ->envname(ENV_CFG_LICENSE)
-        ->default_val(cfg.license);
-
-    rv->add_option(
           "--storage-groups,-G",
           [&cfg](CLI::results_t res) {
               try {
@@ -245,21 +231,9 @@ CLI::App* sub_coordinator(CLI::App& app, coordinator_config& cfg) {
               }
               return true;
           },
-          "UltiHash storage group configuration")
+          "Vroom storage group configuration")
         ->envname(ENV_CFG_STORAGE_GROUPS)
         ->default_val(cfg.storage_groups);
-
-    rv->add_option("--backend-host", cfg.backend_config.backend_host,
-                   "backend host")
-        ->envname(ENV_CFG_BACKEND_HOST);
-    rv->add_option("--customer-id", cfg.backend_config.customer_id,
-                   "customer ID required to connect to the backend")
-        ->envname(ENV_CFG_CUSTOMER_ID);
-    rv->add_option("--access-token", cfg.backend_config.access_token,
-                   "access token required to connect to the backend")
-        ->envname(ENV_CFG_ACCESS_TOKEN);
-
-    configure(*rv, cfg.database_config);
 
     return rv;
 }
@@ -287,7 +261,7 @@ CLI::App* sub_proxy(CLI::App& app, proxy::config& cfg) {
 } // namespace
 
 std::optional<config> read_config(int argc, char** argv) {
-    CLI::App app{"UltiHash Object Storage Cluster"};
+    CLI::App app{"Vroom Object Storage Cluster"};
     argv = app.ensure_utf8(argv);
 
     config rv;
@@ -336,14 +310,6 @@ std::optional<config> read_config(int argc, char** argv) {
         rv.role = ENTRYPOINT_SERVICE;
     } else if (sub_rk->parsed()) {
         rv.role = COORDINATOR_SERVICE;
-        auto& cfg = rv.coordinator;
-
-        if (!cfg.license && !cfg.backend_config) {
-            LOG_INFO() << "license: " << cfg.license;
-            LOG_INFO() << "backend_host: " << cfg.backend_config.backend_host;
-            throw std::invalid_argument("Either a test license or backend "
-                                        "configuration must be provided.");
-        }
     } else if (sub_px->parsed()) {
         rv.role = PROXY_SERVICE;
     } else {
@@ -396,10 +362,10 @@ void configure(CLI::App& app, boost::log::trivial::severity_level& log_level) {
     app.add_option("--log-level,-l", log_level,
                    "severity level, i.e. DEBUG, INFO, WARN, ERROR, or FATAL")
         ->transform([](const std::string& severity_str) {
-            return std::to_string(uh::log::severity_from_string(severity_str));
+            return std::to_string(vrm::log::severity_from_string(severity_str));
         })
-        ->default_val(uh::log::to_string(log_level))
+        ->default_val(vrm::log::to_string(log_level))
         ->envname(ENV_CFG_LOG_LEVEL);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

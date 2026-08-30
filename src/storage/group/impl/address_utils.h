@@ -19,7 +19,7 @@
 #include <common/etcd/service_discovery/storage_index.h>
 #include <common/service_interfaces/storage_interface.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct storage_address_info {
     storage_address addr;
@@ -54,4 +54,4 @@ perform_for_address(
         addr_map);
 }
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

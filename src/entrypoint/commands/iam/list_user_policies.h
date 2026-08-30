@@ -19,7 +19,7 @@
 #include <entrypoint/commands/command.h>
 #include <entrypoint/user/db.h>
 
-namespace uh::cluster::ep::iam {
+namespace vrm::cluster::ep::iam {
 
 class list_user_policies : public command {
 public:
@@ -34,4 +34,4 @@ private:
     user::db& m_users;
 };
 
-} // namespace uh::cluster::ep::iam
+} // namespace vrm::cluster::ep::iam

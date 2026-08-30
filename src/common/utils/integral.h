@@ -18,7 +18,7 @@
 
 #include <type_traits>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename T> constexpr T div_ceil(T x, T y) {
     static_assert(std::is_integral<T>::value,
@@ -44,4 +44,4 @@ template <typename T> constexpr T align_up_next(T x, T y) {
     return (div_floor(x, y) + 1) * y;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

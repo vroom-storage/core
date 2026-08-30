@@ -18,7 +18,7 @@
 
 #include <common/utils/integral.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_AUTO_TEST_SUITE(a_integral_utility)
 
@@ -69,4 +69,4 @@ BOOST_AUTO_TEST_CASE(aligns_up_next) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

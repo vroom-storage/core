@@ -23,7 +23,7 @@
 #include <common/service_interfaces/service_factory.h>
 #include <common/telemetry/log.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename service_interface>
 class hostports_observer : public subscriber_observer {
@@ -146,4 +146,4 @@ private:
     std::atomic<std::size_t> m_client_count{0};
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

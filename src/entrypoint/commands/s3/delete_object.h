@@ -17,15 +17,14 @@
 #pragma once
 
 #include "entrypoint/directory.h"
-#include "entrypoint/limits.h"
 #include "storage/global/data_view.h"
 #include <entrypoint/commands/command.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class delete_object : public command {
 public:
-    delete_object(directory&, storage::global::global_data_view&, limits&);
+    delete_object(directory&, storage::global::global_data_view&);
 
     static bool can_handle(const ep::http::request& req);
 
@@ -37,4 +36,4 @@ private:
     directory& m_dir;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

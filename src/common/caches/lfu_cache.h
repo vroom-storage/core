@@ -20,7 +20,7 @@
 #include <list>
 #include <optional>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename Key, typename Value> class lfu_cache {
 
@@ -145,4 +145,4 @@ private:
     std::list<freq_bucket> m_freq_buckets;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

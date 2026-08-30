@@ -20,7 +20,7 @@
 #include <ostream>
 #include <span>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename T = char, bool shared = false> class scoped_buffer {
     struct info {
@@ -124,12 +124,12 @@ template <typename T = char> using shared_buffer = scoped_buffer<T, true>;
 
 template <typename T = char> using unique_buffer = scoped_buffer<T, false>;
 
-} // namespace uh::cluster
+} // namespace vrm::cluster
 
 template <typename T, bool shared>
 inline std::ostream&
 operator<<(std::ostream& os,
-           const uh::cluster::scoped_buffer<T, shared>& value) {
+           const vrm::cluster::scoped_buffer<T, shared>& value) {
     for (auto i = 0ul; i < value.m_size; ++i) {
         os << value.m_data_ptr[i];
     }

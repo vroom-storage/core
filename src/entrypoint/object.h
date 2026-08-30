@@ -21,7 +21,7 @@
 
 #include <string>
 
-namespace uh::cluster::ep {
+namespace vrm::cluster::ep {
 
 enum class object_state {
     normal, deleted, collected
@@ -44,4 +44,4 @@ struct object {
 object_state to_object_state(const std::string& s);
 std::string to_string(object_state os);
 
-} // namespace uh::cluster::ep
+} // namespace vrm::cluster::ep

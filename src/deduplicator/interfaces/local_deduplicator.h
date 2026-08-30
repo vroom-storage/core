@@ -24,7 +24,7 @@
 #include <storage/global/cache.h>
 #include <storage/global/data_view.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct local_deduplicator : public deduplicator_interface {
 
@@ -40,4 +40,4 @@ private:
     fragment_set m_fragment_set;
     worker_pool m_dedupe_workers;
 };
-} // namespace uh::cluster
+} // namespace vrm::cluster

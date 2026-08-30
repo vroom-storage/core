@@ -21,7 +21,7 @@
 
 #include <atomic>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class storage_index : public service_observer<storage_interface> {
 public:
@@ -63,4 +63,4 @@ private:
     std::vector<std::atomic<std::shared_ptr<storage_interface>>> m_services;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

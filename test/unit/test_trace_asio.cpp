@@ -22,7 +22,7 @@
 
 #include <thread>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 struct fixture {
     fixture()

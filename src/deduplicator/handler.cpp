@@ -17,7 +17,7 @@
 #include <common/utils/common.h>
 #include <utility>
 
-namespace uh::cluster::deduplicator {
+namespace vrm::cluster::deduplicator {
 
 handler::handler(local_deduplicator& local_dedupe)
     : m_local_dedupe(local_dedupe) {}
@@ -99,4 +99,4 @@ coro<void> handler::handle_request(const messenger::header& hdr, messenger& m) {
     }
 }
 
-} // namespace uh::cluster::deduplicator
+} // namespace vrm::cluster::deduplicator

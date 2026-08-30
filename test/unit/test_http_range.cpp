@@ -18,7 +18,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 BOOST_AUTO_TEST_CASE(parse_range_header_start_end) {
 
@@ -53,4 +53,4 @@ BOOST_AUTO_TEST_CASE(parse_range_header_negative_offset) {
     BOOST_CHECK_EQUAL(spec.ranges.front().length(), 100);
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

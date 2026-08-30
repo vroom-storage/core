@@ -21,7 +21,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_AUTO_TEST_CASE(subfrag) {
     fragment f{0, 100};
@@ -105,4 +105,4 @@ BOOST_AUTO_TEST_CASE(range) {
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

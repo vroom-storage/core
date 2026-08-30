@@ -19,9 +19,9 @@
 #include <entrypoint/http/command_exception.h>
 #include <entrypoint/utils.h>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 multipart::multipart(deduplicator_interface& dedupe,
                      storage::global::global_data_view& gdv,
@@ -88,4 +88,4 @@ coro<response> multipart::handle(request& req) {
 
 std::string multipart::action_id() const { return "s3:UploadPart"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -21,7 +21,7 @@
 #include <boost/test/unit_test.hpp>
 
 
-namespace uh::cluster::proxy::cache::disk {
+namespace vrm::cluster::proxy::cache::disk {
 
 BOOST_FIXTURE_TEST_SUITE(a_disk_cache_manager, dedupe_fixture)
 
@@ -87,4 +87,4 @@ BOOST_AUTO_TEST_CASE(eviction_test) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // namespace uh::cluster::proxy::cache::disk
+} // namespace vrm::cluster::proxy::cache::disk

@@ -19,7 +19,7 @@
 #include <boost/asio.hpp>
 #include <filesystem>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 namespace asio = boost::asio;
 
 struct config {

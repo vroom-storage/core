@@ -15,22 +15,21 @@
 #include "service.h"
 #include "handler.h"
 
+#include <common/project/project.h>
 #include <common/telemetry/metrics.h>
 #include <deduplicator/interfaces/dedupe_array.h>
 #include <deduplicator/interfaces/noop_deduplicator.h>
-#include <format>
 #include <magic_enum/magic_enum.hpp>
 
-namespace uh::cluster::ep {
+namespace vrm::cluster::ep {
 
 namespace {
 
 static const auto LIMITS_UPDATE_INTERVAL = std::chrono::seconds(5);
 
-coro<void> update_limits(uh::cluster::directory& directory, limits& l) {
+coro<void> update_limits(vrm::cluster::directory& directory, std::atomic<std::size_t>& size) {
     boost::asio::steady_timer timer(co_await boost::asio::this_coro::executor);
-    std::atomic<std::size_t> size = co_await directory.data_size();
-    l.set_storage_size(size);
+    size = co_await directory.data_size();
 
     auto state = co_await boost::asio::this_coro::cancellation_state;
     while (state.cancelled() == boost::asio::cancellation_type::none) {
@@ -38,7 +37,6 @@ coro<void> update_limits(uh::cluster::directory& directory, limits& l) {
         co_await timer.async_wait(boost::asio::use_awaitable);
 
         size = co_await directory.data_size();
-        l.set_storage_size(size);
     }
 }
 
@@ -80,12 +78,10 @@ service::service(boost::asio::io_context& ioc, const service_config& sc,
       m_directory(ioc, m_config.database),
       m_uploads(ioc, m_config.database),
       m_users(ioc, m_config.database),
-      m_license_watcher(m_etcd),
-      m_limits(m_license_watcher),
       m_server(m_config.server,
                std::make_unique<handler>(
                    command_factory(*m_dedupe, m_directory, m_uploads, m_gdv,
-                                   m_limits, m_users, m_license_watcher),
+                                   m_users),
                    http::request_factory(m_users),
                    std::make_unique<policy::module>(m_directory),
                    std::make_unique<cors::module>(cors::config{}, m_directory)),
@@ -96,16 +92,16 @@ service::service(boost::asio::io_context& ioc, const service_config& sc,
 
       m_gc(ioc, m_directory, m_gdv),
       m_task{"update storage metrics", ioc,
-             update_limits(m_directory, m_limits).start_trace()} {
+             update_limits(m_directory, m_size).start_trace()} {
 
     metric<entrypoint_original_data_volume_gauge, byte, int64_t>::
         register_gauge_callback(
-            [this]() { return m_limits.get_storage_size(); },
+            [this]() { return m_size.load(); },
             [this]() {
-                auto label =
-                    m_license_watcher.get_license()->to_key_value_iterable();
-                label.push_back({"service_id", std::to_string(m_service_id)});
-                return label;
+                return std::vector<std::pair<std::string, std::string>> {
+                    { "service_id", std::to_string(m_service_id) },
+                    { "version", project_info::get().project_version }
+                };
             });
 }
 
@@ -114,4 +110,4 @@ service::~service() {
            int64_t>::remove_gauge_callback();
 }
 
-} // namespace uh::cluster::ep
+} // namespace vrm::cluster::ep

@@ -24,7 +24,7 @@
 #include <iostream>
 #include <random>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 struct config {
     std::string host = "127.0.0.1";
@@ -39,7 +39,7 @@ struct config {
 };
 
 std::optional<::config> read_config(int argc, char** argv) {
-    CLI::App app("UH deduplicator stress test");
+    CLI::App app("VRM deduplicator stress test");
     argv = app.ensure_utf8(argv);
 
     app.description(

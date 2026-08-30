@@ -33,7 +33,7 @@
 #define MAX_DATA_STORE_SIZE_BYTES (4 * MEBI_BYTE)
 #define MAX_FILE_SIZE_BYTES (128 * KIBI_BYTE)
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 #define CHECK_EQUAL_FROM_OFFSET(read, offset, org)                             \
     BOOST_CHECK_EQUAL_COLLECTIONS((read).begin() + offset,                     \
@@ -741,4 +741,4 @@ BOOST_AUTO_TEST_CASE(alignment) {
 
 BOOST_AUTO_TEST_SUITE_END()
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

@@ -17,7 +17,7 @@
 #include <entrypoint/aws/arn.h>
 #include <entrypoint/http/response.h>
 
-namespace uh::cluster::ep::iam {
+namespace vrm::cluster::ep::iam {
 
 create_user::create_user(user::db& users)
     : m_users(users) {}
@@ -55,4 +55,4 @@ bool create_user::can_handle(const ep::http::request& req) {
            req.query("Action").value_or("") == "CreateUser";
 }
 
-} // namespace uh::cluster::ep::iam
+} // namespace vrm::cluster::ep::iam

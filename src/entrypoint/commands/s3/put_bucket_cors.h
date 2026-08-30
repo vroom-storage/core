@@ -19,7 +19,7 @@
 #include <entrypoint/commands/command.h>
 #include <entrypoint/directory.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class put_bucket_cors : public command {
 public:
@@ -35,4 +35,4 @@ private:
     directory& m_dir;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

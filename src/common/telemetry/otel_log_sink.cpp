@@ -51,7 +51,7 @@ convert_severity(boost::log::trivial::severity_level level) noexcept {
     }
 }
 
-namespace uh::log {
+namespace vrm::log {
 
 constexpr boost::posix_time::ptime epoch_time(boost::gregorian::date(1970, 1,
                                                                      1));
@@ -89,4 +89,4 @@ void otel_log_sink::consume(const boost::log::record_view& record) {
     }
 }
 
-} // namespace uh::log
+} // namespace vrm::log

@@ -21,7 +21,7 @@
 #include <entrypoint/commands/command.h>
 #include <entrypoint/directory.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class get_object : public command {
 public:
@@ -38,4 +38,4 @@ private:
     storage::global::global_data_view& m_storage;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

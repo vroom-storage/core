@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(uh_mock_storage mock_data_store.cpp)
-target_link_libraries(uh_mock_storage types storage telemetry utils)
-target_include_directories(uh_mock_storage PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+add_library(vrm_mock_storage mock_data_store.cpp)
+target_link_libraries(vrm_mock_storage types storage telemetry utils)
+target_include_directories(vrm_mock_storage PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../..)
 
-add_library(uh_mock_global_data mock_data_view.cpp)
-target_link_libraries(uh_mock_global_data uh_mock_storage)
+add_library(vrm_mock_global_data mock_data_view.cpp)
+target_link_libraries(vrm_mock_global_data vrm_mock_storage)

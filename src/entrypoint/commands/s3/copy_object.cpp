@@ -19,15 +19,13 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/url/url.hpp>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
-copy_object::copy_object(directory& dir, storage::global::global_data_view& gdv,
-                         limits& limits)
+copy_object::copy_object(directory& dir, storage::global::global_data_view& gdv)
     : m_dir(dir),
-      m_gdv(gdv),
-      m_limits(limits) {}
+      m_gdv(gdv) {}
 
 bool copy_object::can_handle(const request& req) {
     return req.method() == verb::put && req.bucket() != RESERVED_BUCKET_NAME &&
@@ -65,8 +63,6 @@ coro<response> copy_object::handle(request& req) {
                                 "specified did not hold.");
     }
 
-    m_limits.check_storage_size(obj->size);
-
     auto rejects = co_await m_gdv.link(*obj->addr);
     if (!rejects.empty()) {
         LOG_ERROR() << req.peer()
@@ -93,4 +89,4 @@ coro<response> copy_object::handle(request& req) {
 
 std::string copy_object::action_id() const { return "s3:CopyObject"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

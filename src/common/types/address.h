@@ -21,7 +21,7 @@
 #include <cstdint>
 #include <zpp_bits.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <FragmentPointer T = uint128_t> struct address_t {
 
@@ -161,4 +161,4 @@ inline address to_address(std::span<char> data) {
     return addr;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

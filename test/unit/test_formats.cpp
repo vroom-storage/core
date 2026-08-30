@@ -25,7 +25,7 @@
 #include <iomanip>
 #include <sstream>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 using namespace std::chrono_literals;
 namespace bdata = boost::unit_test::data;
 

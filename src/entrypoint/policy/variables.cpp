@@ -21,7 +21,7 @@
 #include <charconv>
 #include <stdexcept>
 
-namespace uh::cluster::ep::policy {
+namespace vrm::cluster::ep::policy {
 
 namespace {
 
@@ -34,11 +34,11 @@ namespace {
 value_provider make_value_provider() {
     value_provider vp;
 
-    vp.add("uh:ActionId", [](const http::request& r, const command& c) {
+    vp.add("vrm:ActionId", [](const http::request& r, const command& c) {
         return c.action_id();
     });
 
-    vp.add("uh:ResourceArn",
+    vp.add("vrm:ResourceArn",
            [](const http::request& r, const command& c) { return r.arn(); });
 
     vp.add("aws:PrincipalArn", [](const http::request& r, const command& c) {
@@ -273,4 +273,4 @@ int64_t to_int(std::string_view s) {
     return rv;
 }
 
-} // namespace uh::cluster::ep::policy
+} // namespace vrm::cluster::ep::policy

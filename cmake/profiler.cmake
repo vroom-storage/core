@@ -20,13 +20,13 @@ CPMAddPackage(
     GITHUB_REPOSITORY
     google/benchmark
     VERSION
-    1.9.4
+    1.9.5
     OPTIONS
     "BENCHMARK_ENABLE_TESTING OFF;BENCHMARK_ENABLE_WERROR OFF"
     CPM_ARGS
     "TIMEOUT 300")
 
-function(uh_add_profiler name)
+function(vrm_add_profiler name)
     # Parse Arguments
     set(options "")
     set(multi_value_args PRIVATE PUBLIC)

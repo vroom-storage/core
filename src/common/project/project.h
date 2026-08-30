@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace uh {
+namespace vrm {
 
 struct project_info {
     std::string project_name;

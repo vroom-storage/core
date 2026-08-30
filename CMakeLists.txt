@@ -14,7 +14,7 @@
 
 cmake_minimum_required(VERSION 3.22.0 FATAL_ERROR)
 
-project(uh-cluster VERSION 1.7.0)
+project(vrm-cluster VERSION 1.0.0)
 
 #
 # Option handling
@@ -29,12 +29,14 @@ option(ENABLE_TSAN "Enable thread-sanitizer" OFF)
 option(ENABLE_ASAN "Enable address sanitizer" OFF)
 option(ENABLE_UBSAN "Enable undefined sanitizer" OFF)
 
+set(CMAKE_CXX_STANDARD 20)
+
 if(ENABLE_CCACHE)
     find_program(CCACHE_PROGRAM ccache)
     if(CCACHE_PROGRAM)
         # https://ccache.dev/manual/4.9.1.html#_precompiled_headers
         set(CMAKE_C_COMPILER_LAUNCHER
-            "${CCACHE_PROGRAM};namespace=uh-core;sloppiness=pch_defines,time_macros"
+            "${CCACHE_PROGRAM};namespace=vrm-core;sloppiness=pch_defines,time_macros"
         )
         set(CMAKE_CXX_COMPILER_LAUNCHER ${CMAKE_C_COMPILER_LAUNCHER})
     endif()
@@ -156,7 +158,6 @@ endif()
 #
 # Compile Options
 #
-set(CMAKE_CXX_STANDARD 20)
 add_compile_options(-Wall)
 
 #
@@ -186,9 +187,9 @@ set(CMAKE_BUILD_RPATH_USE_ORIGIN On)
 #
 message(STATUS "Building ${PROJECT_NAME} ${PROJECT_VERSION}...")
 
-set(UH_BINARY_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/bin)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UH_BINARY_OUTPUT_DIR})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${UH_BINARY_OUTPUT_DIR})
+set(VRM_BINARY_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${VRM_BINARY_OUTPUT_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${VRM_BINARY_OUTPUT_DIR})
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)

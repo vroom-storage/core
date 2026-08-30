@@ -16,7 +16,7 @@
 
 using namespace boost;
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 namespace {
 
@@ -53,4 +53,4 @@ std::size_t raw_body::buffer_size() const {
     return m_s.buffer_size();
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

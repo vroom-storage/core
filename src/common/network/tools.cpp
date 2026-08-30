@@ -18,7 +18,7 @@
 
 namespace asio = boost::asio;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 std::list<asio::ip::tcp::endpoint> resolve(const std::string& address,
                                            uint16_t port) {
@@ -29,4 +29,4 @@ std::list<asio::ip::tcp::endpoint> resolve(const std::string& address,
     return std::list<asio::ip::tcp::endpoint>(results.cbegin(), results.cend());
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster
