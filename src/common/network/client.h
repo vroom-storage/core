@@ -22,7 +22,7 @@
 #include "tools.h"
 #include <boost/asio.hpp>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class client {
 public:
@@ -55,4 +55,4 @@ private:
     pool<messenger> m_pool;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

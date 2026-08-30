@@ -20,7 +20,7 @@
 #include <common/utils/strings.h>
 #include <unordered_set>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 ec_data_view::ec_data_view(boost::asio::io_context& ioc, etcd_manager& etcd,
                            std::size_t group_id, group_config config,
                            std::size_t service_connections)
@@ -62,6 +62,11 @@ coro<address> ec_data_view::write(std::span<const char> data,
     if (leader < 0 or leader >= (candidate_observer::id_t)m_config.storages)
         throw std::runtime_error("Invalid leader id: " +
                                  std::to_string(leader));
+
+    if (storages.at(leader) == nullptr)
+    {
+        throw std::runtime_error("Leader storage is not available");
+    }
 
     auto num_stripes = div_ceil(data.size(), m_stripe_size);
     auto allocation = co_await storages.at(leader)->allocate(
@@ -506,4 +511,4 @@ coro<std::size_t> ec_data_view::unlink(const address& addr) {
     co_return freed_bytes;
 }
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

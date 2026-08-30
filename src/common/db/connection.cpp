@@ -18,7 +18,7 @@
 #include <boost/asio/posix/descriptor.hpp>
 #include <boost/asio/use_awaitable.hpp>
 
-namespace uh::cluster::db {
+namespace vrm::cluster::db {
 
 namespace {
 
@@ -197,4 +197,4 @@ void connection::append_args(std::size_t n, std::vector<const char*>& values,
     format.push_back(0);
 }
 
-} // namespace uh::cluster::db
+} // namespace vrm::cluster::db

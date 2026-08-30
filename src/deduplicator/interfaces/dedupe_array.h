@@ -21,7 +21,7 @@
 #include <common/etcd/utils.h>
 #include <common/service_interfaces/deduplicator_interface.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class dedupe_array : public deduplicator_interface {
 public:
@@ -36,4 +36,4 @@ private:
     service_maintainer<deduplicator_interface> m_dedupe_maintainer;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -18,7 +18,7 @@
 
 #include <utility>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename fini> class guard {
 public:
@@ -106,4 +106,4 @@ value_guard<value, fini> make_value_guard(value v, fini f) {
     return value_guard<value, fini>(std::move(v), std::move(f));
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

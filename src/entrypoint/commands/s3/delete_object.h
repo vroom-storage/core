@@ -21,7 +21,7 @@
 #include "storage/global/data_view.h"
 #include <entrypoint/commands/command.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class delete_object : public command {
 public:
@@ -37,4 +37,4 @@ private:
     directory& m_dir;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

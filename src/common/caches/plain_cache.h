@@ -19,7 +19,7 @@
 #include <functional>
 #include <zpp_bits.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class plain_cache {
     std::vector<char> m_memory;
@@ -52,4 +52,4 @@ public:
     ~plain_cache() { flush(); }
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

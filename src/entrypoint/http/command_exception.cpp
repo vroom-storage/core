@@ -18,9 +18,9 @@
 #include <common/telemetry/metrics.h>
 #include <entrypoint/utils.h>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 command_exception::command_exception()
     : command_exception(status::internal_server_error, "InternalError",
@@ -111,4 +111,4 @@ command_exception::command_exception(const error::type& e) {
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

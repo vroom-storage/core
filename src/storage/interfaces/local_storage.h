@@ -21,7 +21,7 @@
 #include "storage/default_data_store.h"
 #include <span>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct local_storage : public storage_interface {
 
@@ -128,4 +128,4 @@ private:
     std::unique_ptr<default_data_store> m_data_store;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

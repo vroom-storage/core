@@ -19,7 +19,7 @@
 #include "entrypoint/multipart_state.h"
 #include <entrypoint/commands/command.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class list_multipart : public command {
 public:
@@ -35,4 +35,4 @@ private:
     multipart_state& m_uploads;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

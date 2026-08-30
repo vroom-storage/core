@@ -23,7 +23,7 @@
 
 #include <map>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct upload_info {
     struct part {
@@ -121,4 +121,4 @@ private:
     static constexpr auto DEFAULT_TIMEOUT = 300;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

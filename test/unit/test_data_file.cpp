@@ -21,7 +21,7 @@
 
 #include <util/temp_directory.h>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 static std::vector<char> WRITE_BUFFER = std::vector<char>(4 * KIBI_BYTE, 0);
 

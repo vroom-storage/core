@@ -18,7 +18,7 @@
 
 #include <filesystem>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 // ---------------------------------------------------------------------
 
@@ -35,4 +35,4 @@ private:
 
 // ---------------------------------------------------------------------
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

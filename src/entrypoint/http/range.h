@@ -21,7 +21,7 @@
 #include <list>
 #include <string>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 struct range_spec {
     enum unit_t { bytes };
@@ -58,4 +58,4 @@ range_spec::range parse_range_spec(std::string_view header, std::size_t max);
  */
 address apply_range(address addr, const range_spec& spec);
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

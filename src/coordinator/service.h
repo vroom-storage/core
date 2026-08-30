@@ -33,7 +33,7 @@
 #include <common/license/usage_updater.h>
 #include <ranges>
 
-namespace uh::cluster::coordinator {
+namespace vrm::cluster::coordinator {
 
 class service {
 public:
@@ -43,7 +43,7 @@ public:
           m_usage{ioc, cc.database_config},
           m_license_updater{[&]() {
               if (cc.license) {
-                  LOG_INFO() << "using license from UH_LICENSE";
+                  LOG_INFO() << "using license from VRM_LICENSE";
                   return std::make_optional<license_updater>(
                       ioc, m_etcd,
                       pseudo_backend_client(cc.license.to_string()));
@@ -104,4 +104,4 @@ private:
     std::optional<license_updater> m_license_updater;
     std::optional<usage_updater> m_usage_updater;
 };
-} // namespace uh::cluster::coordinator
+} // namespace vrm::cluster::coordinator

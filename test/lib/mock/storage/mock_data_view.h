@@ -20,7 +20,7 @@
 
 #include "mock_data_store.h"
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class mock_data_view : public storage::data_view {
 public:
@@ -41,4 +41,4 @@ private:
     mock_data_store& m_storage;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

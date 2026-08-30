@@ -21,7 +21,7 @@
 #include <iomanip>
 #include <stdexcept>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 std::string imf_fixdate(const utc_time& ts) {
     std::stringstream ss;
@@ -182,12 +182,12 @@ std::chrono::hours read_timezone(std::string_view sv) {
 
 } // namespace detail
 
-} // namespace uh::cluster
+} // namespace vrm::cluster
 
 namespace std {
 
-ostream& operator<<(ostream& out, const uh::cluster::utc_time& t) {
-    out << uh::cluster::iso8601_date(t);
+ostream& operator<<(ostream& out, const vrm::cluster::utc_time& t) {
+    out << vrm::cluster::iso8601_date(t);
     return out;
 }
 

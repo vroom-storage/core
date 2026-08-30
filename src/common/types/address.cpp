@@ -18,7 +18,7 @@
 
 #include <format>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <> std::string fragment_t<pointer>::to_string() const {
     return std::format("[group {}, pointer {:016x}, size {:x}]",
@@ -30,4 +30,4 @@ template <> std::string fragment_t<storage_pointer>::to_string() const {
     return std::format("[pointer {:016x}, size {:x}]", pointer, size);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

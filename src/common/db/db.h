@@ -20,10 +20,10 @@
 #include "config.h"
 #include "connection.h"
 
-namespace uh::cluster::db {
+namespace vrm::cluster::db {
 
 /**
- * Create a connection factory that can be passed to `uh::cluster::pool`.
+ * Create a connection factory that can be passed to `vrm::cluster::pool`.
  */
 inline auto connection_factory(boost::asio::io_context& ioc, const config& cfg,
                                const config::database& db_cfg) {
@@ -41,4 +41,4 @@ inline auto connection_factory(boost::asio::io_context& ioc, const config& cfg,
     };
 }
 
-} // namespace uh::cluster::db
+} // namespace vrm::cluster::db

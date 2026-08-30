@@ -20,11 +20,11 @@ add_subdirectory(lib)
 add_subdirectory(benchmark)
 
 configure_file(test_config.h.in ${CMAKE_CURRENT_BINARY_DIR}/test_config.h @ONLY)
-add_library(uh_test_config INTERFACE)
-target_include_directories(uh_test_config INTERFACE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(uh_test_config INTERFACE magic_enum)
+add_library(vrm_test_config INTERFACE)
+target_include_directories(vrm_test_config INTERFACE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(vrm_test_config INTERFACE magic_enum)
 
-function(uh_add_test name)
+function(vrm_add_test name)
     # Parse Arguments
     set(options "")
     set(one_value_args MODE)
@@ -42,8 +42,8 @@ function(uh_add_test name)
         target_compile_definitions(${target_name} PRIVATE "-D${MODE_STRING}")
     endif()
     target_link_libraries(${target_name}
-        PRIVATE Boost::unit_test_framework uh_test_util
-                uh_test_config ${ARGS_PRIVATE}
+        PRIVATE Boost::unit_test_framework vrm_test_util
+                vrm_test_config ${ARGS_PRIVATE}
         PUBLIC ${ARGS_PUBLIC})
 
     # execute_process(

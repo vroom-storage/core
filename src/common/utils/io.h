@@ -19,7 +19,7 @@
 #include <filesystem>
 #include <span>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 /**
  * Read up to `buffer.size()` bytes from file descriptor `fd` and return the
@@ -63,4 +63,4 @@ std::filesystem::path operator+(const std::filesystem::path& p, std::string s);
  */
 int open_file(const std::filesystem::path& path);
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

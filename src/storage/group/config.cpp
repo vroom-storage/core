@@ -16,7 +16,7 @@
 
 using nlohmann::ordered_json;
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 void from_json(const ordered_json& j, group_config& config) {
     j.at("id").get_to(config.id);
@@ -79,4 +79,4 @@ std::string group_configs::to_string() const {
     return j.dump();
 }
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

@@ -20,7 +20,7 @@
 #include <magic_enum/magic_enum.hpp>
 #include <string>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class service_registry {
 
@@ -35,4 +35,4 @@ private:
     std::string m_key;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

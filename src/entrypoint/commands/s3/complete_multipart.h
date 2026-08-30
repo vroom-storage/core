@@ -22,7 +22,7 @@
 #include "storage/global/data_view.h"
 #include <entrypoint/commands/command.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class complete_multipart : public command {
 public:
@@ -41,4 +41,4 @@ private:
     limits& m_limits;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

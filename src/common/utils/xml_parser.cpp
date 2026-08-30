@@ -16,7 +16,7 @@
 
 #include <boost/iostreams/stream.hpp>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 bool xml_parser::parse(std::string_view body) {
 
     bool flag;
@@ -42,4 +42,4 @@ xml_parser::get_nodes(pt::ptree::path_type&& path) {
     enumerate(m_tree, path, paths);
     return paths;
 }
-} // namespace uh::cluster
+} // namespace vrm::cluster

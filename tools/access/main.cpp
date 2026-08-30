@@ -22,7 +22,7 @@
 
 #include <ranges>
 
-using namespace uh::cluster;
+using namespace vrm::cluster;
 
 struct config {
     enum class command {
@@ -37,7 +37,7 @@ struct config {
         info
     };
 
-    uh::cluster::db::config database;
+    vrm::cluster::db::config database;
 
     command cmd = command::list;
 
@@ -94,13 +94,13 @@ struct config {
 };
 
 std::optional<::config> read_config(int argc, char** argv) {
-    CLI::App app("UH user database control");
+    CLI::App app("VRM user database control");
     argv = app.ensure_utf8(argv);
 
     ::config rv;
 
-    uh::cluster::configure(app, rv.database);
-    uh::cluster::configure(app, rv.log_level);
+    vrm::cluster::configure(app, rv.database);
+    vrm::cluster::configure(app, rv.log_level);
 
     auto* sub_add = app.add_subcommand("user-add", "add user to database");
     sub_add->add_option("username", rv.add_user.username, "user name");
@@ -171,7 +171,7 @@ std::optional<::config> read_config(int argc, char** argv) {
         return {};
     }
 
-    uh::log::set_level(rv.log_level);
+    vrm::log::set_level(rv.log_level);
     if (sub_add->parsed()) {
         rv.cmd = ::config::command::add_user;
     } else if (sub_add_key->parsed()) {
@@ -195,10 +195,10 @@ std::optional<::config> read_config(int argc, char** argv) {
     return rv;
 }
 
-uh::cluster::coro<void> add_user(ep::user::db& db, const ::config& cfg) {
+vrm::cluster::coro<void> add_user(ep::user::db& db, const ::config& cfg) {
     std::string arn = cfg.add_user.arn
                           ? *cfg.add_user.arn
-                          : "arn:uh:iam::0:users/" + cfg.add_user.username;
+                          : "arn:vrm:iam::0:users/" + cfg.add_user.username;
 
     if (cfg.add_user.ignore_existing) {
         try {
@@ -215,7 +215,7 @@ uh::cluster::coro<void> add_user(ep::user::db& db, const ::config& cfg) {
     }
 }
 
-uh::cluster::coro<void> add_key(ep::user::db& db, const ::config& cfg) {
+vrm::cluster::coro<void> add_key(ep::user::db& db, const ::config& cfg) {
 
     if (cfg.add_key.ignore_existing) {
         try {
@@ -230,21 +230,21 @@ uh::cluster::coro<void> add_key(ep::user::db& db, const ::config& cfg) {
                         cfg.add_key.ttl);
 }
 
-uh::cluster::coro<void> remove_entry(ep::user::db& db, const ::config& cfg) {
+vrm::cluster::coro<void> remove_entry(ep::user::db& db, const ::config& cfg) {
     co_await db.remove_key(cfg.remove.access_id);
 }
 
-uh::cluster::coro<void> policy_get(ep::user::db& db, const ::config& cfg) {
+vrm::cluster::coro<void> policy_get(ep::user::db& db, const ::config& cfg) {
     auto policy =
         co_await db.policy(cfg.policy_get.username, cfg.policy_get.name);
     std::cout << policy << "\n";
 }
 
-uh::cluster::coro<void> policy_del(ep::user::db& db, const ::config& cfg) {
+vrm::cluster::coro<void> policy_del(ep::user::db& db, const ::config& cfg) {
     co_await db.remove_policy(cfg.policy_del.username, cfg.policy_del.name);
 }
 
-uh::cluster::coro<void> policy_put(ep::user::db& db, const ::config& cfg) {
+vrm::cluster::coro<void> policy_put(ep::user::db& db, const ::config& cfg) {
     if (cfg.policy_put.ignore_existing) {
         try {
             co_await db.policy(cfg.policy_put.username, cfg.policy_put.name);
@@ -257,7 +257,7 @@ uh::cluster::coro<void> policy_put(ep::user::db& db, const ::config& cfg) {
                        cfg.policy_put.policy);
 }
 
-uh::cluster::coro<void> list_entries(ep::user::db& db, const ::config& cfg) {
+vrm::cluster::coro<void> list_entries(ep::user::db& db, const ::config& cfg) {
     auto entries = co_await db.entries();
 
     for (const auto& entry : entries) {
@@ -275,11 +275,11 @@ uh::cluster::coro<void> list_entries(ep::user::db& db, const ::config& cfg) {
     }
 }
 
-uh::cluster::coro<void> cleanup(ep::user::db& db, const ::config& cfg) {
+vrm::cluster::coro<void> cleanup(ep::user::db& db, const ::config& cfg) {
     co_await db.remove_expired(cfg.cleanup.expire_before);
 }
 
-uh::cluster::coro<void> info(ep::user::db& db, const ::config& cfg) {
+vrm::cluster::coro<void> info(ep::user::db& db, const ::config& cfg) {
     auto user = co_await db.find(cfg.info.username);
 
     std::cout << "id:\t" << user.id << "\n"

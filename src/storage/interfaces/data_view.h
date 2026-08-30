@@ -20,7 +20,7 @@
 #include <common/coroutines/coro.h>
 #include "common/types/scoped_buffer.h"
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class data_view {
 
@@ -42,4 +42,4 @@ public:
     virtual ~data_view() noexcept = default;
 };
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

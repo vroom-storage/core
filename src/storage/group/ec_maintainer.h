@@ -25,7 +25,7 @@
 #include <storage/group/repairer.h>
 #include <storage/interfaces/local_storage.h>
 
-namespace uh::cluster::storage {
+namespace vrm::cluster::storage {
 
 class ec_maintainer {
 public:
@@ -365,4 +365,4 @@ private:
     std::optional<subscriber> m_subscriber;
 };
 
-} // namespace uh::cluster::storage
+} // namespace vrm::cluster::storage

@@ -21,7 +21,7 @@
 #include "storage/global/data_view.h"
 #include <entrypoint/commands/command.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class abort_multipart : public command {
 public:
@@ -38,4 +38,4 @@ private:
     storage::global::global_data_view& m_gdv;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -22,7 +22,7 @@
 #include <common/utils/strings.h>
 #include <storage/group/state.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct remote_storage : public storage_interface {
 
@@ -122,4 +122,4 @@ private:
     client m_storage_service;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

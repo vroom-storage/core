@@ -29,7 +29,7 @@
 #include <entrypoint/http/stream.h>
 #include <storage/interfaces/data_view.h>
 
-namespace uh::cluster::proxy::cache::disk {
+namespace vrm::cluster::proxy::cache::disk {
 
 class disk_sink {
 public:
@@ -121,4 +121,4 @@ private:
     std::size_t m_frag_offset{0};
 };
 
-} // namespace uh::cluster::proxy::cache::disk
+} // namespace vrm::cluster::proxy::cache::disk

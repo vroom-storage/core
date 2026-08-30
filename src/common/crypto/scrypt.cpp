@@ -20,7 +20,7 @@
 #include <openssl/core_names.h>
 #include <openssl/params.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -70,4 +70,4 @@ std::string scrypt::derive(std::string password, std::string salt) {
     return rv;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

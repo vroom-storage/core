@@ -24,7 +24,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_AUTO_TEST_CASE(basic_promise) {
 
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(basic_promise) {
             promise<int> p;
             auto f = p.get_future();
             boost::asio::post(
-                ioc, [p = std::make_shared<uh::cluster::promise<int>>(
+                ioc, [p = std::make_shared<vrm::cluster::promise<int>>(
                           std::move(p))]() mutable { p->set_value(1); });
             BOOST_TEST((co_await f.get()) == 1);
         },
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(promise_exception) {
             promise<int> p;
             auto f = p.get_future();
             boost::asio::post(
-                ioc, [p = std::make_shared<uh::cluster::promise<int>>(
+                ioc, [p = std::make_shared<vrm::cluster::promise<int>>(
                           std::move(p))]() mutable {
                     try {
                         throw std::exception{};
@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE(stress_test) {
                 promise<int> p;
                 auto f = p.get_future();
                 boost::asio::post(
-                    ioc, [p = std::make_shared<uh::cluster::promise<int>>(
+                    ioc, [p = std::make_shared<vrm::cluster::promise<int>>(
                               std::move(p)),
                           i]() mutable { p->set_value(i); });
                 if ((co_await f.get()) != i) {
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE(stress_test_asio_thread_pool) {
                 promise<int> p;
                 auto f = p.get_future();
                 boost::asio::post(
-                    workers, [p = std::make_shared<uh::cluster::promise<int>>(
+                    workers, [p = std::make_shared<vrm::cluster::promise<int>>(
                                   std::move(p)),
                               i]() mutable { p->set_value(int(i)); });
                 if ((co_await f.get()) != i) {
@@ -226,4 +226,4 @@ BOOST_AUTO_TEST_CASE(strand_test) {
     }
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

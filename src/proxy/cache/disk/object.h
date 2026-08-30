@@ -19,7 +19,7 @@
 #include <common/types/address.h>
 #include <string>
 
-namespace uh::cluster::proxy::cache::disk {
+namespace vrm::cluster::proxy::cache::disk {
 
 struct object_metadata {
     std::string path;
@@ -30,11 +30,11 @@ struct object_metadata {
     }
 };
 
-} // namespace uh::cluster::proxy::cache::disk
+} // namespace vrm::cluster::proxy::cache::disk
 
-template <> struct std::hash<uh::cluster::proxy::cache::disk::object_metadata> {
+template <> struct std::hash<vrm::cluster::proxy::cache::disk::object_metadata> {
     size_t operator()(
-        const uh::cluster::proxy::cache::disk::object_metadata& key) const {
+        const vrm::cluster::proxy::cache::disk::object_metadata& key) const {
         std::size_t seed = 0;
 
         auto hash_combine = [](std::size_t& seed, const auto& v) {
@@ -49,7 +49,7 @@ template <> struct std::hash<uh::cluster::proxy::cache::disk::object_metadata> {
     }
 };
 
-namespace uh::cluster::proxy::cache::disk {
+namespace vrm::cluster::proxy::cache::disk {
 
 struct object_handle {
     object_handle() = default;
@@ -71,4 +71,4 @@ private:
     std::size_t m_header_size;
 };
 
-} // namespace uh::cluster::proxy::cache::disk
+} // namespace vrm::cluster::proxy::cache::disk

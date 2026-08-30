@@ -16,7 +16,7 @@
 
 #include <ranges>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 coro<storage_address> messenger::recv_address(const header& message_header) {
     storage_address addr(
@@ -155,4 +155,4 @@ coro<void> messenger::send_dedupe_response(const dedupe_response& dedupe_resp) {
     co_await send_buffers(SUCCESS);
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

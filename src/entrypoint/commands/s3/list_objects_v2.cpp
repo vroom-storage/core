@@ -21,9 +21,9 @@
 #include "entrypoint/http/command_exception.h"
 #include "entrypoint/utils.h"
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -156,4 +156,4 @@ coro<response> list_objects_v2::handle(request& req) {
 
 std::string list_objects_v2::action_id() const { return "s3:ListObjectsV2"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

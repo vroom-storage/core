@@ -23,7 +23,7 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include <sstream>
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 response::response()
     : response(http::status::ok) {}
@@ -44,14 +44,14 @@ void response::set_body(std::unique_ptr<http::body>&& body) noexcept {
 }
 
 void response::set_original_size(std::size_t original_size) {
-    m_res.set("uh-original-size", std::to_string(original_size));
-    m_res.set("uh-original-size-mb",
+    m_res.set("vrm-original-size", std::to_string(original_size));
+    m_res.set("vrm-original-size-mb",
               std::to_string(static_cast<double>(original_size) / MEBI_BYTE));
 }
 
 void response::set_effective_size(std::size_t effective_size) {
-    m_res.set("uh-effective-size", std::to_string(effective_size));
-    m_res.set("uh-effective-size-mb",
+    m_res.set("vrm-effective-size", std::to_string(effective_size));
+    m_res.set("vrm-effective-size-mb",
               std::to_string(static_cast<double>(effective_size) / MEBI_BYTE));
 }
 
@@ -133,7 +133,7 @@ struct visitor {
 coro<void> write(stream& s, response&& res, const std::string& id) {
     auto& body = res.body();
 
-    res.set("Server", "UltiHash");
+    res.set("Server", "Vroom");
     res.set("x-amz-request-id", id);
 
     res.set("Date", imf_fixdate(std::chrono::system_clock::now()));
@@ -169,4 +169,4 @@ coro<void> write(stream& s, response&& res, const std::string& id) {
     }
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

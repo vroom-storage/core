@@ -18,10 +18,10 @@
 #include <entrypoint/formats.h>
 #include <entrypoint/http/command_exception.h>
 
-using namespace uh::cluster::ep::http;
-using uh::cluster::ep::object;
+using namespace vrm::cluster::ep::http;
+using vrm::cluster::ep::object;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 namespace {
 
@@ -113,4 +113,4 @@ coro<dedupe_response> deduplicate(deduplicator_interface& dd,
     co_return rv;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

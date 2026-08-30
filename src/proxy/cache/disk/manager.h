@@ -30,7 +30,7 @@
 
 #include <iostream>
 
-namespace uh::cluster::proxy::cache::disk {
+namespace vrm::cluster::proxy::cache::disk {
 
 class manager {
 public:
@@ -145,4 +145,4 @@ private:
     }
 };
 
-} // namespace uh::cluster::proxy::cache::disk
+} // namespace vrm::cluster::proxy::cache::disk

@@ -16,7 +16,7 @@
 
 #include <fstream>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 std::string read_file(const std::filesystem::path& p) {
     constexpr std::size_t read_size = 4096;
@@ -36,4 +36,4 @@ std::string read_file(const std::filesystem::path& p) {
     return rv;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

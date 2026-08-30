@@ -26,7 +26,7 @@
 #include <vector>
 
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 class stream
 {
@@ -108,4 +108,4 @@ private:
     std::size_t m_put_ptr;
 };
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

@@ -19,9 +19,9 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/url/url.hpp>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 copy_object::copy_object(directory& dir, storage::global::global_data_view& gdv,
                          limits& limits)
@@ -93,4 +93,4 @@ coro<response> copy_object::handle(request& req) {
 
 std::string copy_object::action_id() const { return "s3:CopyObject"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -20,7 +20,7 @@
 
 #include <zpp_bits.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename T>
 concept FragmentPointer =
@@ -57,26 +57,26 @@ template <FragmentPointer T = uint128_t> struct fragment_t {
     using serialize = zpp::bits::members<2>;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster
 
-template <uh::cluster::FragmentPointer T>
+template <vrm::cluster::FragmentPointer T>
 std::ostream& operator<<(std::ostream& os,
-                         const uh::cluster::fragment_t<T>& frag) {
+                         const vrm::cluster::fragment_t<T>& frag) {
     return os << frag.to_string();
 }
 
-template <uh::cluster::FragmentPointer T>
-struct std::formatter<uh::cluster::fragment_t<T>>
+template <vrm::cluster::FragmentPointer T>
+struct std::formatter<vrm::cluster::fragment_t<T>>
     : std::formatter<std::string> {
-    auto format(const uh::cluster::fragment_t<T>& frag,
+    auto format(const vrm::cluster::fragment_t<T>& frag,
                 std::format_context& ctx) {
         return std::formatter<std::string>::format(frag.to_string(), ctx);
     }
 };
 
-template <> struct std::hash<uh::cluster::fragment_t<uint128_t>> {
+template <> struct std::hash<vrm::cluster::fragment_t<uint128_t>> {
     std::size_t
-    operator()(const uh::cluster::fragment_t<uint128_t>& obj) const noexcept {
+    operator()(const vrm::cluster::fragment_t<uint128_t>& obj) const noexcept {
         uint64_t high = static_cast<uint64_t>(obj.pointer >> 64);
         uint64_t low = static_cast<uint64_t>(obj.pointer);
 
@@ -95,9 +95,9 @@ template <> struct std::hash<uh::cluster::fragment_t<uint128_t>> {
     }
 };
 
-template <> struct std::hash<uh::cluster::fragment_t<uint64_t>> {
+template <> struct std::hash<vrm::cluster::fragment_t<uint64_t>> {
     std::size_t
-    operator()(const uh::cluster::fragment_t<uint64_t>& obj) const noexcept {
+    operator()(const vrm::cluster::fragment_t<uint64_t>& obj) const noexcept {
         std::size_t hash_pointer = std::hash<uint64_t>{}(obj.pointer);
         std::size_t hash_size = std::hash<std::size_t>{}(obj.size);
 

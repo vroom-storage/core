@@ -24,7 +24,7 @@
 #include <shared_mutex>
 #include <utility>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class fragment_set {
 
@@ -157,4 +157,4 @@ private:
         m_lfu_headers;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

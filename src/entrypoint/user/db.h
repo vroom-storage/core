@@ -21,11 +21,11 @@
 #include <common/db/db.h>
 #include "user.h"
 
-namespace uh::cluster::ep::user {
+namespace vrm::cluster::ep::user {
 
 class db {
 public:
-    db(boost::asio::io_context& ioc, const uh::cluster::db::config& cfg);
+    db(boost::asio::io_context& ioc, const vrm::cluster::db::config& cfg);
 
     /**
      * Find a user using the access_key.
@@ -139,4 +139,4 @@ private:
     scrypt m_crypt;
 };
 
-} // namespace uh::cluster::ep::user
+} // namespace vrm::cluster::ep::user

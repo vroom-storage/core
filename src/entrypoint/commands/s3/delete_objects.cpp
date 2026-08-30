@@ -17,13 +17,13 @@
 #include "common/utils/xml_parser.h"
 #include "entrypoint/http/command_exception.h"
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 delete_objects::delete_objects(directory& dir,
                                storage::global::global_data_view& gdv,
-                               limits& uhlimits)
+                               limits& vrmlimits)
     : m_dir(dir) {}
 
 bool delete_objects::can_handle(const request& req) {
@@ -120,4 +120,4 @@ coro<response> delete_objects::handle(request& req) {
 
 std::string delete_objects::action_id() const { return "s3:DeleteObjects"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

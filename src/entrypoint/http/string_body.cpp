@@ -14,7 +14,7 @@
 
 #include "string_body.h"
 
-namespace uh::cluster::ep::http {
+namespace vrm::cluster::ep::http {
 
 string_body::string_body(std::string&& body)
     : m_body(std::move(body)),
@@ -39,4 +39,4 @@ std::size_t string_body::buffer_size() const {
     return m_body.size();
 }
 
-} // namespace uh::cluster::ep::http
+} // namespace vrm::cluster::ep::http

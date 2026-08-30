@@ -19,7 +19,7 @@
 #include <common/network/server.h>
 #include <storage/global/config.h>
 
-namespace uh::cluster::proxy {
+namespace vrm::cluster::proxy {
 
 struct config {
     server_config server = {.port = 8088, .bind_address = "0.0.0.0"};
@@ -34,4 +34,4 @@ struct config {
     global_data_view_config gdv;
 };
 
-} // namespace uh::cluster::proxy
+} // namespace vrm::cluster::proxy

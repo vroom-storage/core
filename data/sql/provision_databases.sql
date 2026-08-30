@@ -15,17 +15,17 @@
 --
 -- Create PostgreSQL directory database
 --
-CREATE DATABASE uh_directory;
-GRANT ALL ON DATABASE uh_directory TO SESSION_USER;
+CREATE DATABASE vrm_directory;
+GRANT ALL ON DATABASE vrm_directory TO SESSION_USER;
 
 --
 -- Create PostgreSQL multipart database
 --
-CREATE DATABASE uh_multipart;
-GRANT ALL ON DATABASE uh_multipart TO SESSION_USER;
+CREATE DATABASE vrm_multipart;
+GRANT ALL ON DATABASE vrm_multipart TO SESSION_USER;
 
 --
 -- Create PostgreSQL user database
 --
-CREATE DATABASE uh_user;
-GRANT ALL ON DATABASE uh_user TO SESSION_USER;
+CREATE DATABASE vrm_user;
+GRANT ALL ON DATABASE vrm_user TO SESSION_USER;

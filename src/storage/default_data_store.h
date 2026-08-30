@@ -24,7 +24,7 @@
 #include <filesystem>
 #include <mutex>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class default_data_store : public data_store {
 
@@ -167,4 +167,4 @@ private:
     reference_counter m_refcounter;
 };
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

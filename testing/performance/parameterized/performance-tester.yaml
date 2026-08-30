@@ -33,7 +33,7 @@ spec:
       imagePullPolicy: Always
       env:
         - name: TEST_TYPE
-          value: UH_RANDOM_DATA
+          value: VRM_RANDOM_DATA
         - name: S3_ENDPOINT_URL
           value: "http://${RELEASE_NAME}-entrypoint:8080"
         - name: S3_DESTINATION_BUCKET

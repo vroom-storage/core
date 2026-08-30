@@ -2,7 +2,7 @@ services:
   database:
     image: bitnami/postgresql:16.3.0
     environment:
-      POSTGRESQL_PASSWORD: uh
+      POSTGRESQL_PASSWORD: vrm
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -20,7 +20,7 @@ services:
       - database
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: uh
+      POSTGRES_PASSWORD: vrm
       SUPER_USER_USERNAME: root
       SUPER_USER_ACCESS_KEY_ID: FANCY-ROOT-KEY
       SUPER_USER_SECRET_KEY: SECRET
@@ -28,27 +28,27 @@ services:
       DB_USER: postgres
       DB_HOST: database
       DB_PORT: 5432
-      PGPASSWORD: uh
+      PGPASSWORD: vrm
 
   coordinator:
     image: registry.ultihash.io/stable/core:1.6.0
     depends_on:
       - etcd
     environment:
-      UH_LICENSE: ${UH_LICENSE_STRING}
-      UH_LOG_LEVEL: INFO
-      UH_OTEL_ENDPOINT: http://otel:4317
-      UH_TRACES_ENABLED: 1
-      UH_DB_HOSTPORT: database:5432
-      UH_DB_USER: postgres
-      UH_DB_PASS: uh
-      UH_STORAGE_GROUPS: '[{"id":0,"type":"ROUND_ROBIN","storages":1}]'
+      VRM_LICENSE: ${VRM_LICENSE_STRING}
+      VRM_LOG_LEVEL: INFO
+      VRM_OTEL_ENDPOINT: http://otel:4317
+      VRM_TRACES_ENABLED: 1
+      VRM_DB_HOSTPORT: database:5432
+      VRM_DB_USER: postgres
+      VRM_DB_PASS: vrm
+      VRM_STORAGE_GROUPS: '[{"id":0,"type":"ROUND_ROBIN","storages":1}]'
     command:
       [
         "/usr/bin/bash",
         "-l",
         "-c",
-        "sleep 10 && uh-cluster --registry etcd:2379 coordinator",
+        "sleep 10 && vrm-cluster --registry etcd:2379 coordinator",
       ]
 
   storage:
@@ -57,16 +57,16 @@ services:
       - etcd
       - coordinator
     environment:
-      UH_LICENSE: ${UH_LICENSE_STRING}
-      UH_LOG_LEVEL: INFO
-      UH_OTEL_ENDPOINT: http://otel:4317
-      UH_TRACES_ENABLED: 1
+      VRM_LICENSE: ${VRM_LICENSE_STRING}
+      VRM_LOG_LEVEL: INFO
+      VRM_OTEL_ENDPOINT: http://otel:4317
+      VRM_TRACES_ENABLED: 1
     command:
       [
         "/usr/bin/bash",
         "-l",
         "-c",
-        "sleep 10 && uh-cluster --registry etcd:2379 storage",
+        "sleep 10 && vrm-cluster --registry etcd:2379 storage",
       ]
 
   deduplicator:
@@ -76,16 +76,16 @@ services:
       - storage
       - coordinator
     environment:
-      UH_LICENSE: ${UH_LICENSE_STRING}
-      UH_LOG_LEVEL: INFO
-      UH_OTEL_ENDPOINT: http://otel:4317
-      UH_TRACES_ENABLED: 1
+      VRM_LICENSE: ${VRM_LICENSE_STRING}
+      VRM_LOG_LEVEL: INFO
+      VRM_OTEL_ENDPOINT: http://otel:4317
+      VRM_TRACES_ENABLED: 1
     command:
       [
         "/usr/bin/bash",
         "-l",
         "-c",
-        "sleep 10 && uh-cluster --registry etcd:2379 deduplicator",
+        "sleep 10 && vrm-cluster --registry etcd:2379 deduplicator",
       ]
 
   entrypoint:
@@ -96,21 +96,21 @@ services:
       - deduplicator
       - coordinator
     environment:
-      UH_LICENSE: ${UH_LICENSE_STRING}
-      UH_LOG_LEVEL: INFO
-      UH_OTEL_ENDPOINT: http://otel:4317
-      UH_TRACES_ENABLED: 1
-      UH_DB_HOSTPORT: database:5432
-      UH_DB_USER: postgres
-      UH_DB_PASS: uh
+      VRM_LICENSE: ${VRM_LICENSE_STRING}
+      VRM_LOG_LEVEL: INFO
+      VRM_OTEL_ENDPOINT: http://otel:4317
+      VRM_TRACES_ENABLED: 1
+      VRM_DB_HOSTPORT: database:5432
+      VRM_DB_USER: postgres
+      VRM_DB_PASS: vrm
     volumes:
-      - ./policies.json:/etc/uh/policies.json
+      - ./policies.json:/etc/vrm/policies.json
     command:
       [
         "/usr/bin/bash",
         "-l",
         "-c",
-        "sleep 15 && uh-cluster --registry etcd:2379 entrypoint",
+        "sleep 15 && vrm-cluster --registry etcd:2379 entrypoint",
       ]
     ports:
       - 8080:8080

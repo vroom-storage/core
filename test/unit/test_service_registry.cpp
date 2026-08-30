@@ -25,7 +25,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_AUTO_TEST_CASE(basic_register_retrieve_deregister) {
 
@@ -60,4 +60,4 @@ BOOST_AUTO_TEST_CASE(basic_register_retrieve_deregister) {
     }
 }
 
-} // end namespace uh::cluster
+} // end namespace vrm::cluster

@@ -22,7 +22,7 @@
 #include <storage/global/data_view.h>
 #include <entrypoint/commands/command.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 class put_object : public command {
 public:
@@ -44,4 +44,4 @@ private:
     deduplicator_interface& m_dedupe;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

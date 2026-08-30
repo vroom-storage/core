@@ -46,7 +46,7 @@ receivers:
     endpoint: database:5432
     transport: tcp
     username: postgres
-    password: uh
+    password: vrm
     databases:
       - postgres
     tls:
@@ -71,7 +71,7 @@ exporters:
   otlp/uptrace:
     endpoint: http://uptrace:14317
     tls: { insecure: true }
-    headers: { 'uptrace-dsn': 'http://uh_secret_token@localhost:14318?grpc=14317' }
+    headers: { 'uptrace-dsn': 'http://vrm_secret_token@localhost:14318?grpc=14317' }
 
 service:
   extensions: [health_check, pprof, zpages]

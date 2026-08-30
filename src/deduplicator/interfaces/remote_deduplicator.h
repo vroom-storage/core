@@ -21,7 +21,7 @@
 #include <common/service_interfaces/deduplicator_interface.h>
 #include <common/service_interfaces/service_factory.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct remote_deduplicator : public deduplicator_interface {
     explicit remote_deduplicator(client dedupe_service)
@@ -41,4 +41,4 @@ private:
     client m_dedupe_service;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_SUITE(a_signal_set)
 BOOST_AUTO_TEST_CASE(supports_destroying_resource_on_async_handler) {
     std::promise<void> prom;
     auto fut = prom.get_future();
-    auto executable = UH_BINARY_DIR "/test/unit/signals";
+    auto executable = VRM_BINARY_DIR "/test/unit/signals";
     std::cout << "executable: " << executable << std::endl;
     auto p = bp::child(executable);
     std::this_thread::sleep_for(std::chrono::seconds(1));

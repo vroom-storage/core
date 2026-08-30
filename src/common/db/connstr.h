@@ -19,7 +19,7 @@
 #include "config.h"
 #include <ostream>
 
-namespace uh::cluster::db {
+namespace vrm::cluster::db {
 
 class connstr {
 public:
@@ -40,4 +40,4 @@ private:
 
 std::ostream& operator<<(std::ostream& out, const connstr& c);
 
-} // namespace uh::cluster::db
+} // namespace vrm::cluster::db

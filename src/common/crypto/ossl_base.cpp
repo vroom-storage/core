@@ -18,7 +18,7 @@
 
 #include <stdexcept>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 void throw_from_error(const std::string& prefix) {
     char buffer[256];
@@ -27,4 +27,4 @@ void throw_from_error(const std::string& prefix) {
     throw std::runtime_error(prefix + ": " + std::string(buffer));
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

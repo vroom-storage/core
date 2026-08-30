@@ -20,9 +20,9 @@
 #include <common/utils/random.h>
 #include <common/utils/strings.h>
 
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster::ep::user {
+namespace vrm::cluster::ep::user {
 
 namespace {
 
@@ -31,7 +31,7 @@ static const std::string SALT_CHARACTERS =
     "!@#$%^&*()_-+={}[];'|\\,.<>/?<>`~";
 }
 
-db::db(boost::asio::io_context& ioc, const uh::cluster::db::config& cfg)
+db::db(boost::asio::io_context& ioc, const vrm::cluster::db::config& cfg)
     : m_db(connection_factory(ioc, cfg, cfg.users), cfg.users.count),
       m_crypt({}) {}
 
@@ -40,7 +40,7 @@ coro<user> db::find_by_key(std::string key) {
 
     auto row = co_await conn->execv("SELECT id, username, secret_key, "
                                     "session_token, expires, arn, super_user "
-                                    "FROM uh_query_key($1)",
+                                    "FROM vrm_query_key($1)",
                                     key);
 
     if (!row) {
@@ -60,7 +60,7 @@ coro<user> db::find_by_key(std::string key) {
             .access_key = std::move(k)};
 
     for (auto row = co_await conn->execv(
-             "SELECT name, value FROM uh_get_user_policy($1)", rv.name);
+             "SELECT name, value FROM vrm_get_user_policy($1)", rv.name);
          row; row = co_await conn->next()) {
 
         auto name = row->string(0);
@@ -82,7 +82,7 @@ coro<user> db::find(std::string id) {
     auto conn = co_await m_db.get();
 
     auto row = co_await conn->execv(
-        "SELECT id, password, arn, super_user FROM uh_query_user($1)", id);
+        "SELECT id, password, arn, super_user FROM vrm_query_user($1)", id);
 
     if (!row) {
         throw std::runtime_error("unknown user id");
@@ -94,7 +94,7 @@ coro<user> db::find(std::string id) {
             .super_user = *row->boolean(3)};
 
     for (auto row = co_await conn->execv(
-             "SELECT name, value FROM uh_get_user_policy($1)", rv.name);
+             "SELECT name, value FROM vrm_get_user_policy($1)", rv.name);
          row; row = co_await conn->next()) {
 
         auto name = row->string(0);
@@ -116,7 +116,7 @@ coro<user> db::find_and_check(std::string id, std::string pass) {
     auto conn = co_await m_db.get();
 
     auto row = co_await conn->execv(
-        "SELECT id, password, arn, super_user FROM uh_query_user($1)", id);
+        "SELECT id, password, arn, super_user FROM vrm_query_user($1)", id);
 
     if (!row) {
         throw std::runtime_error("unknown user id");
@@ -140,7 +140,7 @@ coro<user> db::find_and_check(std::string id, std::string pass) {
             .super_user = *row->boolean(3)};
 
     for (auto row = co_await conn->execv(
-             "SELECT name, value FROM uh_get_user_policy($1)", rv.name);
+             "SELECT name, value FROM vrm_get_user_policy($1)", rv.name);
          row; row = co_await conn->next()) {
 
         auto name = row->string(0);
@@ -174,7 +174,7 @@ coro<std::string> db::add_user(const std::string& name,
     }
 
     try {
-        auto row = co_await conn->execv("SELECT uh_add_user($1, $2, $3)", name,
+        auto row = co_await conn->execv("SELECT vrm_add_user($1, $2, $3)", name,
                                         encoded, arn);
 
         if (!row->string(0)) {
@@ -191,7 +191,7 @@ coro<std::string> db::add_user(const std::string& name,
 
 coro<void> db::set_super_user(const std::string& name, bool flag) {
     auto conn = co_await m_db.get();
-    co_await conn->execv("CALL uh_set_super_user($1, $2)", name, flag ? 1 : 0);
+    co_await conn->execv("CALL vrm_set_super_user($1, $2)", name, flag ? 1 : 0);
 }
 
 coro<void> db::add_key(const std::string& username, const std::string& key,
@@ -201,36 +201,36 @@ coro<void> db::add_key(const std::string& username, const std::string& key,
     auto conn = co_await m_db.get();
     if (ttl) {
         co_await conn->execv(
-            "CALL uh_add_user_key($1, $2, $3, $4, now()::timestamp + "
+            "CALL vrm_add_user_key($1, $2, $3, $4, now()::timestamp + "
             "make_interval(secs => $5))",
             username, key, secret, sts, ttl);
     } else {
-        co_await conn->execv("CALL uh_add_user_key($1, $2, $3, $4, NULL)",
+        co_await conn->execv("CALL vrm_add_user_key($1, $2, $3, $4, NULL)",
                              username, key, secret, sts);
     }
 }
 
 coro<void> db::remove_key(const std::string& key) {
     auto conn = co_await m_db.get();
-    co_await conn->execv("CALL uh_remove_key($1)", key);
+    co_await conn->execv("CALL vrm_remove_key($1)", key);
 }
 
 coro<void> db::remove_user(const std::string& username) {
     auto conn = co_await m_db.get();
-    co_await conn->execv("CALL uh_remove_user($1)", username);
+    co_await conn->execv("CALL vrm_remove_user($1)", username);
 }
 
 coro<void> db::policy(const std::string& user, const std::string& name,
                       const std::string& policy) {
     auto conn = co_await m_db.get();
-    co_await conn->execv("CALL uh_put_user_policy($1, $2, $3)", user, name,
+    co_await conn->execv("CALL vrm_put_user_policy($1, $2, $3)", user, name,
                          policy);
 }
 
 coro<std::string> db::policy(const std::string& user, const std::string& name) {
     auto conn = co_await m_db.get();
     auto row = co_await conn->execv(
-        "SELECT value FROM uh_get_user_policy($1) WHERE name = $2", user, name);
+        "SELECT value FROM vrm_get_user_policy($1) WHERE name = $2", user, name);
 
     if (!row || !row->string(0)) {
         throw std::runtime_error("No policy found");
@@ -241,7 +241,7 @@ coro<std::string> db::policy(const std::string& user, const std::string& name) {
 
 coro<void> db::remove_policy(const std::string& user, const std::string& name) {
     auto conn = co_await m_db.get();
-    co_await conn->execv("CALL uh_remove_user_policy($1, $2)", user, name);
+    co_await conn->execv("CALL vrm_remove_user_policy($1, $2)", user, name);
 }
 
 coro<std::list<std::string>> db::list_user_policies(const std::string& user) {
@@ -250,7 +250,7 @@ coro<std::list<std::string>> db::list_user_policies(const std::string& user) {
     std::list<std::string> rv;
 
     for (auto row = co_await conn->execv(
-             "SELECT name FROM uh_get_user_policy($1)", user);
+             "SELECT name FROM vrm_get_user_policy($1)", user);
          row; row = co_await conn->next()) {
         rv.emplace_back(*row->string(0));
     }
@@ -264,7 +264,7 @@ coro<std::list<key>> db::list_user_keys(const std::string& user) {
     auto conn = co_await m_db.get();
     for (auto row = co_await conn->execv(
              "SELECT access_key, secret_key, session_token, expires FROM "
-             "uh_list_user_keys($1)",
+             "vrm_list_user_keys($1)",
              user);
          row; row = co_await conn->next()) {
 
@@ -281,7 +281,7 @@ coro<std::list<std::string>> db::entries() {
     std::list<std::string> rv;
 
     auto conn = co_await m_db.get();
-    for (auto row = co_await conn->exec("SELECT username FROM uh_list_users()");
+    for (auto row = co_await conn->exec("SELECT username FROM vrm_list_users()");
          row; row = co_await conn->next()) {
         rv.emplace_back(*row->string(0));
     }
@@ -291,9 +291,9 @@ coro<std::list<std::string>> db::entries() {
 
 coro<void> db::remove_expired(std::size_t seconds) {
     auto conn = co_await m_db.get();
-    co_await conn->execv("CALL uh_remove_expired_keys(now()::timestamp - "
+    co_await conn->execv("CALL vrm_remove_expired_keys(now()::timestamp - "
                          "make_interval(secs => $1))",
                          seconds);
 }
 
-} // namespace uh::cluster::ep::user
+} // namespace vrm::cluster::ep::user

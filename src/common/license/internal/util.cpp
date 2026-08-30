@@ -24,7 +24,7 @@
 #include <memory>
 #include <stdexcept>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 void throw_from_openssl_error(const std::string& prefix) {
     char buffer[256];
@@ -64,7 +64,7 @@ auto load_key(const unsigned char* data, std::size_t size) {
 bool verify_license(std::string_view data, const std::vector<char>& signature) {
     auto ctx = make_md_ctx();
 
-    auto key = load_key(UH_LICENSE_PUBLIC_KEY, UH_LICENSE_PUBLIC_KEY_len);
+    auto key = load_key(VRM_LICENSE_PUBLIC_KEY, VRM_LICENSE_PUBLIC_KEY_len);
     auto key_ctx = std::unique_ptr<EVP_PKEY_CTX, void (*)(EVP_PKEY_CTX*)>(
         EVP_PKEY_CTX_new_from_pkey(nullptr, key.get(), nullptr),
         EVP_PKEY_CTX_free);
@@ -88,4 +88,4 @@ bool verify_license(std::string_view data, const std::vector<char>& signature) {
                data.size()) != 0;
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

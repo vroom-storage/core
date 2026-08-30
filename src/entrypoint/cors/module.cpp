@@ -18,7 +18,7 @@
 #include <common/utils/strings.h>
 #include <ranges>
 
-namespace uh::cluster::ep::cors {
+namespace vrm::cluster::ep::cors {
 
 namespace {
 
@@ -172,4 +172,4 @@ module::get_info(const std::string& bucket) const {
     co_return parsed;
 }
 
-} // namespace uh::cluster::ep::cors
+} // namespace vrm::cluster::ep::cors

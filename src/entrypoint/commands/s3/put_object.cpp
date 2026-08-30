@@ -20,16 +20,16 @@
 #include <entrypoint/utils.h>
 
 using namespace boost;
-using namespace uh::cluster::ep::http;
+using namespace vrm::cluster::ep::http;
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
-put_object::put_object(limits& uhlimits,
+put_object::put_object(limits& vrmlimits,
                        directory& dir, storage::global::global_data_view& gdv,
                        deduplicator_interface& dedupe)
     : m_dir(dir),
       m_gdv(gdv),
-      m_limits(uhlimits),
+      m_limits(vrmlimits),
       m_dedupe(dedupe) {}
 
 bool put_object::can_handle(const request& req) {
@@ -78,4 +78,4 @@ coro<response> put_object::handle(request& req) {
 
 std::string put_object::action_id() const { return "s3:PutObject"; }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

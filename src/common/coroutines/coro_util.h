@@ -21,7 +21,7 @@
 #include <common/telemetry/log.h>
 #include <common/types/common_types.h>
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 template <typename R, typename I>
 coro<std::conditional_t<std::is_void_v<R>, void, std::vector<R>>>
@@ -215,4 +215,4 @@ public:
     ~scoped_task() { task::cancel(); }
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

@@ -28,7 +28,7 @@
 #include <string>
 #include <vector>
 
-namespace uh::cluster::db {
+namespace vrm::cluster::db {
 
 class connection {
 public:
@@ -188,4 +188,4 @@ private:
     int m_row = 0;
 };
 
-} // namespace uh::cluster::db
+} // namespace vrm::cluster::db

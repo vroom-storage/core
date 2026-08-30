@@ -25,7 +25,7 @@
 #define MAX_FILE_SIZE_BYTES (128 * KIBI_BYTE)
 #define DATA_STORE_ID 1
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 struct dedupe_fixture : public coro_fixture {
     dedupe_fixture()
@@ -54,4 +54,4 @@ struct dedupe_fixture : public coro_fixture {
     local_deduplicator dedupe;
 };
 
-} // namespace uh::cluster
+} // namespace vrm::cluster

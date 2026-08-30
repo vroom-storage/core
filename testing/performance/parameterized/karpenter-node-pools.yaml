@@ -15,12 +15,12 @@
 apiVersion: karpenter.sh/v1
 kind: NodePool
 metadata:
-  name: parameterized-test-uh
+  name: parameterized-test-vrm
 spec:
   template:
     metadata:
       labels:
-        purpose: parameterized-test-uh
+        purpose: parameterized-test-vrm
     spec:
       requirements:
         - key: karpenter.sh/capacity-type

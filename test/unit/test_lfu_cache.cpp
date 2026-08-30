@@ -19,7 +19,7 @@
 
 // ------------- Tests Suites Follow --------------
 
-namespace uh::cluster {
+namespace vrm::cluster {
 
 BOOST_AUTO_TEST_CASE(lfu_evict_outdated_entries) {
     lfu_cache<int, int> cache(5);
@@ -115,4 +115,4 @@ BOOST_AUTO_TEST_CASE(lfu_erase) {
     BOOST_CHECK(cache.get(0).has_value());
 }
 
-} // namespace uh::cluster
+} // namespace vrm::cluster
