@@ -60,6 +60,10 @@ jobs:
               uses: actions/checkout@v4
               with:
                   repository: ceph/s3-tests
+                  # Pin to a known-good commit so CI is deterministic and does
+                  # not break when ceph/s3-tests adds tests for unimplemented
+                  # features upstream. Bump deliberately to pick up new coverage.
+                  ref: 5522d1c351f75bc00ae0f64f742f3f095f5939d9
                   path: test/feature/s3-tests
 
             - uses: actions/download-artifact@v4
