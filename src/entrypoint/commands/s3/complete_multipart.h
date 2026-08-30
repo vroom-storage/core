@@ -17,7 +17,6 @@
 #pragma once
 
 #include "entrypoint/directory.h"
-#include "entrypoint/limits.h"
 #include "entrypoint/multipart_state.h"
 #include "storage/global/data_view.h"
 #include <entrypoint/commands/command.h>
@@ -27,7 +26,7 @@ namespace vrm::cluster {
 class complete_multipart : public command {
 public:
     complete_multipart(directory&, storage::global::global_data_view&,
-                       multipart_state&, limits&);
+                       multipart_state&);
 
     static bool can_handle(const ep::http::request& req);
 
@@ -38,7 +37,6 @@ public:
 private:
     directory& m_dir;
     multipart_state& m_uploads;
-    limits& m_limits;
 };
 
 } // namespace vrm::cluster

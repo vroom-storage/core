@@ -1,6 +1,5 @@
 x-vrm-cluster-env: &vrm-cluster-env
     VRM_LOG_LEVEL: DEBUG
-    VRM_LICENSE: '{"version":"v1","customer_id":"Vroom-Test","license_type":"freemium","storage_cap_gib":1048576,"signature":"E5ulpGbxd5F5mHQA8r0RKxK+nFUKc7dAMHHJxgrNsPEJuqhj54F6LfDx0RAY2vFNPvkYmkwNy8LvJIv9UqS1Bw=="}'
 
 x-vrm-cluster-build: &vrm-cluster-build
     context: ..

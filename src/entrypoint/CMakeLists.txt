@@ -15,7 +15,6 @@
 add_library(entrypoint
             garbage_collector.cpp
             object.cpp
-            limits.cpp
             cors/parser.cpp
             cors/module.cpp
             handler.cpp
@@ -27,7 +26,6 @@ add_library(entrypoint
             commands/iam/create_user.cpp
             commands/iam/delete_user.cpp
             commands/iam/get_user_policy.cpp
-            commands/vrm/get_license_info.cpp
             commands/vrm/get_ready.cpp
             commands/vrm/get_metrics.cpp
             commands/s3/put_bucket_cors.cpp
@@ -84,4 +82,4 @@ add_library(entrypoint
             policy/module.cpp
             policy/variables.cpp)
 
-target_link_libraries(entrypoint db etcd nlohmann_json deduplicator storage vrmcrypto utils license)
+target_link_libraries(entrypoint db etcd nlohmann_json deduplicator storage vrmcrypto utils)

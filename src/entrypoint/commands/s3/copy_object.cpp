@@ -23,11 +23,9 @@ using namespace vrm::cluster::ep::http;
 
 namespace vrm::cluster {
 
-copy_object::copy_object(directory& dir, storage::global::global_data_view& gdv,
-                         limits& limits)
+copy_object::copy_object(directory& dir, storage::global::global_data_view& gdv)
     : m_dir(dir),
-      m_gdv(gdv),
-      m_limits(limits) {}
+      m_gdv(gdv) {}
 
 bool copy_object::can_handle(const request& req) {
     return req.method() == verb::put && req.bucket() != RESERVED_BUCKET_NAME &&
@@ -64,8 +62,6 @@ coro<response> copy_object::handle(request& req) {
                                 "At least one of the preconditions that you "
                                 "specified did not hold.");
     }
-
-    m_limits.check_storage_size(obj->size);
 
     auto rejects = co_await m_gdv.link(*obj->addr);
     if (!rejects.empty()) {

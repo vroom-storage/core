@@ -21,7 +21,6 @@ target_link_libraries(conf
                       telemetry
                       utils
                       network
-                      license
                       CLI11::CLI11
                       coordinator
                       entrypoint

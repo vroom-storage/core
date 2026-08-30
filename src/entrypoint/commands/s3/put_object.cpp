@@ -24,12 +24,10 @@ using namespace vrm::cluster::ep::http;
 
 namespace vrm::cluster {
 
-put_object::put_object(limits& vrmlimits,
-                       directory& dir, storage::global::global_data_view& gdv,
+put_object::put_object(directory& dir, storage::global::global_data_view& gdv,
                        deduplicator_interface& dedupe)
     : m_dir(dir),
       m_gdv(gdv),
-      m_limits(vrmlimits),
       m_dedupe(dedupe) {}
 
 bool put_object::can_handle(const request& req) {
@@ -48,7 +46,6 @@ coro<response> put_object::handle(request& req) {
     response res;
 
     auto content_length = req.content_length();
-    m_limits.check_storage_size(content_length);
 
     md5 hash;
     auto resp = co_await deduplicate(m_dedupe, req.body(), hash);

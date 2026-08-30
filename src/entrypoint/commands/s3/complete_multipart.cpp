@@ -87,11 +87,9 @@ std::string multipart_etag(const upload_info& info) {
 
 complete_multipart::complete_multipart(directory& dir,
                                        storage::global::global_data_view& gdv,
-                                       multipart_state& uploads,
-                                       limits& vrmlimits)
+                                       multipart_state& uploads)
     : m_dir(dir),
-      m_uploads(uploads),
-      m_limits(vrmlimits) {}
+      m_uploads(uploads) {}
 
 bool complete_multipart::can_handle(const request& req) {
     return req.method() == verb::post && req.bucket() != RESERVED_BUCKET_NAME &&
@@ -115,10 +113,6 @@ coro<response> complete_multipart::handle(request& req) {
         info = co_await instance.details(id);
 
         validate_internal(info, buffer);
-
-        if (!info.completed) {
-            m_limits.check_storage_size(info.data_size);
-        }
 
         etag = multipart_etag(info);
 
