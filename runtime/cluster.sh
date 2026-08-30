@@ -306,8 +306,8 @@ _start_docker() {
             --name "${project}-${name}" \
             --user root \
             --env-file "$env_file" \
-            -v "$cluster_abs/data/$name:/var/lib/vrm" \
-            -v "$cluster_abs/logs:/cluster-logs" \
+            -v "$cluster_abs/data/$name:/var/lib/vrm:Z" \
+            -v "$cluster_abs/logs:/cluster-logs:Z" \
             "$@" \
             "$image_tag" \
             sh -c "$cmd >> /cluster-logs/${name}.log 2>&1"
@@ -340,9 +340,9 @@ _start_docker() {
         --user root \
         --env-file "$env_file" \
         -e "VRM_SERVICE_NAME=entrypoint" \
-        -v "$cluster_abs/data/entrypoint:/var/lib/vrm" \
-        -v "$cluster_abs/logs:/cluster-logs" \
-        -v "$cluster_abs/policies.json:/etc/vrm/policies.json:ro" \
+        -v "$cluster_abs/data/entrypoint:/var/lib/vrm:Z" \
+        -v "$cluster_abs/logs:/cluster-logs:Z" \
+        -v "$cluster_abs/policies.json:/etc/vrm/policies.json:ro,Z" \
         "$image_tag" \
         sh -c "/usr/local/bin/vrm-cluster --registry $registry entrypoint --no-dedupe >> /cluster-logs/entrypoint.log 2>&1"
     containers+=("${project}-entrypoint")
