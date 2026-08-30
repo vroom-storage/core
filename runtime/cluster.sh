@@ -306,26 +306,29 @@ _start_docker() {
             --name "${project}-${name}" \
             --user root \
             --env-file "$env_file" \
-            -v "$cluster_abs/data/$name:/var/lib/vrm" \
-            -v "$cluster_abs/logs:/cluster-logs" \
+            -v "$cluster_abs/data/$name:/var/lib/vrm:Z" \
+            -v "$cluster_abs/logs:/cluster-logs:Z" \
             "$@" \
             "$image_tag" \
             sh -c "$cmd >> /cluster-logs/${name}.log 2>&1"
         containers+=("${project}-${name}")
     }
 
+    echo "Run coordinator..."
     _run_service "coordinator" \
         "/usr/local/bin/vrm-cluster --registry $registry coordinator" \
         -e "VRM_SERVICE_NAME=coordinator"
 
+    echo "Run storages..."
     while IFS= read -r group; do
         local gid num_s
         gid="$(jq -r '.id' <<< "$group")"
         num_s="$(jq -r '.storages' <<< "$group")"
         for ((i = 0; i < num_s; i++)); do
             local sname="storage-${gid}-${i}"
+            local port=$((9311 + gid * 100 + i))
             _run_service "$sname" \
-                "/usr/local/bin/vrm-cluster --registry $registry storage" \
+                "/usr/local/bin/vrm-cluster --registry $registry storage --port $port" \
                 -e "VRM_STORAGE_GROUP_ID=$gid" \
                 -e "VRM_STORAGE_INSTANCE_ID=$i" \
                 -e "VRM_SERVICE_NAME=$sname"
@@ -333,6 +336,7 @@ _start_docker() {
     done < <(jq -c '.[]' <<< "$storage_groups")
 
     # Entrypoint gets an additional policy file mount
+    echo "Run entrypoint..."
     mkdir -p "$cluster_abs/data/entrypoint"
     docker run -d \
         --network host \
@@ -340,9 +344,9 @@ _start_docker() {
         --user root \
         --env-file "$env_file" \
         -e "VRM_SERVICE_NAME=entrypoint" \
-        -v "$cluster_abs/data/entrypoint:/var/lib/vrm" \
-        -v "$cluster_abs/logs:/cluster-logs" \
-        -v "$cluster_abs/policies.json:/etc/vrm/policies.json:ro" \
+        -v "$cluster_abs/data/entrypoint:/var/lib/vrm:Z" \
+        -v "$cluster_abs/logs:/cluster-logs:Z" \
+        -v "$cluster_abs/policies.json:/etc/vrm/policies.json:ro,Z" \
         "$image_tag" \
         sh -c "/usr/local/bin/vrm-cluster --registry $registry entrypoint --no-dedupe >> /cluster-logs/entrypoint.log 2>&1"
     containers+=("${project}-entrypoint")
