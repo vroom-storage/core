@@ -314,10 +314,12 @@ _start_docker() {
         containers+=("${project}-${name}")
     }
 
+    echo "Run coordinator..."
     _run_service "coordinator" \
         "/usr/local/bin/vrm-cluster --registry $registry coordinator" \
         -e "VRM_SERVICE_NAME=coordinator"
 
+    echo "Run storages..."
     while IFS= read -r group; do
         local gid num_s
         gid="$(jq -r '.id' <<< "$group")"
@@ -333,6 +335,7 @@ _start_docker() {
     done < <(jq -c '.[]' <<< "$storage_groups")
 
     # Entrypoint gets an additional policy file mount
+    echo "Run entrypoint..."
     mkdir -p "$cluster_abs/data/entrypoint"
     docker run -d \
         --network host \
