@@ -1,11 +1,11 @@
-FROM flyway/flyway:10.17
+FROM debian:bookworm-slim
 
 RUN apt-get update -y && \
     apt-get install -y postgresql-client
 
 COPY ./tools/database-init/apply_db_schema.sh .
 
-COPY ./data/sql/ /flyway/migrations
+COPY ./data/sql/ /sql
 
 ENTRYPOINT ["/bin/bash"]
 

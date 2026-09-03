@@ -16,11 +16,10 @@ SQL_PATH=@PROJECT_SOURCE_DIR@/data/sql
 
 cat $SQL_PATH/provision_databases.sql | psql postgres
 
-for dir in $SQL_PATH/*; do
-    if [ -d  "$dir" ]; then
-        dbname=$(basename "$dir")
-        flyway -locations="filesystem:$dir" -url="jdbc:postgresql://$VRM_DB_HOSTPORT/$dbname" -user="$VRM_DB_USER" -password="$VRM_DB_PASS" migrate
-    fi
+for schema in $SQL_PATH/*.sql; do
+    dbname=$(basename "$schema" .sql)
+    [ "$dbname" = "provision_databases" ] && continue
+    psql "postgresql://$VRM_DB_USER:$VRM_DB_PASS@$VRM_DB_HOSTPORT/$dbname" -f "$schema"
 done
 
 access=$<TARGET_FILE:vrm-access>
