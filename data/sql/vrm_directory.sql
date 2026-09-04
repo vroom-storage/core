@@ -56,61 +56,6 @@ $$;
 
 
 --
--- Name: migrate_object_status(bigint); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.migrate_object_status(id bigint) RETURNS public.object_status
-    LANGUAGE plpgsql
-    AS $$
-DECLARE status INTEGER;
-BEGIN
-    SELECT status FROM former_object_status INTO status WHERE object_id = id;
-
-    IF status = status_normal() THEN
-        RETURN 'Normal';
-    END IF;
-
-    IF status = status_deleted() THEN
-        RETURN 'Deleted';
-    END IF;
-
-    IF status = status_collected() THEN
-        RETURN 'Collected';
-    END IF;
-
-    RETURN 'Normal';
-END;
-$$;
-
-
---
--- Name: status_collected(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.status_collected() RETURNS integer
-    LANGUAGE sql IMMUTABLE PARALLEL SAFE
-    AS $$SELECT 2$$;
-
-
---
--- Name: status_deleted(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.status_deleted() RETURNS integer
-    LANGUAGE sql IMMUTABLE PARALLEL SAFE
-    AS $$SELECT 1$$;
-
-
---
--- Name: status_normal(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.status_normal() RETURNS integer
-    LANGUAGE sql IMMUTABLE PARALLEL SAFE
-    AS $$SELECT 0$$;
-
-
---
 -- Name: vrm_bucket_cors(text); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -274,38 +219,6 @@ BEGIN
     DELETE FROM buckets b WHERE status = 'Deleted'
         AND NOT EXISTS (SELECT 1 FROM objects o WHERE o.bucket_id = b.id);
 END
-$$;
-
-
---
--- Name: vrm_compute_usage(timestamp without time zone, timestamp without time zone); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.vrm_compute_usage(interval_start timestamp without time zone, interval_end timestamp without time zone) RETURNS bigint
-    LANGUAGE plpgsql
-    AS $$
-DECLARE
-    row RECORD;
-    byteseconds BIGINT;
-    interval_seconds BIGINT;
-BEGIN
-    byteseconds := 0;
-    FOR row in
-        SELECT size, last_modified, deleted_at FROM objects
-        WHERE last_modified < interval_end AND (status = 'Normal' OR deleted_at >= interval_start)
-        LOOP
-            interval_seconds := EXTRACT(EPOCH FROM LEAST(COALESCE(row.deleted_at, interval_end), interval_end) - GREATEST(row.last_modified, interval_start));
-
-            IF interval_seconds < 0 THEN
-                RAISE NOTICE 'Interval seconds is negative: %, interval_start: %, interval_end: %, last_modified: %, deleted_at: %', interval_seconds, interval_start, interval_end, row.last_modified, row.deleted_at;
-                CONTINUE;
-            END IF;
-
-            byteseconds := byteseconds + interval_seconds * row.size;
-        END LOOP;
-    byteseconds := byteseconds / 1024 / 1024 / 1024;
-    RETURN byteseconds;
-END;
 $$;
 
 
@@ -655,28 +568,6 @@ BEGIN
             SELECT o2.name, o2.bucket_id, max(o2.id) AS max_id FROM objects o2 GROUP BY o2.name, o2.bucket_id
         ) temp ON o.id = temp.max_id
         WHERE o.bucket_id = vrm_get_bucket_id(bucket) AND o.status = 'Normal'
-        ORDER BY o.name;
-END;
-$$;
-
-
---
--- Name: vrm_list_objects(text, text); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.vrm_list_objects(bucket text, prefix text) RETURNS TABLE(id bigint, name text, size bigint, last_modified timestamp without time zone, etag text, mime text, version uuid, status public.object_status)
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
-    CALL vrm_check_bucket(bucket);
-    RETURN QUERY
-        SELECT o.id, o.name, o.size, o.last_modified, o.etag, o.mime, o.version, o.status FROM objects o
-        JOIN (
-            SELECT o2.name, o2.bucket_id, max(o2.id) AS max_id FROM objects o2 GROUP BY o2.name, o2.bucket_id
-        ) temp ON o.id = temp.max_id
-        WHERE o.bucket_id = vrm_get_bucket_id(bucket)
-          AND o.name LIKE prefix || '%'
-          AND o.status = 'Normal'
         ORDER BY o.name;
 END;
 $$;

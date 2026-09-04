@@ -105,15 +105,6 @@ $$;
 
 
 --
--- Name: vrm_get_uploads(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.vrm_get_uploads() RETURNS TABLE(id uuid, bucket text, key text, mime text)
-    LANGUAGE sql
-    AS $$SELECT id, bucket, key, mime FROM uploads WHERE erased_since IS NULL$$;
-
-
---
 -- Name: vrm_get_uploads(text); Type: FUNCTION; Schema: public; Owner: -
 --
 
