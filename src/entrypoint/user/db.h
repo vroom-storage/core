@@ -16,16 +16,16 @@
 
 #pragma once
 
-#include <common/crypto/scrypt.h>
-#include <common/utils/pool.h>
-#include <common/db/db.h>
 #include "user.h"
+#include <common/crypto/scrypt.h>
+#include <common/db/db.h>
+#include <common/utils/pool.h>
 
 namespace vrm::cluster::ep::user {
 
 class db {
 public:
-    db(boost::asio::io_context& ioc, const vrm::cluster::db::config& cfg);
+    explicit db(pool<cluster::db::connection>& db_pool);
 
     /**
      * Find a user using the access_key.
@@ -135,7 +135,7 @@ public:
     coro<void> remove_expired(std::size_t seconds);
 
 private:
-    pool<cluster::db::connection> m_db;
+    pool<cluster::db::connection>& m_db;
     scrypt m_crypt;
 };
 

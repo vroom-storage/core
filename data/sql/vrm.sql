@@ -805,3 +805,506 @@ ALTER TABLE ONLY public.objects
 
 ALTER TABLE ONLY public.object_refs
     ADD CONSTRAINT object_refs_object_id_fkey FOREIGN KEY (object_id) REFERENCES public.objects(id) ON DELETE RESTRICT;
+
+
+--
+-- Section: vrm_multipart schema (merged)
+--
+
+--
+-- Name: vrm_clean_deleted(interval); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_clean_deleted(IN age interval)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('DELETE FROM uploads WHERE erased_since + %L < now()', age);
+END;
+$$;
+
+
+--
+-- Name: vrm_complete_upload(text); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_complete_upload(IN id text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('UPDATE uploads SET complete = 1 WHERE id = %L', id);
+END;
+$$;
+
+
+--
+-- Name: vrm_create_upload(text, text, text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.vrm_create_upload(bucket text, key text, mime text) RETURNS text
+    LANGUAGE plpgsql
+    AS $$
+DECLARE id TEXT;
+BEGIN
+    EXECUTE format('INSERT INTO uploads (bucket, key, mime) VALUES(%L, %L, %L) RETURNING id', bucket, key, mime)
+        INTO id;
+    RETURN id;
+END;
+$$;
+
+
+--
+-- Name: vrm_delete_upload(text); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_delete_upload(IN id text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('UPDATE uploads SET erased_since = now(), bucket = gen_random_uuid(), key = gen_random_uuid() WHERE id = %L', id);
+END;
+$$;
+
+
+--
+-- Name: vrm_get_upload(text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.vrm_get_upload(id text) RETURNS TABLE(bucket text, key text, erased_since timestamp without time zone, mime text, complete integer)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY EXECUTE format('SELECT bucket, key, erased_since, mime, complete FROM uploads WHERE id = %L', id);
+END;
+$$;
+
+
+--
+-- Name: vrm_get_upload_part(text, bigint); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.vrm_get_upload_part(upload_id text, part_id bigint) RETURNS TABLE(size bigint, address bytea, etag text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+RETURN QUERY EXECUTE format('SELECT size, address, etag FROM upload_parts WHERE upload_id = %L AND part_id = %L', upload_id, part_id);
+END;
+$$;
+
+
+--
+-- Name: vrm_get_upload_parts(text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.vrm_get_upload_parts(id text) RETURNS TABLE(part_id bigint, size bigint, effective_size bigint, address bytea, etag text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY EXECUTE format('SELECT part_id, size, effective_size, address, etag FROM upload_parts WHERE upload_id = %L', id);
+END;
+$$;
+
+
+--
+-- Name: vrm_get_uploads(text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.vrm_get_uploads(bucket text) RETURNS TABLE(id uuid, key text, mime text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY EXECUTE format('SELECT id, key, mime FROM uploads WHERE erased_since IS NULL AND bucket = %L', bucket);
+END;
+$$;
+
+
+--
+-- Name: vrm_lock_upload(text); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_lock_upload(IN id text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    PERFORM pg_advisory_lock(hashtext(id));
+END;
+$$;
+
+
+--
+-- Name: vrm_put_multipart(text, bigint, bigint, bigint, bytea, text); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_put_multipart(IN id text, IN part_id bigint, IN size bigint, IN effective_size bigint, IN address bytea, IN etag text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('
+        INSERT INTO upload_parts (upload_id, part_id, size, effective_size, address, etag)
+        VALUES (%L, %L, %L, %L, %L, %L) ON CONFLICT(upload_id, part_id) DO UPDATE SET
+        size = EXCLUDED.size, effective_size = EXCLUDED.effective_size, address = EXCLUDED.address, etag = EXCLUDED.etag',
+        id, part_id, size, effective_size, address, etag);
+END;
+$$;
+
+
+--
+-- Name: vrm_unlock_upload(text); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_unlock_upload(IN id text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    PERFORM pg_advisory_unlock(hashtext(id));
+END;
+$$;
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: upload_parts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.upload_parts (
+    id bigint NOT NULL,
+    upload_id uuid NOT NULL,
+    part_id bigint NOT NULL,
+    size bigint NOT NULL,
+    effective_size bigint NOT NULL,
+    address bytea NOT NULL,
+    etag text NOT NULL
+);
+
+
+--
+-- Name: upload_parts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.upload_parts ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.upload_parts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: uploads; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.uploads (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    bucket text NOT NULL,
+    key text NOT NULL,
+    erased_since timestamp without time zone,
+    mime text,
+    complete integer DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: upload_parts upload_parts_upload_id_part_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.upload_parts
+    ADD CONSTRAINT upload_parts_upload_id_part_id_key UNIQUE (upload_id, part_id);
+
+
+--
+-- Name: uploads uploads_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.uploads
+    ADD CONSTRAINT uploads_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: upload_parts upload_parts_upload_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.upload_parts
+    ADD CONSTRAINT upload_parts_upload_id_fkey FOREIGN KEY (upload_id) REFERENCES public.uploads(id) ON DELETE CASCADE;
+
+
+--
+-- Section: vrm_user schema (merged)
+--
+
+--
+-- Name: vrm_add_user(text, text, text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.vrm_add_user(username text, password text, arn text) RETURNS text
+    LANGUAGE plpgsql
+    AS $$
+DECLARE id TEXT;
+BEGIN
+    EXECUTE format('INSERT INTO users (name, password, arn) VALUES (%L, %L, %L) RETURNING id',
+        username, password, arn) INTO id;
+    RETURN id;
+END;
+$$;
+
+
+--
+-- Name: vrm_add_user_key(text, text, text, text, timestamp without time zone); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_add_user_key(IN username text, IN access_key text, IN secret_key text, IN session_token text, IN expires timestamp without time zone)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('
+        INSERT INTO keys (username, access_key, secret_key, session_token, expires)
+        VALUES (%L, %L, %L, %L, %L)',
+        username, access_key, secret_key, session_token, expires);
+END;
+$$;
+
+
+--
+-- Name: vrm_get_user_policy(text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.vrm_get_user_policy(username text) RETURNS TABLE(name text, value json)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY EXECUTE format('SELECT name, value FROM policies WHERE username = %L', username);
+END;
+$$;
+
+
+--
+-- Name: vrm_list_user_keys(text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.vrm_list_user_keys(username text) RETURNS TABLE(access_key text, secret_key text, session_token text, expires timestamp without time zone)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY EXECUTE format('
+        SELECT access_key, secret_key, session_token, expires FROM keys
+        WHERE username = %L AND (expires >= now() OR expires IS NULL)', username);
+END;
+$$;
+
+
+--
+-- Name: vrm_list_users(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.vrm_list_users() RETURNS TABLE(username text)
+    LANGUAGE sql
+    AS $$
+    SELECT name FROM users;
+$$;
+
+
+--
+-- Name: vrm_put_user_policy(text, text, json); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_put_user_policy(IN username text, IN name text, IN policy json)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('INSERT INTO policies (username, name, value) VALUES (%L, %L, %L)', username, name, policy);
+END;
+$$;
+
+
+--
+-- Name: vrm_query_key(text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.vrm_query_key(access_key text) RETURNS TABLE(id uuid, username text, secret_key text, session_token text, expires timestamp without time zone, arn text, super_user integer)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY EXECUTE format('
+        SELECT id, username, secret_key, session_token, expires, arn, super_user FROM keys
+        JOIN users ON username = name WHERE access_key = %L AND (expires >= now() OR expires IS NULL)', access_key);
+END;
+$$;
+
+
+--
+-- Name: vrm_query_user(text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.vrm_query_user(username text) RETURNS TABLE(id uuid, password text, arn text, super_user integer)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY EXECUTE format('SELECT id, password, arn, super_user FROM users WHERE name = %L',
+        username);
+END;
+$$;
+
+
+--
+-- Name: vrm_remove_expired_keys(timestamp without time zone); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_remove_expired_keys(IN expired_before timestamp without time zone)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('DELETE FROM keys WHERE expires <= %L', expired_before);
+END;
+$$;
+
+
+--
+-- Name: vrm_remove_key(text); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_remove_key(IN access_key text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('DELETE from keys WHERE access_key = %L', access_key);
+END;
+$$;
+
+
+--
+-- Name: vrm_remove_user(text); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_remove_user(IN username text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('DELETE FROM users WHERE name = %L', username);
+END;
+$$;
+
+
+--
+-- Name: vrm_remove_user_policy(text, text); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_remove_user_policy(IN username text, IN name text)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('DELETE FROM policies WHERE username = %L and name = %L', username, name);
+END;
+$$;
+
+
+--
+-- Name: vrm_set_super_user(text, integer); Type: PROCEDURE; Schema: public; Owner: -
+--
+
+CREATE PROCEDURE public.vrm_set_super_user(IN username text, IN value integer)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('UPDATE users SET super_user = %L WHERE name = %L', value, username);
+END;
+$$;
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: keys; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.keys (
+    username text NOT NULL,
+    access_key text NOT NULL,
+    secret_key text NOT NULL,
+    session_token text,
+    expires timestamp without time zone
+);
+
+
+--
+-- Name: policies; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.policies (
+    username text NOT NULL,
+    name text NOT NULL,
+    value json NOT NULL
+);
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    name text NOT NULL,
+    password text,
+    arn text,
+    super_user integer DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: keys keys_access_key_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.keys
+    ADD CONSTRAINT keys_access_key_key UNIQUE (access_key);
+
+
+--
+-- Name: policies policies_name_username_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.policies
+    ADD CONSTRAINT policies_name_username_key UNIQUE (name, username);
+
+
+--
+-- Name: users users_name_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_name_key UNIQUE (name);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: expires_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX expires_idx ON public.keys USING btree (expires);
+
+
+--
+-- Name: keys keys_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.keys
+    ADD CONSTRAINT keys_username_fkey FOREIGN KEY (username) REFERENCES public.users(name) ON DELETE CASCADE;
+
+
+--
+-- Name: policies policies_username_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.policies
+    ADD CONSTRAINT policies_username_fkey FOREIGN KEY (username) REFERENCES public.users(name) ON DELETE CASCADE;

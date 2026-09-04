@@ -9,8 +9,5 @@ done
 psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -d postgres \
     -f /sql/provision_databases.sql
 
-for schema in /sql/*.sql; do
-    database="$(basename "$schema" .sql)"
-    [ "$database" = "provision_databases" ] && continue
-    psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -d "$database" -f "$schema"
-done
+psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -d vrm \
+    -f /sql/vrm.sql

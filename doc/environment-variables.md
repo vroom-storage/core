@@ -37,10 +37,7 @@ components and describes their purpose.
 
 - `VRM_DB_HOSTPORT` - configure host and port of the DBMS 
     (format: "hostname:port").
-- `VRM_DB_DIRECTORY_CONNECTIONS` - number of connections used to connect to 
-    directory database.
-- `VRM_DB_MULTIPART_CONNECTIONS` - number of connections used to connect to 
-    multipart database.
+- `VRM_DB_CONNECTIONS` - number of pooled connections to the database.
 - `VRM_DB_USER` - configure user name for connections to the DBMS.
 - `VRM_DB_PASS` - pass the connection password for the user given in `VRM_DB_USER`.
 

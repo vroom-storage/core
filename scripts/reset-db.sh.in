@@ -6,21 +6,14 @@
     exit 1
 }
 
-databases="vrm_directory vrm_multipart vrm_user"
-for db in $databases; do
-    echo "DROP DATABASE $db" |
-        psql "postgresql://$VRM_DB_USER:$VRM_DB_PASS@$VRM_DB_HOSTPORT/postgres"
-done
+echo "DROP DATABASE vrm" |
+    psql "postgresql://$VRM_DB_USER:$VRM_DB_PASS@$VRM_DB_HOSTPORT/postgres"
 
 SQL_PATH=@PROJECT_SOURCE_DIR@/data/sql
 
 cat $SQL_PATH/provision_databases.sql | psql postgres
 
-for schema in $SQL_PATH/*.sql; do
-    dbname=$(basename "$schema" .sql)
-    [ "$dbname" = "provision_databases" ] && continue
-    psql "postgresql://$VRM_DB_USER:$VRM_DB_PASS@$VRM_DB_HOSTPORT/$dbname" -f "$schema"
-done
+psql "postgresql://$VRM_DB_USER:$VRM_DB_PASS@$VRM_DB_HOSTPORT/vrm" -f $SQL_PATH/vrm.sql
 
 access=$<TARGET_FILE:vrm-access>
 $access user-add --superuser 'root' 'arn:vrm:iam::0:users/root'

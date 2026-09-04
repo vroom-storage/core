@@ -27,7 +27,8 @@ namespace {
 
 static const auto LIMITS_UPDATE_INTERVAL = std::chrono::seconds(5);
 
-coro<void> update_limits(vrm::cluster::directory& directory, std::atomic<std::size_t>& size) {
+coro<void> update_limits(vrm::cluster::directory& directory,
+                         std::atomic<std::size_t>& size) {
     boost::asio::steady_timer timer(co_await boost::asio::this_coro::executor);
     size = co_await directory.data_size();
 
@@ -75,9 +76,11 @@ service::service(boost::asio::io_context& ioc, const service_config& sc,
 
       m_dedupe(make_deduplicator(m_config, m_gdv, m_cache, ioc, m_etcd)),
 
-      m_directory(ioc, m_config.database),
-      m_uploads(ioc, m_config.database),
-      m_users(ioc, m_config.database),
+      m_db_pool(db::connection_factory(ioc, m_config.database),
+                m_config.database.count),
+      m_directory(m_db_pool),
+      m_uploads(m_db_pool),
+      m_users(m_db_pool),
       m_server(m_config.server,
                std::make_unique<handler>(
                    command_factory(*m_dedupe, m_directory, m_uploads, m_gdv,
@@ -98,10 +101,9 @@ service::service(boost::asio::io_context& ioc, const service_config& sc,
         register_gauge_callback(
             [this]() { return m_size.load(); },
             [this]() {
-                return std::vector<std::pair<std::string, std::string>> {
-                    { "service_id", std::to_string(m_service_id) },
-                    { "version", project_info::get().project_version }
-                };
+                return std::vector<std::pair<std::string, std::string>>{
+                    {"service_id", std::to_string(m_service_id)},
+                    {"version", project_info::get().project_version}};
             });
 }
 

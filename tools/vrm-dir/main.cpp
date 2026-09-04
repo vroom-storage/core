@@ -17,6 +17,8 @@
 #include "entrypoint/directory.h"
 #include "entrypoint/formats.h"
 
+#include <common/utils/pool.h>
+
 #include <CLI/CLI.hpp>
 #include <iostream>
 
@@ -91,7 +93,8 @@ std::ostream& operator<<(std::ostream& out, const object& obj) {
     return out;
 }
 
-vrm::cluster::coro<void> list_bucket(directory& dir, const std::string& target) {
+vrm::cluster::coro<void> list_bucket(directory& dir,
+                                     const std::string& target) {
     if (target.empty()) {
         for (const auto& bucket : co_await dir.list_buckets()) {
             std::cout << bucket << "\n";
@@ -106,17 +109,18 @@ vrm::cluster::coro<void> list_bucket(directory& dir, const std::string& target) 
     }
 }
 
-vrm::cluster::coro<void> make_bucket(directory& dir, const std::string& target) {
+vrm::cluster::coro<void> make_bucket(directory& dir,
+                                     const std::string& target) {
     co_await dir.put_bucket(target);
 }
 
 vrm::cluster::coro<void> remove_bucket(directory& dir,
-                                      const std::string& target) {
+                                       const std::string& target) {
     co_await dir.delete_bucket(target);
 }
 
 vrm::cluster::coro<void> object_info(directory& dir, const std::string& bucket,
-                                    const std::string& key) {
+                                     const std::string& key) {
     auto object = co_await dir.get_object(bucket, key);
 
     std::cout << "object: " << object->name << "\n"
@@ -152,7 +156,10 @@ int main(int argc, char** argv) {
             }
         };
 
-        directory dir(executor, cfg->database);
+        vrm::cluster::pool<vrm::cluster::db::connection> db_pool(
+            vrm::cluster::db::connection_factory(executor, cfg->database),
+            cfg->database.count);
+        directory dir(db_pool);
 
         switch (cfg->cmd) {
         case config::command::ls:

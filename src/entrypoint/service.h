@@ -24,6 +24,7 @@
 #include <common/etcd/registry/service_id.h>
 #include <common/etcd/registry/service_registry.h>
 #include <common/etcd/service_discovery/service_maintainer.h>
+#include <common/utils/pool.h>
 #include <deduplicator/service.h>
 #include <entrypoint/directory.h>
 #include <entrypoint/garbage_collector.h>
@@ -47,6 +48,8 @@ private:
     storage::global::cache m_cache;
 
     std::unique_ptr<deduplicator_interface> m_dedupe;
+
+    pool<db::connection> m_db_pool;
     directory m_directory;
 
     multipart_state m_uploads;

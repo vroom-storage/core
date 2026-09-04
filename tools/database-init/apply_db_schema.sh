@@ -18,16 +18,11 @@ set -e
 
 until pg_isready -U postgres -h $DB_HOST -p $DB_PORT; do echo 'Waiting for postgres...'; sleep 2; done
 
-# Provision databases in advance
+# Provision the database in advance
 cat /sql/provision_databases.sql | psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d postgres
 
-# Fill out the databases with their schemas
-for schema in /sql/*.sql
-do
-    database="$(basename "$schema" .sql)"
-    [ "$database" = "provision_databases" ] && continue
-    psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d "$database" -f "$schema"
-done
+# Fill out the database with its schema
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d vrm -f /sql/vrm.sql
 
 # Set up the super user
 vrm-cluster-access-client --db-host $DB_HOST:$DB_PORT --db-user $DB_USER --db-pass $PGPASSWORD user-add --superuser --if-not-exists $SUPER_USER_USERNAME
