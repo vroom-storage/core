@@ -1,12 +1,11 @@
-FROM flyway/flyway:10.21
+FROM debian:bookworm-slim
 
-USER root
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
         postgresql-client \
  && rm -rf /var/lib/apt/lists/*
 
-COPY data/sql/ /flyway/migrations/
+COPY data/sql/ /sql/
 COPY --chmod=755 docker/apply_db_schema.sh /apply_db_schema.sh
 
 ENTRYPOINT ["/apply_db_schema.sh"]

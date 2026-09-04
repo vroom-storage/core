@@ -16,6 +16,7 @@
 #include "config/configuration.h"
 
 #include "common/telemetry/log.h"
+#include "common/utils/pool.h"
 #include "common/utils/strings.h"
 #include "entrypoint/formats.h"
 #include "entrypoint/user/db.h"
@@ -326,7 +327,10 @@ int main(int argc, char** argv) {
             }
         };
 
-        ep::user::db db(executor, cfg->database);
+        pool<db::connection> db_pool(
+            db::connection_factory(executor, cfg->database),
+            cfg->database.count);
+        ep::user::db db(db_pool);
 
         switch (cfg->cmd) {
         case ::config::command::add_user:

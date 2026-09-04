@@ -31,18 +31,17 @@ struct config {
     // db password
     std::string password = DEFAULT_PASS;
 
-    struct database {
-        std::string dbname;
-        unsigned count;
-    };
+    // name of the database
+    std::string dbname = DEFAULT_DBNAME;
 
-    database directory = {"vrm_directory", 2u};
-    database multipart = {"vrm_multipart", 2u};
-    database users = {"vrm_user", 2u};
+    // number of pooled connections shared across all consumers
+    unsigned count = DEFAULT_CONNECTIONS;
 
     static constexpr const char* DEFAULT_HOST_PORT = "localhost:5432";
     static constexpr const char* DEFAULT_USER = "";
     static constexpr const char* DEFAULT_PASS = "";
+    static constexpr const char* DEFAULT_DBNAME = "vrm";
+    static constexpr unsigned DEFAULT_CONNECTIONS = 6u;
 };
 
 } // namespace vrm::cluster::db

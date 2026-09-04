@@ -13,8 +13,8 @@
 // limitations under the License.
 
 #include "configuration.h"
-#include <common/project/project.h>
 #include <CLI/CLI.hpp>
+#include <common/project/project.h>
 
 namespace vrm::cluster {
 
@@ -22,8 +22,8 @@ namespace {
 
 void print_vcsid() {
     const auto& info = vrm::project_info::get();
-    std::cout << info.project_name << " " << info.project_version << " (" << __DATE__
-              << " " << __TIME__ << ")\n"
+    std::cout << info.project_name << " " << info.project_version << " ("
+              << __DATE__ << " " << __TIME__ << ")\n"
               << info.project_repository << " (" << info.project_vcsid << ")\n";
     exit(0);
 }
@@ -88,7 +88,8 @@ void register_service(CLI::App& app, service_config& cfg) {
         ->envname(ENV_CFG_ENABLE_TRACES);
 
     app.add_option("--trace-endpoint", cfg.trace_url,
-                   "URL to OpenTelemetry trace endpoint (overrides --telemetry-endpoint for traces)")
+                   "URL to OpenTelemetry trace endpoint (overrides "
+                   "--telemetry-endpoint for traces)")
         ->envname(ENV_CFG_TRACE_ENDPOINT);
 }
 
@@ -342,20 +343,10 @@ void configure(CLI::App& app, db::config& cfg) {
         ->default_val(cfg.password)
         ->envname(ENV_CFG_DB_PASS);
 
-    app.add_option("--db-directory-connections", cfg.directory.count,
-                   "Number of connections to directory database")
-        ->default_val(cfg.directory.count)
-        ->envname(ENV_CFG_DB_DIRECTORY_CONNECTIONS);
-
-    app.add_option("--db-multipart-connections", cfg.multipart.count,
-                   "Number of connections to multipart database")
-        ->default_val(cfg.multipart.count)
-        ->envname(ENV_CFG_DB_MULTIPART_CONNECTIONS);
-
-    app.add_option("--db-users-connections", cfg.users.count,
-                   "Number of connections to users database")
-        ->default_val(cfg.users.count)
-        ->envname(ENV_CFG_DB_USERS_CONNECTIONS);
+    app.add_option("--db-connections", cfg.count,
+                   "Number of pooled connections to the database")
+        ->default_val(cfg.count)
+        ->envname(ENV_CFG_DB_CONNECTIONS);
 }
 
 void configure(CLI::App& app, boost::log::trivial::severity_level& log_level) {

@@ -7,14 +7,7 @@ until pg_isready -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT"; do
 done
 
 psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -d postgres \
-    -f /flyway/migrations/provision_databases.sql
+    -f /sql/provision_databases.sql
 
-for database in $(ls /flyway/migrations | grep -v .sql); do
-    flyway \
-        -locations="filesystem:/flyway/migrations/${database}" \
-        -url="jdbc:postgresql://${DB_HOST}:${DB_PORT}/${database}" \
-        -user="$DB_USER" \
-        -password="$PGPASSWORD" \
-        migrate
-done
-
+psql -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" -d vrm \
+    -f /sql/vrm.sql

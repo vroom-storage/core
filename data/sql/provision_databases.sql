@@ -13,19 +13,7 @@
 -- limitations under the License.
 
 --
--- Create PostgreSQL directory database
+-- Create PostgreSQL database
 --
-CREATE DATABASE vrm_directory;
-GRANT ALL ON DATABASE vrm_directory TO SESSION_USER;
-
---
--- Create PostgreSQL multipart database
---
-CREATE DATABASE vrm_multipart;
-GRANT ALL ON DATABASE vrm_multipart TO SESSION_USER;
-
---
--- Create PostgreSQL user database
---
-CREATE DATABASE vrm_user;
-GRANT ALL ON DATABASE vrm_user TO SESSION_USER;
+CREATE DATABASE vrm;
+GRANT ALL ON DATABASE vrm TO SESSION_USER;

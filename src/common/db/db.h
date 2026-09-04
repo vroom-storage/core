@@ -16,19 +16,19 @@
 
 #pragma once
 
-#include <common/telemetry/log.h>
 #include "config.h"
 #include "connection.h"
+#include <common/telemetry/log.h>
 
 namespace vrm::cluster::db {
 
 /**
  * Create a connection factory that can be passed to `vrm::cluster::pool`.
  */
-inline auto connection_factory(boost::asio::io_context& ioc, const config& cfg,
-                               const config::database& db_cfg) {
+inline auto connection_factory(boost::asio::io_context& ioc,
+                               const config& cfg) {
 
-    connstr cs(cfg, db_cfg.dbname);
+    connstr cs(cfg, cfg.dbname);
 
     return [cs, &ioc]() {
         LOG_INFO() << "connecting to " << cs;

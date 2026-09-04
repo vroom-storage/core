@@ -31,8 +31,8 @@ static const std::string SALT_CHARACTERS =
     "!@#$%^&*()_-+={}[];'|\\,.<>/?<>`~";
 }
 
-db::db(boost::asio::io_context& ioc, const vrm::cluster::db::config& cfg)
-    : m_db(connection_factory(ioc, cfg, cfg.users), cfg.users.count),
+db::db(pool<cluster::db::connection>& db_pool)
+    : m_db(db_pool),
       m_crypt({}) {}
 
 coro<user> db::find_by_key(std::string key) {

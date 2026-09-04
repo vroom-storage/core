@@ -83,10 +83,8 @@ entrypoint:
             - entrypoint
         topologyKey: kubernetes.io/hostname
   extraEnv:
-    - name: VRM_DB_DIRECTORY_CONNECTIONS
-      value: "5"
-    - name: VRM_DB_MULTIPART_CONNECTIONS
-      value: "5"
+    - name: VRM_DB_CONNECTIONS
+      value: "10"
 
   ingress:
     enabled: false

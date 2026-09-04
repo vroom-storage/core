@@ -21,10 +21,8 @@ using namespace vrm::cluster::ep::http;
 
 namespace vrm::cluster {
 
-multipart_state::multipart_state(boost::asio::io_context& ioc,
-                                 const db::config& cfg)
-    : m_db(connection_factory(ioc, cfg, cfg.multipart),
-           cfg.multipart.count) {}
+multipart_state::multipart_state(pool<db::connection>& db_pool)
+    : m_db(db_pool) {}
 
 coro<multipart_state::lock>
 multipart_state::instance::lock_upload(const std::string& id) {
@@ -159,9 +157,9 @@ coro<void> multipart_state::instance::append_upload_part_info(
 
     auto data = to_buffer(resp.addr);
 
-    co_await (*m_handle)->execv("CALL vrm_put_multipart($1, $2, $3, $4, $5, $6)",
-                                id, part, data_size, resp.effective_size,
-                                std::span<char>(data), md5);
+    co_await (*m_handle)->execv(
+        "CALL vrm_put_multipart($1, $2, $3, $4, $5, $6)", id, part, data_size,
+        resp.effective_size, std::span<char>(data), md5);
 }
 
 coro<void> multipart_state::instance::remove_upload(const std::string& id) {

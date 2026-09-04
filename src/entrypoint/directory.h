@@ -35,9 +35,8 @@ bucket_versioning to_versioning(std::string s);
 
 class directory {
 public:
-    directory(boost::asio::io_context& ioc, const db::config& cfg)
-        : m_db(connection_factory(ioc, cfg, cfg.directory),
-               cfg.directory.count) {}
+    explicit directory(pool<db::connection>& db_pool)
+        : m_db(db_pool) {}
 
     struct unref {
         promise<void> p;
@@ -115,7 +114,7 @@ public:
     coro<std::size_t> data_size();
 
 private:
-    pool<db::connection> m_db;
+    pool<db::connection>& m_db;
 
     static void validate_bucket_name(const std::string& bucket_name);
 };

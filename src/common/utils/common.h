@@ -94,11 +94,7 @@ constexpr const char* ENV_CFG_OTEL_EXPORT_INTERVAL = "VRM_OTEL_INTERVAL";
 constexpr const char* ENV_CFG_ENABLE_TRACES = "VRM_TRACES_ENABLED";
 constexpr const char* ENV_CFG_TRACE_ENDPOINT = "VRM_TRACE_ENDPOINT";
 constexpr const char* ENV_CFG_DB_HOSTPORT = "VRM_DB_HOSTPORT";
-constexpr const char* ENV_CFG_DB_DIRECTORY_CONNECTIONS =
-    "VRM_DB_DIRECTORY_CONNECTIONS";
-constexpr const char* ENV_CFG_DB_MULTIPART_CONNECTIONS =
-    "VRM_DB_MULTIPART_CONNECTIONS";
-constexpr const char* ENV_CFG_DB_USERS_CONNECTIONS = "VRM_DB_USERS_CONNECTIONS";
+constexpr const char* ENV_CFG_DB_CONNECTIONS = "VRM_DB_CONNECTIONS";
 constexpr const char* ENV_CFG_DB_USER = "VRM_DB_USER";
 constexpr const char* ENV_CFG_DB_PASS = "VRM_DB_PASS";
 constexpr const char* ENV_CFG_ETCD_USERNAME = "VRM_ETCD_USERNAME";

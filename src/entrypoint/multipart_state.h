@@ -54,7 +54,7 @@ struct upload_info {
 
 class multipart_state {
 public:
-    multipart_state(boost::asio::io_context& ioc, const db::config& cfg);
+    explicit multipart_state(pool<db::connection>& db_pool);
 
     struct release_lock {
         promise<void> p;
@@ -115,7 +115,7 @@ public:
     coro<instance> get();
 
 private:
-    pool<db::connection> m_db;
+    pool<db::connection>& m_db;
 
     /// Default grace period for deleted entries in seconds.
     static constexpr auto DEFAULT_TIMEOUT = 300;
